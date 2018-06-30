@@ -18,13 +18,17 @@ import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import TextField from '@material-ui/core/TextField';
+import Slide from '@material-ui/core/Slide';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserCircle, faKey } from '@fortawesome/free-solid-svg-icons'
+import { faUserCircle, faKey, faLock } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faUserCircle, faKey)
+library.add(faUserCircle, faKey, faLock)
 
+function Transition(props) {
+  return <Slide direction="left" {...props} />;
+}
 
 const LoginDialog = withStyles(styles)(
   class extends Component {
@@ -212,7 +216,6 @@ const ForgetPass = withStyles(styles)(
           <Dialog
             open={this.state.open}
             onClose={this.handleClose}
-            aria-labelledby="form-dialog-title"
           >
             <DialogTitle id="form-dialog-title">忘記密碼</DialogTitle>
             <DialogContent>
@@ -246,19 +249,33 @@ const NewMember = withStyles(styles)(
     constructor(props) {
       super(props);
       this.state={
-        open: false
+        step: 0,
+        auth: '',
+        username: '',
+        password: ''
       };   
       this.handleClickOpen = this.handleClickOpen.bind(this);
       this.handleClose = this.handleClose.bind(this);
+      this.authCheck = this.authCheck.bind(this);
+      this.signup = this.signup.bind(this);
     }
   
     handleClickOpen = () => {
-      this.setState({ open: true });
+      this.setState({ step: 1 });
     };
   
     handleClose = () => {
-      this.setState({ open: false });
+      this.setState({ step: 0 });
     };
+
+    authCheck(auth)
+    {
+      this.setState({ step: 2 });
+    }
+    signup(username, password)
+    {
+      this.handleClose();
+    }
 
   
     render() {
@@ -266,38 +283,26 @@ const NewMember = withStyles(styles)(
       return (
         <div>
           <Button onClick={this.handleClickOpen}> 新團員註冊 </Button>
+
           <Dialog
-            open={this.state.open}
+            open={this.state.step==1}
             onClose={this.handleClose}
-            aria-labelledby="form-dialog-title"
           >
-            <DialogTitle id="form-dialog-title">新團員註冊</DialogTitle>
+            <DialogTitle>新團員註冊：Step {this.state.step}</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                歡迎加入青&#38901;合唱團！
+                請輸入錄取通知上的授權碼
               </DialogContentText>
   
               <div className={classes.margin}>
-                請選擇一個帳號
                 <Grid container spacing={8} alignItems="flex-end">
                   <Grid item>
-                    <AccountCircle />
+                    <FontAwesomeIcon icon="lock" />
                   </Grid>
                   <Grid item>
-                    <TextField label="Username" 
-                    onChange={(evt) => this.setState({username: evt.target.value})}
-                    />
-                  </Grid>
-                </Grid>
-
-                <Grid container spacing={8} alignItems="flex-end">
-                  <Grid item>
-                    <i className="material-icons">lock</i>
-                  </Grid>
-                  <Grid item>
-                    <TextField label="Password" type="password"
-                    onChange={(evt) => this.setState({password: evt.target.value})}
-                    onKeyPress={ (event)=>{ if(event.key === 'Enter') this.login(this.state.username, this.state.password); }}
+                    <TextField label="Authentication code" 
+                    onChange={(evt) => this.setState({auth: evt.target.value})}
+                    onKeyPress={ (event)=>{ if(event.key === 'Enter') this.authCheck(this.state.auth); }}
                     />
                   </Grid>
                 </Grid>
@@ -308,7 +313,62 @@ const NewMember = withStyles(styles)(
               <Button onClick={this.handleClose} color="primary">
                 取消
               </Button>
-              
+
+              <Button onClick={() => {this.authCheck(this.state.auth);}} 
+                color="primary">
+                下一步
+              </Button>              
+            </DialogActions>
+          </Dialog>
+
+
+          <Dialog
+            open={this.state.step==2}
+            onClose={this.handleClose}
+            TransitionComponent={Transition}
+            keepMounted
+          >
+            <DialogTitle>新團員註冊：Step {this.state.step}</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                請選擇一組帳號密碼
+              </DialogContentText>
+  
+              <div className={classes.margin}>
+                <Grid container spacing={8} alignItems="flex-end">
+                  <Grid item>
+                    <FontAwesomeIcon icon="user-circle" />
+                  </Grid>
+                  <Grid item>
+                    <TextField label="Username" 
+                    onChange={(evt) => this.setState({username: evt.target.value})}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={8} alignItems="flex-end">
+                  <Grid item>
+                    <FontAwesomeIcon icon="key" />
+                  </Grid>
+                  <Grid item>
+                    <TextField label="Password" type="password"
+                    onChange={(evt) => this.setState({password: evt.target.value})}
+                    onKeyPress={ (event)=>{ if(event.key === 'Enter') this.signup(this.state.username, this.state.password); }}
+                    />
+                  </Grid>
+                </Grid>
+              </div>
+  
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose} color="primary">
+                取消
+              </Button>
+
+              <Button onClick={() => {this.signup(this.state.username, this.state.password);}} 
+                color="primary">
+                註冊
+              </Button>
             </DialogActions>
           </Dialog>
 
