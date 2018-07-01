@@ -54,8 +54,8 @@ var schema = buildSchema(`
    }
 `);
 
-var Login = async function(args) {
-   console.log('login request')
+async function Login(args) {
+   console.log('login request');
    var result;
    await People.findOne(args)
       .exec()
@@ -76,7 +76,13 @@ var Login = async function(args) {
       });
    // console.log(result);
    return result;
-};
+}
+
+async function Signup(args) {
+   console.log('signup request');
+
+
+}
 
 const resolver = {
    login: Login
