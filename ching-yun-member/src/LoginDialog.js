@@ -304,6 +304,9 @@ const NewMember = withStyles(styles)(
     }
     signup(username, password)
     {
+       if(!username || !password)
+          return;
+
       this.handleClose();
     }
 

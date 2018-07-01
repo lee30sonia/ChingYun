@@ -1,0 +1,13 @@
+{
+  "name": "ching-yun",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+  },
+  "scripts": {
+    "start": "cd ching-yun-member && react-scripts start",
+    "build": "cd ching-yun-member && react-scripts build && cd ../",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
