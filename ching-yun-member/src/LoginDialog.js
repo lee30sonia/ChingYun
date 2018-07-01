@@ -302,18 +302,41 @@ const NewMember = withStyles(styles)(
     {
       this.setState({ step: 2 });
     }
-    signup(username, password)
+    async signup(username, password, client)
     {
        if(!username || !password)
           return;
 
-      this.handleClose();
+       const { data } = await client.mutate({
+          mutation: gql`
+            mutation signup($u: String!, $p: String!) {
+               signup(username: $u, password: $p) 
+         }`,
+         variables: {
+            "u": username,
+            "p": password
+         }
+       })
+          .catch( err => {
+             console.log(err);
+          });
+
+      if(data.signup) {
+         alert("You've registered successfully!");
+         this.handleClose();
+      }
+      else {
+         alert("This username has already been used.");
+      }
     }
 
   
     render() {
       const { classes } = this.props;
       return (
+         <ApolloConsumer>
+            { client => (
+
         <div>
           <Button onClick={this.handleClickOpen}> 新團員註冊 </Button>
 
@@ -386,7 +409,10 @@ const NewMember = withStyles(styles)(
                   <Grid item>
                     <TextField label="Password" type="password"
                     onChange={(evt) => this.setState({password: evt.target.value})}
-                    onKeyPress={ (event)=>{ if(event.key === 'Enter') this.signup(this.state.username, this.state.password); }}
+                    onKeyPress={ (event)=>{ 
+                       if(event.key === 'Enter') 
+                          this.signup(this.state.username, this.state.password, client);
+                    }}
                     />
                   </Grid>
                 </Grid>
@@ -398,7 +424,9 @@ const NewMember = withStyles(styles)(
                 取消
               </Button>
 
-              <Button onClick={() => {this.signup(this.state.username, this.state.password);}} 
+              <Button onClick={ () => {
+                 this.signup(this.state.username, this.state.password, client);
+              }} 
                 color="primary">
                 註冊
               </Button>
@@ -407,9 +435,11 @@ const NewMember = withStyles(styles)(
 
           
         </div>
+         ) }</ApolloConsumer>
       );
     }
   }
+
 );
 
 export default LoginDialog;
