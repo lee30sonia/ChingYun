@@ -7,7 +7,7 @@ const client = new ApolloClient({
    // uri: "http://localhost:4001/graphql"
 });
 
-
+// this is for testing if client is working
  const { data } = client.query({
     query: gql`
       query login($u: String!, $p: String!) {
@@ -30,6 +30,5 @@ const client = new ApolloClient({
        console.log(err);
     });
 
-console.log(data);
 
 export default client
