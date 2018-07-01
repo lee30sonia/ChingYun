@@ -5,7 +5,7 @@
   "dependencies": {
   },
   "scripts": {
-    "start": "cd ching-yun-member && react-scripts start",
+    "start": "cd ching-yun-member && npm start",
     "build": "cd ching-yun-member && react-scripts build && cd ../",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
