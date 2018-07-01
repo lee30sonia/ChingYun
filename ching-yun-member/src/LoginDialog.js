@@ -24,6 +24,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserCircle, faKey, faLock } from '@fortawesome/free-solid-svg-icons'
 
+import { ApolloConsumer } from 'react-apollo';
+import gql from 'graphql-tag';
+
 library.add(faUserCircle, faKey, faLock)
 
 function Transition(props) {
@@ -60,22 +63,40 @@ const LoginDialog = withStyles(styles)(
       this.setState({snackBarOpen: false});
     }
   
-    login(username, password)
+    async login(username, password, client)
     {
-      this.props.login({name: 'Happy'});
-      this.setState({snackBarOpen: true});
-      /*
-      if (success)
+       if(!username || !password)
+          return;
+       const { data } = await client.query({
+          query: gql`
+            query login($u: String!, $p: String!) {
+             login(username: $u, password: $p) {
+               match
+               person {
+                  name
+               }
+            }
+         }`,
+         variables: {
+            "u": username,
+            "p": password
+         }
+       })
+          .catch( err => {
+             console.log(err);
+          });
+       // this.props.login({name: 'Happy'});
+       // this.setState({snackBarOpen: true});
+      if (data.login.match)
       {
-        this.props.login(person);
+        this.props.login(data.login.person.name);
         this.setState({snackBarOpen: true});
       }
-      if (failed)
+       else
       {
         alert('wrong username/password!');
         this.setState({username: '', password: ''});
       }
-      */
       this.handleClose();
     }
 
@@ -91,7 +112,11 @@ const LoginDialog = withStyles(styles)(
       var logout = (<Button color="inherit" onClick={this.logout}>登出</Button>);
       var button = this.props.loggedIn? logout: login;
       var greet = this.props.loggedIn? (<Button color="inherit">{this.props.me.name}</Button>): (<div></div>);
+         
       return (
+         <ApolloConsumer>
+         { client => (
+         
         <div>
           {greet}
           {button}
@@ -125,7 +150,7 @@ const LoginDialog = withStyles(styles)(
                   <Grid item>
                     <TextField label="Password" type="password"
                     onChange={(evt) => this.setState({password: evt.target.value})}
-                    onKeyPress={ (event)=>{ if(event.key === 'Enter') this.login(this.state.username, this.state.password); }}
+                    onKeyPress={ (event)=>{ if(event.key === 'Enter') this.login(this.state.username, this.state.password, client); }}
                     />
                   </Grid>
                 </Grid>
@@ -142,7 +167,9 @@ const LoginDialog = withStyles(styles)(
               <Button onClick={this.handleClose} color="primary">
                 取消
               </Button>
-              <Button onClick={() => {this.login(this.state.username, this.state.password);}} 
+              <Button onClick={() => {
+                 this.login(this.state.username, this.state.password, client);
+              }} 
                 color="primary">
                 登入
               </Button>
@@ -183,6 +210,9 @@ const LoginDialog = withStyles(styles)(
 
           </Snackbar>
         </div>
+
+               )}
+            </ApolloConsumer>
       );
     }
   }

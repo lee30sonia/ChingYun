@@ -9,12 +9,17 @@ import { withTheme } from '@material-ui/core/styles'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import styles from './styles'
 
+// material-ui
 import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+
+import { ApolloProvider } from 'react-apollo';
+import client from './client';
+
 
 const theme = createMuiTheme({
   palette: {
@@ -65,6 +70,7 @@ const App = withTheme()(withStyles(styles)(
       const { classes } = this.props;
 
       return (
+         <ApolloProvider client={client}>
         <MuiThemeProvider theme={theme}>
           <div className={classes.root+" root"}>
             <Grid container className="Nav">
@@ -91,6 +97,7 @@ const App = withTheme()(withStyles(styles)(
 
           </div>
         </MuiThemeProvider>
+     </ApolloProvider>
       );
     }
   }
