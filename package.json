@@ -6,7 +6,7 @@
   },
   "scripts": {
     "start": "cd ching-yun-member && npm start",
-    "build": "cd ching-yun-member && react-scripts build && cd ../",
+    "build": "cd ching-yun-member && npm build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
