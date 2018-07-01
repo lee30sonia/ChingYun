@@ -1,6 +1,7 @@
 const express = require('express');
 const express_graphql = require('express-graphql');
 const { buildSchema } = require('graphql');
+const cors = require('cors');
 
 const port = 4001;
 const app = express();
@@ -53,28 +54,40 @@ var schema = buildSchema(`
    }
 `);
 
-var Login =  async function(args) {
+var Login = async function(args) {
    console.log('login request')
    var result;
-   await People.findOne(args, (err, match) => {
-      if (err) return console.error(err);
-      if (match) {
-         result = {
-            match: true,
-            person: match
-         };
-      }
-      else
-         result = {
+   await People.findOne(args)
+      .exec()
+      .then( match => {
+         if(match) {
+            result = {
+               match: true,
+               person: match
+            };
+            // console.log(result);
+         }
+         else result = {
             match: false
          };
-   });
+      })
+      .catch( err => {
+         console.error(err);
+      });
+   // console.log(result);
    return result;
 };
 
 const resolver = {
    login: Login
 };
+
+app.use(cors());
+app.use(function(req, res, next) {
+   res.header("Access-Control-Allow-Origin", "*");
+   res.header("Access-Control-Allow-Headers", "X-Requested-With");
+   next();
+});
 
 app.use("/graphql", express_graphql({
    schema: schema,
