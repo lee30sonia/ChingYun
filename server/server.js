@@ -27,7 +27,8 @@ var schema = buildSchema(`
 
    type Query {
       login(username: String!, password: String!): Match,
-      getAuth(number: String!): AuthNum
+      getAuth(number: String!): AuthNum,
+      allPeople: [Person]
    }
 
    type AuthNum {
@@ -63,6 +64,7 @@ var schema = buildSchema(`
 const resolver = {
    login: query.Login,
    getAuth: query.getAuth,
+   allPeople: query.allPeople,
    signup: mutation.Signup,
    update: mutation.Update,
    authUpdate: mutation.authUpdate

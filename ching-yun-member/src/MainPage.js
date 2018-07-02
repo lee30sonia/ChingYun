@@ -4,6 +4,7 @@ import Announcement from './Announcement';
 import Schedule from './Schedule';
 import ChatBoard from './ChatBoard';
 import People from './People';
+import Attendance from './attendance/attendance';
 
 //import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -36,6 +37,7 @@ const MainPage = withStyles(styles)(
           case 'schedule': main = <Schedule />; break;
           case 'chatBoard': main = <ChatBoard />; break;
           case 'people': main = <People />; break;
+          case 'attendance': main = <Attendance />; break;
           default: main = <div></div>;
         }
 
@@ -44,16 +46,29 @@ const MainPage = withStyles(styles)(
             <Grid item xs={3}>
               <List className={classes.list}>
                 <ListItem button>
-                  <ListItemText primary='公告' onClick={() => {this.setState({main: 'announcement'})}}/>
+                   <ListItemText primary='公告' onClick={() => {
+                      this.setState({main: 'announcement'});
+                   }}/>
                 </ListItem>
                 <ListItem button>
-                  <ListItemText primary='練唱進度' onClick={() => {this.setState({main: 'schedule'})}}/>
+                   <ListItemText primary='練唱進度' onClick={() => {
+                      this.setState({main: 'schedule'});
+                   }}/>
                 </ListItem>
                 <ListItem button>
-                  <ListItemText primary='討論區' onClick={() => {this.setState({main: 'chatBoard'})}}/>
+                   <ListItemText primary='討論區' onClick={() => {
+                      this.setState({main: 'chatBoard'});
+                   }}/>
                 </ListItem>
                 <ListItem button>
-                  <ListItemText primary='通訊錄' onClick={() => {this.setState({main: 'people'})}}/>
+                   <ListItemText primary='通訊錄' onClick={() => {
+                      this.setState({main: 'people'});
+                  }}/>
+                </ListItem>
+                <ListItem button>
+                   <ListItemText primary='出席表' onClick={() => {
+                      this.setState({main: 'attendance'});
+                  }}/>
                 </ListItem>
               </List>
             </Grid>

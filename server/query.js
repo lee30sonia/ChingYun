@@ -49,9 +49,28 @@ async function getAuth(args) {
    return result;
 }
 
+async function allPeople() {
+   console.log('allPeople request');
+   var result;
+   await People.find()
+      .exec()
+      .then( people => {
+         if(people) {
+            result = people;
+            // console.log(result);
+         }
+      })
+      .catch( err => {
+         console.error(err);
+      });
+   // console.log(result);
+   return result;
+}
+
 var query = {
    Login: Login,
-   getAuth: getAuth
+   getAuth: getAuth,
+   allPeople: allPeople
 }
 
 module.exports = query;

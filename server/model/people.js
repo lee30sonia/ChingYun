@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 // mongodb schema and model
-var peopleSchema = mongoose.Schema({
+var schema = mongoose.Schema({
    name: String,
    username: String,
    password: String,
@@ -10,6 +10,18 @@ var peopleSchema = mongoose.Schema({
    email: String,
    phone: String
 });
-var People = mongoose.model('People', peopleSchema);
+
+schema.method.update = function(newData) {
+   this.name = newData.name;
+   this.email = newData.email;
+   this.phone = newData.phone;
+}
+
+schema.method.AuthUpdate = function(newData) {
+   this.auth = newData.auth;
+   this.part = newData.part;
+}
+
+var People = mongoose.model('People', schema);
 
 module.exports = People

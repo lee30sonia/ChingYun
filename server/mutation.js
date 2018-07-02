@@ -38,11 +38,29 @@ async function Signup(args) {
 }
 
 async function Update(args) {
+   var result = true;
+   await People.update( { username: args.username }, {
+      name: args.name,
+      email: args.email,
+      phone: args.phone
+   }, err => {
+      console.log(err);
+      result = false;
+   });
+   return result;
 }
 
 async function AuthUpdate(args) {
+   var result = true;
+   await People.update( { username: args.username }, {
+      auth: args.auth,
+      part: args.part
+   }, err => {
+      console.log(err);
+      result = false;
+   });
+   return result;
 }
-
 
 var mutation = {
    Signup: Signup,
