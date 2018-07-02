@@ -6,8 +6,11 @@ const cors = require('cors');
 const port = 4001;
 const app = express();
 const server = require('http').createServer(app);
-const People = require('./people');
-// const io = require('socket.io')(server);
+
+const People = require('./model/people');
+const AuthNum = require('./model/authNum');
+const query = require('./query');
+const mutation = require('./mutation');
 
 // connect to mongodb
 var mongoose = require('mongoose');
@@ -19,29 +22,20 @@ db.once('open', function() {
     console.log('connected');
 });
 
-// clean previous data
-People.deleteMany({}, function (err) {
-    if (err) return handleError(err);
-    // deleted at most one tank document
-});
-
-// create an admin
-var pw = 'password';
-var admin = new People({ name: 'Admin', username: 'admin', password: pw });
-admin.save(function (err) {
-    if (err) return handleError(err);
-    // saved!
-    console.log('admin saved')
-    //console.log(admin);
-});
-
 // graphql schema
 var schema = buildSchema(`
 
    type Query {
-      login(username: String!, password: String!): Match
+      login(username: String!, password: String!): Match,
+      getAuth(number: String!): AuthNum
    }
-   
+
+   type AuthNum {
+      number: String,
+      auth: String,
+      part: String
+   }
+
    type Match {
       match: Boolean,
       person: Person
@@ -50,42 +44,28 @@ var schema = buildSchema(`
    type Person {
       name: String,
       username: String,
-      password: String
+      password: String,
+      auth: String,
+      part: String,
+      email: String,
+      phone: String
+   }
+
+   type Mutation {
+      signup(username: String!, password: String!, auth: String, part: String): Boolean,
+      update(name: String, email: String, phone: String): Boolean,
+      authUpdate(auth: String, part: String): Boolean
    }
 `);
 
-async function Login(args) {
-   console.log('login request');
-   var result;
-   await People.findOne(args)
-      .exec()
-      .then( match => {
-         if(match) {
-            result = {
-               match: true,
-               person: match
-            };
-            // console.log(result);
-         }
-         else result = {
-            match: false
-         };
-      })
-      .catch( err => {
-         console.error(err);
-      });
-   // console.log(result);
-   return result;
-}
 
-async function Signup(args) {
-   console.log('signup request');
-
-
-}
 
 const resolver = {
-   login: Login
+   login: query.Login,
+   getAuth: query.getAuth,
+   signup: mutation.Signup,
+   update: mutation.Update,
+   authUpdate: mutation.authUpdate
 };
 
 app.use(cors());
@@ -100,42 +80,5 @@ app.use("/graphql", express_graphql({
    rootValue: resolver,
    graphiql: true
 }));
-
-// the socketIO version
-/*
-io.on('connection', socket => {
-    console.log('New client connected: ', socket.client.id)
-    var key = socket.client.id
-
-    socket.on('login request', (obj) => {
-        console.log('login request')
-        People.findOne(obj, (err, match) => {
-            if (err) return console.error(err);
-            //console.log(matches);
-            if (match)
-                io.sockets.emit('login success', match);
-            else
-                io.sockets.emit('login failed');
-        })
-    })
-  
-    /*socket.on('login', (name) => {
-        console.log('New user logged in: ', name)
-        users[key] = { key: key, name: name }
-        io.sockets.emit('new user', {user: users[key], users: users})
-    })
-
-    socket.on('send', (obj) => {
-        console.log(obj.from, ' sends ', obj.msg, ' to ', obj.to)
-        io.sockets.emit('new msg', obj)
-    })
-
-    socket.on('disconnect', () => {
-        console.log('user disconnected: ', users[key])
-        io.sockets.emit('user leave', users[key])
-        delete users[key]
-    })
-})
-*/
 
 server.listen(port, () => console.log(`Listening on localhost:${port}/graphql`))

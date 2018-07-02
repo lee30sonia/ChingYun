@@ -2,8 +2,7 @@
   "name": "ching-yun",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-  },
+  "dependencies": {},
   "scripts": {
     "start": "cd ching-yun-member && npm start",
     "build": "cd ching-yun-member && npm build",

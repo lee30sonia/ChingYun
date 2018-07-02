@@ -8,7 +8,7 @@ const client = new ApolloClient({
 });
 
 // this is for testing if client is working
- const { data } = client.query({
+ client.query({
     query: gql`
       query login($u: String!, $p: String!) {
        login(username: $u, password: $p) {

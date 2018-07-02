@@ -4,7 +4,11 @@ var mongoose = require('mongoose');
 var peopleSchema = mongoose.Schema({
    name: String,
    username: String,
-   password: String
+   password: String,
+   auth: String,
+   part: String,
+   email: String,
+   phone: String
 });
 var People = mongoose.model('People', peopleSchema);
 

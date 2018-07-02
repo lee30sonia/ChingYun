@@ -358,7 +358,9 @@ const NewMember = withStyles(styles)(
                   <Grid item>
                     <TextField label="Authentication code" 
                     onChange={(evt) => this.setState({auth: evt.target.value})}
-                    onKeyPress={ (event)=>{ if(event.key === 'Enter') this.authCheck(this.state.auth); }}
+                    onKeyPress={ (event)=>{ 
+                       if(event.key === 'Enter') this.authCheck(this.state.auth, client); 
+                    }}
                     />
                   </Grid>
                 </Grid>
@@ -370,7 +372,7 @@ const NewMember = withStyles(styles)(
                 取消
               </Button>
 
-              <Button onClick={() => {this.authCheck(this.state.auth);}} 
+              <Button onClick={() => {this.authCheck(this.state.auth, client);}} 
                 color="primary">
                 下一步
               </Button>              
