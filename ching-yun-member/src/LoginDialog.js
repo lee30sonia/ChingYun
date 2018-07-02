@@ -282,7 +282,9 @@ const NewMember = withStyles(styles)(
         step: 0,
         auth: '',
         username: '',
-        password: ''
+        password: '',
+         person_auth: '',
+         person_part: ''
       };   
       this.handleClickOpen = this.handleClickOpen.bind(this);
       this.handleClose = this.handleClose.bind(this);
@@ -298,10 +300,38 @@ const NewMember = withStyles(styles)(
       this.setState({ step: 0 });
     };
 
-    authCheck(auth)
+    async authCheck(auth, client)
     {
-      this.setState({ step: 2 });
+      if(!auth)
+          return;
+       const { data } = await client.query({
+          query: gql`
+            query getAuth($num: String!) {
+             getAuth(number: $num) {
+               auth
+               part
+            }
+         }`,
+         variables: {
+            "num": auth
+         }
+       })
+          .catch( err => {
+             console.log(err);
+          });
+
+       if(data.getAuth) {
+          this.setState({ 
+             step: 2,
+             person_auth: data.getAuth.auth,
+             person_part: data.getAuth.part
+          });
+       }
+       else {
+          alert("Invalid Authorization code!");
+       }
     }
+
     async signup(username, password, client)
     {
        if(!username || !password)
@@ -309,12 +339,14 @@ const NewMember = withStyles(styles)(
 
        const { data } = await client.mutate({
           mutation: gql`
-            mutation signup($u: String!, $p: String!) {
-               signup(username: $u, password: $p) 
+            mutation signup($u: String!, $p: String!, $auth: String, $part: String) {
+               signup(username: $u, password: $p, auth: $auth, part: $part) 
          }`,
          variables: {
             "u": username,
-            "p": password
+            "p": password,
+            "auth": this.state.person_auth,
+            "part": this.state.person_part
          }
        })
           .catch( err => {
