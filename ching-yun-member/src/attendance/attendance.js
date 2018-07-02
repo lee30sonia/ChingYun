@@ -106,6 +106,7 @@ class Attendance extends Component {
    //    }));
    // }
    addDate(date) {
+      /*
       this.setState(prev => {
          let col = prev.columns;
          let mem = prev.members;
@@ -117,6 +118,8 @@ class Attendance extends Component {
             dates: prev.dates + 1
          };
       });
+      */
+      alert("This feature is not yet done.");
    }
 
    // componentDidMount() {
