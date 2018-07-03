@@ -4,6 +4,11 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
   },
+   tableroot: {
+     width: '100%',
+     marginTop: theme.spacing.unit * 3,
+     overflowX: 'auto',
+   },
   flex: {
     flex: 1,
   },
@@ -17,7 +22,7 @@ const styles = theme => ({
     color: theme.palette.text.secondary,
   },
   list: {
-    width: '100%',
+    width: '75%',
     maxWidth: 360,
     backgroundColor: theme.palette.primary.light,
   },
@@ -39,6 +44,12 @@ const styles = theme => ({
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 3,
   },
+   progress: {
+          margin: theme.spacing.unit * 2,
+   },
+  table: {
+         minWidth: 700,
+   },
 });
 
 export default styles;

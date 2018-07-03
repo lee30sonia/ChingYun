@@ -4,6 +4,7 @@
 
 const People = require('./model/people');
 const AuthNum = require('./model/authNum');
+const Dates = require('./model/dates');
 
 // connect to mongodb
 var mongoose = require('mongoose');
@@ -28,7 +29,7 @@ db.once('open', function() {
          username: 'admin', 
          password: 'password',
          auth: 'Root',
-         part: 'Teacher
+         part: 'Teacher'
       });
       admin.save(function (err) {
           if (err) return handleError(err);
@@ -63,5 +64,21 @@ db.once('open', function() {
          }
          console.log("AuthNum: numbers saved");
       });
+
+   Dates.deleteMany({}, function (err) {
+       if (err) return handleError(err);
+      console.log('Dates: previous data cleared');
+   })
+   .then( () => {
+      var preset = ["2018-06-02", "2018-06-09", "2018-06-16", "2018-06-23"];
+      var date = new Dates({ 
+         name: "attend",
+         dates: preset.map( d => new Date(d) )
+      });
+      date.save(function (err) {
+          if (err) return handleError(err);
+          console.log('Dates: attend saved')
+      });
+   });
 });
 

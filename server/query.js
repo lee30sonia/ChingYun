@@ -1,5 +1,6 @@
 const People = require('./model/people');
 const AuthNum = require('./model/authNum');
+const Dates = require("./model/dates");
 
 async function Login(args) {
    console.log('login request', args.username);
@@ -58,6 +59,23 @@ async function allPeople() {
          if(people) {
             result = people;
             // console.log(result);
+         }
+      })
+      .catch( err => {
+         console.error(err);
+      });
+   // console.log(result);
+   return result;
+}
+
+async function getAttendDates() {
+   console.log('getAttendDates request');
+   var result;
+   await Dates.find("attend")
+      .exec()
+      .then( data => {
+         if(data) {
+            result = data.dates.map( d => (d.getMonth()+1) + "/" + d.getDay() );
          }
       })
       .catch( err => {

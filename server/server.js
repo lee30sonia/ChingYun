@@ -9,6 +9,7 @@ const server = require('http').createServer(app);
 
 const People = require('./model/people');
 const AuthNum = require('./model/authNum');
+const Dates = require('./model/dates');
 const query = require('./query');
 const mutation = require('./mutation');
 
@@ -28,7 +29,8 @@ var schema = buildSchema(`
    type Query {
       login(username: String!, password: String!): Match,
       getAuth(number: String!): AuthNum,
-      allPeople: [Person]
+      allPeople: [Person],
+      getAttendDates: [String]
    }
 
    type AuthNum {
@@ -48,14 +50,21 @@ var schema = buildSchema(`
       password: String,
       auth: String,
       part: String,
+      job: String,
       email: String,
       phone: String
+   }
+
+   type Dates {
+      name: String,
+      dates: [String]
    }
 
    type Mutation {
       signup(username: String!, password: String!, auth: String, part: String): Boolean,
       update(name: String, email: String, phone: String): Boolean,
-      authUpdate(auth: String, part: String): Boolean
+      authUpdate(auth: String, part: String, job: String): Boolean,
+      addDate(date: String): Int
    }
 `);
 
@@ -65,9 +74,11 @@ const resolver = {
    login: query.Login,
    getAuth: query.getAuth,
    allPeople: query.allPeople,
+   getAttendDates: query.getAttendDates,
    signup: mutation.Signup,
    update: mutation.Update,
-   authUpdate: mutation.authUpdate
+   authUpdate: mutation.authUpdate,
+   addAttendDate: mutation.addAttendDate
 };
 
 app.use(cors());

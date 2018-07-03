@@ -7,20 +7,10 @@ var schema = mongoose.Schema({
    password: String,
    auth: String,
    part: String,
+   job: String,
    email: String,
    phone: String
 });
-
-schema.method.update = function(newData) {
-   this.name = newData.name;
-   this.email = newData.email;
-   this.phone = newData.phone;
-}
-
-schema.method.AuthUpdate = function(newData) {
-   this.auth = newData.auth;
-   this.part = newData.part;
-}
 
 var People = mongoose.model('People', schema);
 

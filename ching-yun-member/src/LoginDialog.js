@@ -74,6 +74,9 @@ const LoginDialog = withStyles(styles)(
                match
                person {
                   name
+                  username
+                  auth
+                  part
                }
             }
          }`,
@@ -89,15 +92,15 @@ const LoginDialog = withStyles(styles)(
        // this.setState({snackBarOpen: true});
       if (data.login.match)
       {
-        this.props.login(data.login.person.name);
+        this.props.login(data.login.person);
         this.setState({snackBarOpen: true});
+         this.handleClose();
       }
        else
       {
         alert('wrong username/password!');
         this.setState({username: '', password: ''});
       }
-      this.handleClose();
     }
 
     logout()

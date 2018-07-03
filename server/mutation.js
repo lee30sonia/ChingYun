@@ -54,7 +54,8 @@ async function AuthUpdate(args) {
    var result = true;
    await People.update( { username: args.username }, {
       auth: args.auth,
-      part: args.part
+      part: args.part,
+      job: args.job
    }, err => {
       console.log(err);
       result = false;

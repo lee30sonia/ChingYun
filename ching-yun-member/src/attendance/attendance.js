@@ -8,6 +8,11 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import Popup from 'react-popup';
 
+//import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import styles from '../styles'
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 
@@ -87,7 +92,8 @@ var query = gql`{
    }
 }`;
 
-class Attendance extends Component {
+const Attendance = withStyles(styles)(
+  class extends Component {
 
    constructor(props) {
       super(props);
@@ -130,11 +136,13 @@ class Attendance extends Component {
    }
 
    render() {
+      const { classes } = this.props;
+
       return(
          <Query query={ query } >
             { ({ loading, err, data}) => {
                if(loading)
-                  return "Loading...";
+                  return <CircularProgress className={classes.progress} />;
                if(err)
                   return `Error! ${err.message}`;
 
@@ -154,6 +162,6 @@ class Attendance extends Component {
          </Query>
       );
   }
-}
+});
 
 export default Attendance;
