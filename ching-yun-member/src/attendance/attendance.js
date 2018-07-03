@@ -38,10 +38,10 @@ function sortPart(a, b, order) {
 }
 
 
-function memberAdd(member) {
-   member.attend.push("");
-   memberUpdate(member);
-}
+// function memberAdd(member) {
+//    member.attend.push("");
+//    memberUpdate(member);
+// }
 
 function memberUpdate(it) {
    it.absent = it.attend.filter( a => a === "" ).length;
@@ -63,6 +63,9 @@ var query = gql`{
       name
       part
    }
+   getDates(name: "attend")
+}`;
+var queryDate = gql`{
    getDates(name: "attend")
 }`;
 var mutation = gql`
@@ -111,7 +114,10 @@ const Attendance = withStyles(styles)(
 
    async enterDate(addDate) {
       Popup.plugins().addDate( (date) => { 
-         addDate({ variables: {"date": date} }) });
+         addDate({ 
+            variables: {"date": date},
+            refetchQueries: [{ query: queryDate }]
+         }) });
    }
 
    render() {

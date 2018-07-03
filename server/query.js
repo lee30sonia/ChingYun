@@ -68,6 +68,12 @@ async function allPeople() {
    return result;
 }
 
+var date_sort = function (date1, date2) {
+   if (date1 > date2) return 1;
+   if (date1 < date2) return -1;
+      return 0;
+};
+
 async function getDates(args) {
    console.log('getDates request');
    var result;
@@ -75,7 +81,7 @@ async function getDates(args) {
       .exec()
       .then( data => {
          if(data) {
-            data.dates.sort();
+            data.dates.sort(date_sort);
             result = data.dates.map( d => {
                return (d.getMonth()+1) + "/" + d.getDate() });
          }
