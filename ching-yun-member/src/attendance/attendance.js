@@ -14,7 +14,7 @@ import styles from '../styles'
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import gql from "graphql-tag";
-import { Query } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
 
 function DateColumn(num, date) {
    return {
@@ -37,33 +37,6 @@ function sortPart(a, b, order) {
    else  return arr.indexOf(a) > arr.indexOf(b);
 }
 
-var columns = [{
-   dataField: "id",
-   text: "#",
-   sort: true
-},{
-   dataField: "name",
-   text: "姓名"
-},{
-   dataField: "part",
-   text: "聲部",
-   sort: true,
-   sortFunc: sortPart
-}  ,
-   DateColumn(0, "6/9"),   // if you want to add dates here, remember to initial the state.dates
-   DateColumn(1, "6/16"),  
-   DateColumn(2, "6/23"),
-{
-   dataField: "absent",
-   text: "缺席",
-   sort: true,
-   editable: false
-},{
-   dataField: "rate",
-   text: "出席率",
-   sort: true,
-   editable: false
-}];
 
 function memberAdd(member) {
    member.attend.push("");
@@ -90,6 +63,11 @@ var query = gql`{
       name
       part
    }
+   getDates(name: "attend")
+}`;
+var mutation = gql`
+   mutation addDate($date: String!) {
+      addDate(name: "attend", date: $date)
 }`;
 
 const Attendance = withStyles(styles)(
@@ -97,42 +75,43 @@ const Attendance = withStyles(styles)(
 
    constructor(props) {
       super(props);
-      this.state = {
-         // members: [],
-         columns: columns,
-         dates: 3
-      };
-      // this.addPerson = this.addPerson.bind(this);
-      // this.enterName = this.enterName.bind(this);
       this.enterDate = this.enterDate.bind(this);
-   }
-   // addPerson(name, part) {
-   //    this.setState( prev => ({
-   //       members: [...prev.members, new Member(prev.members.length+1, name, part, this.state.dates)]
-   //    }));
-   // }
-   addDate(date) {
-      /*
-      this.setState(prev => {
-         let col = prev.columns;
-         let mem = prev.members;
-         col.splice(-2, 0, DateColumn(prev.dates, date));
-         for(let m of mem) memberAdd(m);
-         return {
-            columns: col,
-            members: mem,
-            dates: prev.dates + 1
-         };
-      });
-      */
-      alert("This feature is not yet done.");
+      this.constructDate = this.constructDate.bind(this);
    }
 
-   // componentDidMount() {
-   // }
-   enterDate() {
-      var it = this;
-      Popup.plugins().addDate(function(date){ it.addDate(date); });
+   constructDate(dates) {
+      var columns = [{
+         dataField: "id",
+         text: "#",
+         sort: true
+      },{
+         dataField: "name",
+         text: "姓名"
+      },{
+         dataField: "part",
+         text: "聲部",
+         sort: true,
+         sortFunc: sortPart
+      }];
+      dates.map( (d, index) => columns.push(DateColumn(index, d)) );
+      columns.push({
+         dataField: "absent",
+         text: "缺席",
+         sort: true,
+         editable: false
+      });
+      columns.push({
+         dataField: "rate",
+         text: "出席率",
+         sort: true,
+         editable: false
+      });
+      return columns;
+   }
+
+   async enterDate(addDate) {
+      Popup.plugins().addDate( (date) => { 
+         addDate({ variables: {"date": date} }) });
    }
 
    render() {
@@ -140,7 +119,7 @@ const Attendance = withStyles(styles)(
 
       return(
          <Query query={ query } >
-            { ({ loading, err, data}) => {
+            { ({ loading, err, data, refetch}) => {
                if(loading)
                   return <CircularProgress className={classes.progress} />;
                if(err)
@@ -149,10 +128,19 @@ const Attendance = withStyles(styles)(
                return (
                   <div className="Attendance">
                      <h3>點名表</h3>
-                     <Button bsStyle="info" onClick={ this.enterDate } >加入日期</Button>
-                     <BootstrapTable keyField="name" columns={ this.state.columns } 
+                     <Mutation mutation={mutation}>
+                        { addDate => (
+                           <Button bsStyle="info" 
+                              onClick={ () => {
+                                 this.enterDate(addDate)
+                                    .then(refetch);
+                              }} >加入日期</Button>
+                        )}
+                     </Mutation>
+                     <BootstrapTable keyField="name" 
+                        columns={ this.constructDate(data.getDates) } 
                         data={ data.allPeople.map( (person, index) => (
-                           new Member(index+1, person.name, person.part, this.state.dates) ))}
+                           new Member(index+1, person.name, person.part, data.getDates.length) ))}
                         cellEdit={ cellEditFactory({ mode: "click", blurToSave: true, 
                            afterSaveCell: (o, n, row, c) => { memberUpdate(row); }
                            }) } />
@@ -165,3 +153,6 @@ const Attendance = withStyles(styles)(
 });
 
 export default Attendance;
+/*
+ *
+*/

@@ -30,7 +30,7 @@ var schema = buildSchema(`
       login(username: String!, password: String!): Match,
       getAuth(number: String!): AuthNum,
       allPeople: [Person],
-      getAttendDates: [String]
+      getDates(name: String!): [String]
    }
 
    type AuthNum {
@@ -64,21 +64,19 @@ var schema = buildSchema(`
       signup(username: String!, password: String!, auth: String, part: String): Boolean,
       update(name: String, email: String, phone: String): Boolean,
       authUpdate(auth: String, part: String, job: String): Boolean,
-      addDate(date: String): Int
+      addDate(name: String!, date: String!): Int
    }
 `);
-
-
 
 const resolver = {
    login: query.Login,
    getAuth: query.getAuth,
    allPeople: query.allPeople,
-   getAttendDates: query.getAttendDates,
+   getDates: query.getDates,
    signup: mutation.Signup,
    update: mutation.Update,
    authUpdate: mutation.authUpdate,
-   addAttendDate: mutation.addAttendDate
+   addDate: mutation.addDate
 };
 
 app.use(cors());

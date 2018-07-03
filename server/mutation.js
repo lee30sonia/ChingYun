@@ -1,4 +1,5 @@
 const People = require("./model/people");
+const Dates = require("./model/dates");
 
 async function addNewAgent(name, username, password, auth, part) {
 
@@ -63,10 +64,33 @@ async function AuthUpdate(args) {
    return result;
 }
 
+async function addDate(args) {
+   var result = 0;
+   await Dates.findOne( {name: args.name} )
+      .exec()
+      .then( data => {
+         if(data) {
+            let d = data.dates;
+            d.push(new Date(args.date));
+            result = d.length;
+            data.set( { dates: d } );
+            data.save( err => {
+               if(err)  console.log(err);
+               console.log(`date ${args.date} added`);
+            });
+         }
+      })
+      .catch( err => {
+         console.error(err);
+      });
+   return result;
+}
+
 var mutation = {
    Signup: Signup,
    Update: Update,
-   AuthUpdate: AuthUpdate
+   AuthUpdate: AuthUpdate,
+   addDate: addDate
 };
 
 module.exports = mutation;

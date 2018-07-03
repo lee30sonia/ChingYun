@@ -153,7 +153,9 @@ const LoginDialog = withStyles(styles)(
                   <Grid item>
                     <TextField label="Password" type="password"
                     onChange={(evt) => this.setState({password: evt.target.value})}
-                    onKeyPress={ (event)=>{ if(event.key === 'Enter') this.login(this.state.username, this.state.password, client); }}
+                    onKeyPress={ (event) => { 
+                       if(event.key === 'Enter') 
+                          this.login(this.state.username, this.state.password, client); }}
                     />
                   </Grid>
                 </Grid>

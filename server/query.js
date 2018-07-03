@@ -68,14 +68,16 @@ async function allPeople() {
    return result;
 }
 
-async function getAttendDates() {
-   console.log('getAttendDates request');
+async function getDates(args) {
+   console.log('getDates request');
    var result;
-   await Dates.find("attend")
+   await Dates.findOne(args)
       .exec()
       .then( data => {
          if(data) {
-            result = data.dates.map( d => (d.getMonth()+1) + "/" + d.getDay() );
+            data.dates.sort();
+            result = data.dates.map( d => {
+               return (d.getMonth()+1) + "/" + d.getDate() });
          }
       })
       .catch( err => {
@@ -88,7 +90,8 @@ async function getAttendDates() {
 var query = {
    Login: Login,
    getAuth: getAuth,
-   allPeople: allPeople
+   allPeople: allPeople,
+   getDates: getDates
 }
 
 module.exports = query;

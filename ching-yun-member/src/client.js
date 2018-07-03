@@ -3,8 +3,8 @@ import gql from 'graphql-tag';
 
 // connect to the server
 const client = new ApolloClient({
-   uri: "https://chingyun.now.sh/graphql"
-   // uri: "http://localhost:4001/graphql"
+   // uri: "https://chingyun.now.sh/graphql"
+   uri: "http://localhost:4001/graphql"
 });
 
 // this is for testing if client is working
