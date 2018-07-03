@@ -50,6 +50,9 @@ const styles = theme => ({
   table: {
          minWidth: 700,
    },
+  card: {
+    minWidth: 275,
+  },
 });
 
 export default styles;

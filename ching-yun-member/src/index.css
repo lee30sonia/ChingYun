@@ -14,5 +14,10 @@ body {
   padding-bottom: 30px;
 }
 
+.marker {
+  background-color: Yellow;
+} /* for CKEditor display */
 
-
+.chatArticle {
+    text-align: left;
+}

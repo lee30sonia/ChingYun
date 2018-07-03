@@ -72,7 +72,7 @@ const MainPage = withStyles(styles)(
                 </ListItem>
               </List>
             </Grid>
-            <Grid item xs>
+            <Grid item xs={8}>
               {main}
             </Grid>
           </Grid>
