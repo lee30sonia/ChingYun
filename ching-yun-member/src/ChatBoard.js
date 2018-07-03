@@ -17,6 +17,13 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import TextField from '@material-ui/core/TextField';
+import Tooltip from '@material-ui/core/Tooltip';
+import AddIcon from '@material-ui/icons/Add';
 
 const ChatBoard = withStyles(styles)(
   class extends Component {
@@ -41,7 +48,7 @@ const ChatBoard = withStyles(styles)(
 
       return (
         <div>
-          <NewPost />
+          <NewPost submit={ (content)=>{this.setState({content: content})} }/>
 
           <Card className={classes.card}>
             <Typography gutterBottom variant="headline" component="h2">
@@ -81,6 +88,7 @@ const NewPost = withStyles(styles)(
       this.onChange = this.onChange.bind(this);
       this.handleClickOpen = this.handleClickOpen.bind(this);
       this.handleClose = this.handleClose.bind(this);
+      this.submit = this.submit.bind(this);
     }
     
     onChange(evt){
@@ -98,13 +106,24 @@ const NewPost = withStyles(styles)(
     handleClose(){
       this.setState({ open: false });
     }
+
+    submit() {
+      this.props.submit(this.state.content);
+      this.handleClose();
+    }
     
     render() {
       const { classes } = this.props;
 
       return (
         <div>
-          <Button onClick={this.handleClickOpen}>發表新文章</Button>
+          <Tooltip title="發表新文章">
+            <Button variant="fab" color="primary" className={classes.addBtn}
+              onClick={this.handleClickOpen}
+            >
+              <AddIcon />
+            </Button>
+          </Tooltip>
 
           <Dialog
             fullScreen
@@ -112,27 +131,36 @@ const NewPost = withStyles(styles)(
             onClose={this.handleClose}
             TransitionComponent={Transition}
           >
+            
             <AppBar className={classes.appBar}>
               <Toolbar>
                 <IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
                   <CloseIcon />
                 </IconButton>
                 <Typography variant="title" color="inherit" className={classes.flex}>
-                  Sound
+                  發表新文章
                 </Typography>
-                <Button color="inherit" onClick={this.handleClose}>
-                  save
+                <Button color="inherit" onClick={this.submit}>
+                  發布
                 </Button>
               </Toolbar>
             </AppBar>
-
-            <CKEditor 
-              activeClass="p10" 
-              content={this.state.content} 
-              events={{
-                "change": this.onChange
-              }}
-            />
+           
+            <DialogContent>
+              <TextField
+                autoFocus
+                margin="normal"
+                label="文章標題"
+                fullWidth
+              />
+              <CKEditor 
+                activeClass="p10 articleEditor" 
+                content={this.state.content} 
+                events={{
+                  "change": this.onChange
+                }}
+              />
+            </DialogContent>
           </Dialog>
         </div>
       );

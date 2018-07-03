@@ -44,14 +44,18 @@ const styles = theme => ({
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 3,
   },
-   progress: {
-          margin: theme.spacing.unit * 2,
+  progress: {
+    margin: theme.spacing.unit * 2,
    },
   table: {
-         minWidth: 700,
+    minWidth: 700,
    },
   card: {
     minWidth: 275,
+  },
+  appBar: {
+    position: 'relative',
+    textAlign: 'center'
   },
 });
 

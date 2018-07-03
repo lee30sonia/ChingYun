@@ -21,3 +21,7 @@ body {
 .chatArticle {
     text-align: left;
 }
+
+.articleEditor {
+    margin-top: 30px;
+}
