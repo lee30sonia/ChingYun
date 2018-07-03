@@ -132,9 +132,7 @@ const Attendance = withStyles(styles)(
                         { addDate => (
                            <Button bsStyle="info" 
                               onClick={ () => {
-                                 this.enterDate(addDate)
-                                    .then(refetch);
-                              }} >加入日期</Button>
+                                 this.enterDate(addDate); }} >加入日期</Button>
                         )}
                      </Mutation>
                      <BootstrapTable keyField="name" 
