@@ -1,8 +1,8 @@
 const People = require("./model/people");
 const Dates = require("./model/dates");
+const Post = require('./model/post');
 
 async function addNewAgent(name, username, password, auth, part) {
-
    var newAgent = new People({ 
       name: name, 
       username: username, 
@@ -65,7 +65,7 @@ async function AuthUpdate(args) {
 }
 
 async function addDate(args) {
-   var result = 0;
+   var result;
    await Dates.findOne( {name: args.name} )
       .exec()
       .then( data => {
@@ -75,7 +75,7 @@ async function addDate(args) {
             result = d.length;
             data.set( { dates: d } );
             data.save( err => {
-               if(err)  console.log(err);
+               if(err)  return console.log(err);
                console.log(`date ${args.date} added`);
             });
          }
@@ -86,11 +86,66 @@ async function addDate(args) {
    return result;
 }
 
+async function addPost(args) {
+   var result = 1;
+   var newPost = new Post({
+      title: args.title,
+      author: args.author,
+      date: new Date(),
+      content: args.content
+   });
+   await newPost.save()
+      .then( p => {
+         console.log('new post added');
+         console.log(p._id);
+         result = p._id;
+      })
+      .catch( err => console.log(err) );
+   return result;
+}
+
+function Response(a, d, t) {
+   return {
+      author: a,
+      date: d,
+      text: t
+   };
+};
+
+async function addResponse(args) {
+   var result;
+   await Post.findById(args.id)
+      .exec()
+      .then( data => {
+         if(data) {
+            let res = data.response;
+            res.push(new Response(args.author, args.date, args.text));
+            data.set( { response: res } );
+            data.save()
+               .then( () => {
+                  console.log(`response added`);
+                  result = true;
+               })
+               .catch( err => {
+                  result = false;
+                  return console.log(err);
+               });
+         }
+      })
+      .catch( err => {
+         result = false;
+         console.error(err);
+      });
+   return result;
+}
+
 var mutation = {
    Signup: Signup,
    Update: Update,
    AuthUpdate: AuthUpdate,
-   addDate: addDate
+   addDate: addDate,
+   addPost: addPost,
+   addResponse: addResponse
 };
 
 module.exports = mutation;

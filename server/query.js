@@ -1,6 +1,7 @@
 const People = require('./model/people');
 const AuthNum = require('./model/authNum');
 const Dates = require("./model/dates");
+const Post = require('./model/post');
 
 async function Login(args) {
    console.log('login request', args.username);
@@ -93,11 +94,28 @@ async function getDates(args) {
    return result;
 }
 
+async function allPost() {
+   console.log('allPost request');
+   var result;
+   await Post.find()
+      .exec()
+      .then( posts => {
+         if(posts) {
+            result = posts;
+         }
+      })
+      .catch( err => {
+         console.error(err);
+      });
+   return result;
+}
+
 var query = {
    Login: Login,
    getAuth: getAuth,
    allPeople: allPeople,
-   getDates: getDates
+   getDates: getDates,
+   allPost: allPost
 }
 
 module.exports = query;

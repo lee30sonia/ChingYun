@@ -10,6 +10,7 @@ const server = require('http').createServer(app);
 const People = require('./model/people');
 const AuthNum = require('./model/authNum');
 const Dates = require('./model/dates');
+const Post = require('./model/post');
 const query = require('./query');
 const mutation = require('./mutation');
 
@@ -25,13 +26,6 @@ db.once('open', function() {
 
 // graphql schema
 var schema = buildSchema(`
-
-   type Query {
-      login(username: String!, password: String!): Match,
-      getAuth(number: String!): AuthNum,
-      allPeople: [Person],
-      getDates(name: String!): [String]
-   }
 
    type AuthNum {
       number: String,
@@ -60,11 +54,35 @@ var schema = buildSchema(`
       dates: [String]
    }
 
+   type Post {
+      title: String,
+      author: Person,
+      date: String,
+      content: String,
+      response: [Response]
+   }
+
+   type Response {
+      author: Person,
+      date: String,
+      text: String
+   }
+
+   type Query {
+      login(username: String!, password: String!): Match,
+      getAuth(number: String!): AuthNum,
+      allPeople: [Person],
+      getDates(name: String!): [String],
+      allPost: [Post]
+   }
+
    type Mutation {
       signup(username: String!, password: String!, auth: String, part: String): Boolean,
       update(name: String, email: String, phone: String): Boolean,
       authUpdate(auth: String, part: String, job: String): Boolean,
-      addDate(name: String!, date: String!): Int
+      addDate(name: String!, date: String!): Int,
+      addPost(title: String, author: String, date: String, content: String): String,
+      addResponse(id: String, author: String, date: String, text: String): Boolean
    }
 `);
 
@@ -73,10 +91,13 @@ const resolver = {
    getAuth: query.getAuth,
    allPeople: query.allPeople,
    getDates: query.getDates,
+   allPost: query.allPost,
    signup: mutation.Signup,
    update: mutation.Update,
    authUpdate: mutation.authUpdate,
-   addDate: mutation.addDate
+   addDate: mutation.addDate,
+   addPost: mutation.addPost,
+   addResponse: mutation.addResponse
 };
 
 app.use(cors());

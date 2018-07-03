@@ -2,9 +2,10 @@
  * This is for cleaning the data base
  ************************************/
 
-const People = require('./model/people');
-const AuthNum = require('./model/authNum');
-const Dates = require('./model/dates');
+const People = require("./model/people");
+const AuthNum = require("./model/authNum");
+const Dates = require("./model/dates");
+const Post = require("./model/post");
 
 // connect to mongodb
 var mongoose = require('mongoose');
@@ -80,5 +81,10 @@ db.once('open', function() {
           console.log('Dates: attend saved')
       });
    });
+
+   Post.deleteMany({}, function (err) {
+       if (err) return handleError(err);
+      console.log('Post: previous data cleared');
+   })
 });
 
