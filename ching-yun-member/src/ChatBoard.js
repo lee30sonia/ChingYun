@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import  CKEditor from "react-ckeditor-component";
 
 //import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -12,18 +13,37 @@ const ChatBoard = withStyles(styles)(
     constructor(props) {
       super(props);
       this.state={
-
-      };   
+        content: ''
+      };
+      this.onChange = this.onChange.bind(this);
     }
-  
+    
+    onChange(evt){
+      //console.log("onChange fired with event info: ", evt);
+      var newContent = evt.editor.getData();
+      this.setState({
+        content: newContent
+      })
+    }
+    
     render() {
       const { classes } = this.props;
 
       return (
-        <Paper> 討論區 </Paper>
+        <div>
+          <Paper> 討論區 </Paper>
+          <CKEditor 
+            activeClass="p10" 
+            content={this.state.content} 
+            events={{
+              "change": this.onChange
+            }}
+            />
+        </div>
       );
     }
   }
 );
+
 
 export default ChatBoard;
