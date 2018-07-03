@@ -51,8 +51,8 @@ const App = withTheme()(withStyles(styles)(
     constructor(props) {
       super(props);
       this.state={
-          me: {name: 'admin'},//null,
-          loggedIn: true//false,
+          me: null,
+          loggedIn: false,
       };
       this.login = this.login.bind(this);
       this.logout = this.logout.bind(this);
