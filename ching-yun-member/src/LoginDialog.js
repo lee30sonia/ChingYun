@@ -289,8 +289,9 @@ const NewMember = withStyles(styles)(
         username: '',
         password: '',
         checkPass: '',
-         person_auth: '',
-         person_part: ''
+        person_auth: '',
+        person_part: '',
+        name: ''
       };   
       this.handleClickOpen = this.handleClickOpen.bind(this);
       this.handleClose = this.handleClose.bind(this);
@@ -338,6 +339,21 @@ const NewMember = withStyles(styles)(
        }
     }
 
+    async checkUP(username, password, checkPass, client)
+    {
+       if(!username || !password)
+          return;
+       if(password!==checkPass)
+          return;
+
+      if(false) { //檢查username有沒有用過
+         alert("This username has already been used.");
+      }
+      else {
+         this.setState({step: 3});
+      }
+    }
+
     async signup(username, password, client)
     {
        if(!username || !password)
@@ -378,14 +394,14 @@ const NewMember = withStyles(styles)(
             { client => { 
 
               var checkPass = (this.state.password===this.state.checkPass)
-                        ? (<TextField required label="確認密碼" type="password"
-                          onChange={(evt) => this.setState({checkPass: evt.target.value})}
-                          onKeyPress={ (event)=>{ 
-                             if(event.key === 'Enter') 
-                                this.signup(this.state.username, this.state.password, client);
-                          }} />)
-                        : (<TextField error required label="確認密碼" type="password"
-                          onChange={(evt) => this.setState({checkPass: evt.target.value})} />);
+                ? (<TextField required label="確認密碼" type="password"
+                  onChange={(evt) => this.setState({checkPass: evt.target.value})}
+                  onKeyPress={ (event)=>{ 
+                     if(event.key === 'Enter') 
+                        this.checkUP(this.state.username, this.state.password, this.state.checkPass, client);
+                  }} />)
+                : (<TextField error required label="確認密碼" type="password"
+                  onChange={(evt) => this.setState({checkPass: evt.target.value})} />);
 
         return(
         <div>
@@ -407,7 +423,7 @@ const NewMember = withStyles(styles)(
                     <FontAwesomeIcon icon="lock" />
                   </Grid>
                   <Grid item>
-                    <TextField label="Authentication code" 
+                    <TextField required label="Authentication code" 
                     onChange={(evt) => this.setState({auth: evt.target.value})}
                     onKeyPress={ (event)=>{ 
                        if(event.key === 'Enter') this.authCheck(this.state.auth, client); 
@@ -439,6 +455,7 @@ const NewMember = withStyles(styles)(
           >
             <DialogTitle>新團員註冊：Step {this.state.step}</DialogTitle>
             <DialogContent>
+
               <DialogContentText>
                 請選擇一組帳號密碼
               </DialogContentText>
@@ -482,15 +499,55 @@ const NewMember = withStyles(styles)(
                 取消
               </Button>
 
+              <Button onClick={() => {this.checkUP(this.state.username, this.state.password, this.state.checkPass, client);} } 
+                color="primary">
+                下一步
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <Dialog
+            open={this.state.step==3}
+            onClose={this.handleClose}
+          >
+            <DialogTitle>新團員註冊：Step {this.state.step}</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                請輸入基本資料
+              </DialogContentText>
+  
+              <div className={classes.margin}>
+                <Grid container spacing={8} alignItems="flex-end">
+                  <Grid item>
+                    聲部：{this.state.person_part}
+                  </Grid>
+                </Grid>
+                <Grid container spacing={8} alignItems="flex-end">
+                  <Grid item>
+                    <TextField required label="姓名" 
+                    onChange={(evt) => this.setState({name: evt.target.value})}
+                    onKeyPress={ (event)=>{ 
+                       if(event.key === 'Enter') this.signup(this.state.username, this.state.password, client);
+                    }}
+                    />
+                  </Grid>
+                </Grid>
+              </div>
+  
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose} color="primary">
+                取消
+              </Button>
+ 
               <Button onClick={ () => {
                  this.signup(this.state.username, this.state.password, client);
               }} 
                 color="primary">
                 註冊
-              </Button>
+              </Button>             
             </DialogActions>
           </Dialog>
-
           
         </div>
          );} }</ApolloConsumer>
