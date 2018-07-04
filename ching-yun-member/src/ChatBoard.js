@@ -24,22 +24,20 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
+import CircularProgress from '@mateial-ui/core/CircularProgress';
 
-import { ApolloConsumer } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 
-var query = gql`{
-   allPost {
-      title
-      author
-      date
-      content
-   }
-   allPost()
-}`;
-var queryPosts = gql`{
-   allPost()
-}`;
+var query = gql`
+   query {
+      allPost {
+         title
+         author
+         date
+         content
+      }
+   }`;
 
 const ChatBoard = withStyles(styles)(
   class extends Component {
@@ -53,27 +51,40 @@ const ChatBoard = withStyles(styles)(
       const { classes } = this.props;
 
       return (
-        <div>
-          <NewPost submit={ ()=>{this.render()} } me={this.props.me} />
+         <Query query={query}>
+            { ({ loading, err, data, refetch}) => {
+               if(loading)
+                  return <CircularProgress className={classes.progress} />;
+               if(err)
+                  return `Error! ${err.message}`;
 
-          <Card className={classes.card}>
-            <Typography gutterBottom variant="headline" component="h2">
-              title
-            </Typography>
-            <Typography color="textSecondary">
-              July 4, 2018
-            </Typography>
-            <Typography color="textSecondary">
-              author
-            </Typography>
-            <CardContent>
-              <div dangerouslySetInnerHTML={{__html: this.state.content}} className="chatArticle"/>
-            </CardContent>
-            <CardActions>
-              <Button size="small">Learn More</Button>
-            </CardActions>
-          </Card>
-        </div>
+               return (
+                 <div>
+                   <NewPost submit={ ()=>{this.render()} } me={this.props.me} />
+                   { data.allPost.map( post => (
+                      <Card className={classes.card}>
+                        <Typography gutterBottom variant="headline" component="h2">
+                           {post.title}
+                        </Typography>
+                        <Typography color="textSecondary">
+                           { new Date(post.date).toDateString() }
+                        </Typography>
+                        <Typography color="textSecondary">
+                           { post.author }
+                        </Typography>
+                        <CardContent>
+                           <div dangerouslySetInnerHTML={{__html: post.content}} 
+                              className="chatArticle"/>
+                        </CardContent>
+                        <CardActions>
+                          <Button size="small">Learn More</Button>
+                        </CardActions>
+                     </Card>
+                   )) };
+                 </div>
+               );
+            }}
+         </Query>
       );
     }
   }
@@ -82,6 +93,11 @@ const ChatBoard = withStyles(styles)(
 function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
+
+var mutation = gql`
+   mutation addPost($t: String, $a: String, $d: String, $c: String) {
+      addPost(title: $t, author: $a, date: $d, content: $c)
+}`;
 
 const NewPost = withStyles(styles)(
   class extends Component {
@@ -114,22 +130,20 @@ const NewPost = withStyles(styles)(
       this.setState({ open: false });
     }
 
-    async submit(client)
+    async submit(addPost)
     {
        if(!this.state.content)
           return;
 
-       //const { data } = 
-       await client.mutate({
-          mutation: gql`
-            mutation addPost($t: String, $p: String, $a: String) {
-               addPost(title: $t, content: $c, author: $a) 
-         }`,
+       addPost({
          variables: {
             "t": this.state.title,
-            "c": this.state.content,
-            "a": this.props.me.name //應該存username，顯示時顯示name(nickname)，以處理更換暱稱的狀況
-         }
+            "a": this.props.me.username, 
+               //應該存username，顯示時顯示name(nickname)，以處理更換暱稱的狀況
+            "d": new Date(),
+            "c": this.state.content
+         },
+         refetchQueries: [{ query: query }]
        })
           .catch( err => {
              console.log(err);
@@ -143,9 +157,6 @@ const NewPost = withStyles(styles)(
       const { classes } = this.props;
 
       return (
-        <ApolloConsumer>
-            { client => (
-
         <div>
           <Tooltip title="發表新文章">
             <Button variant="fab" color="primary" className={classes.addBtn}
@@ -170,9 +181,12 @@ const NewPost = withStyles(styles)(
                 <Typography variant="title" color="inherit" className={classes.flex}>
                   發表新文章
                 </Typography>
-                <Button color="inherit" onClick={() => {this.submit(client)}} >
-                  發布
-                </Button>
+                <Mutation mutation={mutation}>
+                   { addPost => (
+                      <Button color="inherit" onClick={() => {this.submit(addPost)}} >
+                        發布
+                      </Button> )}
+                </Mutation>
               </Toolbar>
             </AppBar>
            
@@ -193,7 +207,6 @@ const NewPost = withStyles(styles)(
             </DialogContent>
           </Dialog>
         </div>
-        ) }</ApolloConsumer>
       );
     }
   }
