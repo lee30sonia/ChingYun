@@ -51,6 +51,23 @@ async function getAuth(args) {
    return result;
 }
 
+async function getPerson(args) {
+   console.log('getPerson request', args.username);
+   var result;
+   await People.findOne({username: args.username})
+      .exec()
+      .then( match => {
+         if(match) {
+            result = match;
+         }
+      })
+      .catch( err => {
+         console.error(err);
+      });
+   // console.log(result);
+   return result;
+}
+
 async function allPeople() {
    console.log('allPeople request');
    var result;
@@ -101,7 +118,18 @@ async function allPost() {
       .exec()
       .then( posts => {
          if(posts) {
-            result = posts;
+            result = posts.map( post => {
+               People.findOne({username: post.author})
+                  .exec()
+                  .then( match => {
+                     if(match) 
+                        post.author = match.name;
+                  })
+                  .catch( err => {
+                     console.error(err);
+                  });
+               return post;
+            });
          }
       })
       .catch( err => {
@@ -113,6 +141,7 @@ async function allPost() {
 var query = {
    Login: Login,
    getAuth: getAuth,
+   getPerson: getPerson,
    allPeople: allPeople,
    getDates: getDates,
    allPost: allPost

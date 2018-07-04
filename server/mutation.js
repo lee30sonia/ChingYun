@@ -97,7 +97,6 @@ async function addPost(args) {
    await newPost.save()
       .then( p => {
          console.log('new post added');
-         console.log(p._id);
          result = p._id;
       })
       .catch( err => console.log(err) );

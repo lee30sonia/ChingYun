@@ -71,6 +71,7 @@ var schema = buildSchema(`
    type Query {
       login(username: String!, password: String!): Match,
       getAuth(number: String!): AuthNum,
+      getPerson(username: String!): Person,
       allPeople: [Person],
       getDates(name: String!): [String],
       allPost: [Post]
@@ -89,6 +90,7 @@ var schema = buildSchema(`
 const resolver = {
    login: query.Login,
    getAuth: query.getAuth,
+   getPerson: query.getPerson,
    allPeople: query.allPeople,
    getDates: query.getDates,
    allPost: query.allPost,
