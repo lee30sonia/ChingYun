@@ -491,8 +491,8 @@ const NewMember = withStyles(styles)(
 
                 <DialogContentText>
                 <br />
-                請輸入基本資料 <br/>
-                聲部：{this.state.person_part}
+                你的聲部是：{this.state.person_part} <br/>
+                請輸入基本資料
                 </DialogContentText>
 
               <div className={classes.margin}>
