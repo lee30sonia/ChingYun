@@ -64,7 +64,7 @@ const ChatBoard = withStyles(styles)(
                  <div>
                    <NewPost submit={ ()=>{this.render()} } me={this.props.me} />
                    { data.allPost.map( post => (
-                      <Card className={classes.card}>
+                      <Card className={classes.article}>
                         <Typography gutterBottom variant="headline" component="h2">
                            {post.title}
                         </Typography>
@@ -72,17 +72,17 @@ const ChatBoard = withStyles(styles)(
                            { new Date(post.date).toDateString() }
                         </Typography>
                         <Typography color="textSecondary">
-                           { post.author.name }
+                           作者：{ post.author.name }
                         </Typography>
                         <CardContent>
                            <div dangerouslySetInnerHTML={{__html: post.content}} 
                               className="chatArticle"/>
                         </CardContent>
                         <CardActions>
-                          <Button size="small">Learn More</Button>
+                          
                         </CardActions>
                      </Card>
-                   )) };
+                   )) }
                  </div>
                );
             }}
@@ -107,7 +107,7 @@ const NewPost = withStyles(styles)(
       super(props);
       this.state={
         open: false,
-        title: 'title',
+        title: '',
         content: ''
       };
       this.onChange = this.onChange.bind(this);
@@ -198,6 +198,7 @@ const NewPost = withStyles(styles)(
                 margin="normal"
                 label="文章標題"
                 fullWidth
+                onChange={(evt) => this.setState({title: evt.target.value})}
               />
               <CKEditor 
                 activeClass="p10 articleEditor" 
