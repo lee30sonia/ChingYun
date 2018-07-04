@@ -23,7 +23,7 @@ import client from './client';
 
 const theme = createMuiTheme({
   palette: {
-    primary: {main: '#408c8c'},
+    primary: {main: '#d9a99d'},//'#408c8c'},
   },
   status: {
     danger: 'orange',
@@ -93,7 +93,7 @@ const App = withTheme()(withStyles(styles)(
               </Grid>
             </Grid>
 
-            <MainPage loggedIn={this.state.loggedIn}/>
+            <MainPage loggedIn={this.state.loggedIn} me={this.state.me}/>
 
           </div>
         </MuiThemeProvider>
