@@ -72,7 +72,7 @@ const ChatBoard = withStyles(styles)(
                            { new Date(post.date).toDateString() }
                         </Typography>
                         <Typography color="textSecondary">
-                           作者：{ post.author.name }
+                           { post.author.name }
                         </Typography>
                         <CardContent>
                            <div dangerouslySetInnerHTML={{__html: post.content}} 

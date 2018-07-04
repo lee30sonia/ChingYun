@@ -50,11 +50,7 @@ const MainPage = withStyles(styles)(
                       this.setState({main: 'announcement'});
                    }}/>
                 </ListItem>
-                <ListItem button>
-                   <ListItemText primary='練唱進度' onClick={() => {
-                      this.setState({main: 'schedule'});
-                   }}/>
-                </ListItem>
+                
                 <ListItem button>
                    <ListItemText primary='討論區' onClick={() => {
                       this.setState({main: 'chatBoard'});
@@ -87,5 +83,13 @@ const MainPage = withStyles(styles)(
     }
   }
 );
+
+/*
+                <ListItem button>
+                   <ListItemText primary='練唱進度' onClick={() => {
+                      this.setState({main: 'schedule'});
+                   }}/>
+                </ListItem>
+*/
 
 export default MainPage;
