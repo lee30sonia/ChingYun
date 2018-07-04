@@ -363,10 +363,11 @@ const NewMember = withStyles(styles)(
 
        const { data } = await client.mutate({
           mutation: gql`
-            mutation signup($u: String!, $p: String!, $auth: String, $part: String) {
-               signup(username: $u, password: $p, auth: $auth, part: $part) 
+            mutation signup($n: String, $u: String!, $p: String!, $auth: String, $part: String) {
+               signup(name: $n, username: $u, password: $p, auth: $auth, part: $part) 
          }`,
          variables: {
+            "n": name,
             "u": username,
             "p": password,
             "auth": this.state.person_auth,

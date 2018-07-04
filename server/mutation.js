@@ -27,7 +27,7 @@ async function Signup(args) {
             result = false;
          }
          else {
-            addNewAgent("未命名", args.username, args.password, args.auth, args.part);
+            addNewAgent(args.name, args.username, args.password, args.auth, args.part);
             result = true;
          }
       })

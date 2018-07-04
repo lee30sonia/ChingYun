@@ -78,7 +78,7 @@ var schema = buildSchema(`
    }
 
    type Mutation {
-      signup(username: String!, password: String!, auth: String, part: String): Boolean,
+      signup(name: String, username: String!, password: String!, auth: String, part: String): Boolean,
       update(name: String, email: String, phone: String): Boolean,
       authUpdate(auth: String, part: String, job: String): Boolean,
       addDate(name: String!, date: String!): Int,
