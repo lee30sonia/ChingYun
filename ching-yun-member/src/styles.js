@@ -40,7 +40,7 @@ const styles = theme => ({
     alignItems: 'center',
   },
   addBtn: {
-    position: 'absolute',
+    position: 'fixed',
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 3,
   },
@@ -50,8 +50,9 @@ const styles = theme => ({
   table: {
     minWidth: 700,
    },
-  card: {
+  article: {
     minWidth: 275,
+    marginBottom: 30
   },
   appBar: {
     position: 'relative',
