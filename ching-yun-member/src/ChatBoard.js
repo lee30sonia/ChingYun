@@ -33,7 +33,9 @@ var query = gql`
    query {
       allPost {
          title
-         author
+         author{
+            name
+         }
          date
          content
       }
@@ -70,7 +72,7 @@ const ChatBoard = withStyles(styles)(
                            { new Date(post.date).toDateString() }
                         </Typography>
                         <Typography color="textSecondary">
-                           { post.author }
+                           { post.author.name }
                         </Typography>
                         <CardContent>
                            <div dangerouslySetInnerHTML={{__html: post.content}} 

@@ -118,12 +118,12 @@ async function allPost() {
       .exec()
       .then( posts => {
          if(posts) {
-            result = posts.map( post => {
-               People.findOne({username: post.author})
+            result = posts.map( async function(post) {
+               await People.findOne({username: post.author})
                   .exec()
                   .then( match => {
-                     if(match) 
-                        post.author = match.name;
+                     post.author = match;
+                     console.log(match);
                   })
                   .catch( err => {
                      console.error(err);
