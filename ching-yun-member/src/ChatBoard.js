@@ -24,7 +24,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
-import CircularProgress from '@mateial-ui/core/CircularProgress';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
