@@ -339,6 +339,7 @@ const NewMember = withStyles(styles)(
        }
     }
 
+        /*
     async checkUP(username, password, checkPass, client)
     {
        if(!username || !password)
@@ -353,6 +354,7 @@ const NewMember = withStyles(styles)(
          this.setState({step: 3});
       }
     }
+    */
 
     async signup(username, password, name, client)
     {
