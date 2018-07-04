@@ -25,22 +25,28 @@ import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
 
+import { ApolloConsumer } from 'react-apollo';
+import gql from 'graphql-tag';
+
+var query = gql`{
+   allPost {
+      title
+      author
+      date
+      content
+   }
+   allPost()
+}`;
+var queryPosts = gql`{
+   allPost()
+}`;
+
 const ChatBoard = withStyles(styles)(
   class extends Component {
     constructor(props) {
       super(props);
       this.state={
-        content: ''
       };
-      this.onChange = this.onChange.bind(this);
-    }
-    
-    onChange(evt){
-      //console.log("onChange fired with event info: ", evt);
-      var newContent = evt.editor.getData();
-      this.setState({
-        content: newContent
-      })
     }
     
     render() {
@@ -48,7 +54,7 @@ const ChatBoard = withStyles(styles)(
 
       return (
         <div>
-          <NewPost submit={ (content)=>{this.setState({content: content})} }/>
+          <NewPost submit={ ()=>{this.render()} } me={this.props.me} />
 
           <Card className={classes.card}>
             <Typography gutterBottom variant="headline" component="h2">
@@ -83,6 +89,7 @@ const NewPost = withStyles(styles)(
       super(props);
       this.state={
         open: false,
+        title: 'title',
         content: ''
       };
       this.onChange = this.onChange.bind(this);
@@ -107,7 +114,27 @@ const NewPost = withStyles(styles)(
       this.setState({ open: false });
     }
 
-    submit() {
+    async submit(client)
+    {
+       if(!this.state.content)
+          return;
+
+       //const { data } = 
+       await client.mutate({
+          mutation: gql`
+            mutation addPost($t: String, $p: String, $a: String) {
+               addPost(title: $t, content: $c, author: $a) 
+         }`,
+         variables: {
+            "t": this.state.title,
+            "c": this.state.content,
+            "a": this.props.me.name //應該存username，顯示時顯示name(nickname)，以處理更換暱稱的狀況
+         }
+       })
+          .catch( err => {
+             console.log(err);
+          });
+
       this.props.submit(this.state.content);
       this.handleClose();
     }
@@ -116,6 +143,9 @@ const NewPost = withStyles(styles)(
       const { classes } = this.props;
 
       return (
+        <ApolloConsumer>
+            { client => (
+
         <div>
           <Tooltip title="發表新文章">
             <Button variant="fab" color="primary" className={classes.addBtn}
@@ -140,7 +170,7 @@ const NewPost = withStyles(styles)(
                 <Typography variant="title" color="inherit" className={classes.flex}>
                   發表新文章
                 </Typography>
-                <Button color="inherit" onClick={this.submit}>
+                <Button color="inherit" onClick={() => {this.submit(client)}} >
                   發布
                 </Button>
               </Toolbar>
@@ -163,6 +193,7 @@ const NewPost = withStyles(styles)(
             </DialogContent>
           </Dialog>
         </div>
+        ) }</ApolloConsumer>
       );
     }
   }

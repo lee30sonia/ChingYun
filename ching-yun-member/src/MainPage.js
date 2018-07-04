@@ -35,7 +35,7 @@ const MainPage = withStyles(styles)(
         {
           case 'announcement': main = <Announcement />; break;
           case 'schedule': main = <Schedule />; break;
-          case 'chatBoard': main = <ChatBoard />; break;
+          case 'chatBoard': main = <ChatBoard me={this.props.me} />; break;
           case 'people': main = <People />; break;
           case 'attendance': main = <Attendance />; break;
           default: main = <div></div>;
