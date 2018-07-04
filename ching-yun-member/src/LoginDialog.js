@@ -288,6 +288,7 @@ const NewMember = withStyles(styles)(
         auth: '',
         username: '',
         password: '',
+        checkPass: '',
          person_auth: '',
          person_part: ''
       };   
@@ -370,10 +371,23 @@ const NewMember = withStyles(styles)(
   
     render() {
       const { classes } = this.props;
+
+      
       return (
          <ApolloConsumer>
-            { client => (
+            { client => { 
 
+              var checkPass = (this.state.password===this.state.checkPass)
+                        ? (<TextField required label="確認密碼" type="password"
+                          onChange={(evt) => this.setState({checkPass: evt.target.value})}
+                          onKeyPress={ (event)=>{ 
+                             if(event.key === 'Enter') 
+                                this.signup(this.state.username, this.state.password, client);
+                          }} />)
+                        : (<TextField error required label="確認密碼" type="password"
+                          onChange={(evt) => this.setState({checkPass: evt.target.value})} />);
+
+        return(
         <div>
           <Button onClick={this.handleClickOpen}> 新團員註冊 </Button>
 
@@ -435,7 +449,7 @@ const NewMember = withStyles(styles)(
                     <FontAwesomeIcon icon="user-circle" />
                   </Grid>
                   <Grid item>
-                    <TextField label="Username" 
+                    <TextField required label="帳號" 
                     onChange={(evt) => this.setState({username: evt.target.value})}
                     />
                   </Grid>
@@ -446,13 +460,18 @@ const NewMember = withStyles(styles)(
                     <FontAwesomeIcon icon="key" />
                   </Grid>
                   <Grid item>
-                    <TextField label="Password" type="password"
+                    <TextField required label="密碼" type="password"
                     onChange={(evt) => this.setState({password: evt.target.value})}
-                    onKeyPress={ (event)=>{ 
-                       if(event.key === 'Enter') 
-                          this.signup(this.state.username, this.state.password, client);
-                    }}
                     />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={8} alignItems="flex-end">
+                  <Grid item>
+                    <FontAwesomeIcon icon="key" />
+                  </Grid>
+                  <Grid item>
+                    {checkPass}
                   </Grid>
                 </Grid>
               </div>
@@ -474,7 +493,7 @@ const NewMember = withStyles(styles)(
 
           
         </div>
-         ) }</ApolloConsumer>
+         );} }</ApolloConsumer>
       );
     }
   }
