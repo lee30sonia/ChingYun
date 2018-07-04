@@ -19,6 +19,9 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import TextField from '@material-ui/core/TextField';
 import Slide from '@material-ui/core/Slide';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -115,6 +118,7 @@ const LoginDialog = withStyles(styles)(
       var logout = (<Button color="inherit" onClick={this.logout}>登出</Button>);
       var button = this.props.loggedIn? logout: login;
       var greet = this.props.loggedIn? (<Button color="inherit">{this.props.me.name}</Button>): (<div></div>);
+      //<PersonalPage me={this.props.me}/>
          
       return (
          <ApolloConsumer>
@@ -218,6 +222,59 @@ const LoginDialog = withStyles(styles)(
 
                )}
             </ApolloConsumer>
+      );
+    }
+  }
+);
+
+const PersonalPage = withStyles(styles)(
+  class extends Component {
+    constructor(props) {
+      super(props);
+      this.state={
+      };
+      this.handleClickOpen = this.handleClickOpen.bind(this);
+      this.handleClose = this.handleClose.bind(this);
+    }
+
+    handleClickOpen(){
+      this.setState({ open: true });
+    }
+
+    handleClose(){
+      this.setState({ open: false });
+    }
+
+    render() {
+      const { classes } = this.props;
+
+      return (
+        <div>
+          <Button color="inherit" onClick={this.handleClickOpen}>{this.props.me.name}</Button>
+          <Dialog
+            fullScreen
+            open={this.state.open}
+            onClose={this.handleClose}
+            TransitionComponent={Transition}
+          >
+            
+            <AppBar className={classes.appBar}>
+              <Toolbar>
+                <IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
+                  <CloseIcon />
+                </IconButton>
+                <Typography variant="title" color="inherit" className={classes.flex}>
+                  發表新文章
+                </Typography>
+                
+              </Toolbar>
+            </AppBar>
+           
+            <DialogContent>
+              
+            </DialogContent>
+          </Dialog>
+        </div>
       );
     }
   }
