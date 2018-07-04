@@ -354,7 +354,7 @@ const NewMember = withStyles(styles)(
       }
     }
 
-    async signup(username, password, client)
+    async signup(username, password, name, client)
     {
        if(!username || !password)
           return;
@@ -395,11 +395,7 @@ const NewMember = withStyles(styles)(
 
               var checkPass = (this.state.password===this.state.checkPass)
                 ? (<TextField required label="確認密碼" type="password"
-                  onChange={(evt) => this.setState({checkPass: evt.target.value})}
-                  onKeyPress={ (event)=>{ 
-                     if(event.key === 'Enter') 
-                        this.checkUP(this.state.username, this.state.password, this.state.checkPass, client);
-                  }} />)
+                  onChange={(evt) => this.setState({checkPass: evt.target.value})} />)
                 : (<TextField error required label="確認密碼" type="password"
                   onChange={(evt) => this.setState({checkPass: evt.target.value})} />);
 
@@ -492,19 +488,59 @@ const NewMember = withStyles(styles)(
                   </Grid>
                 </Grid>
               </div>
+
+                <DialogContentText>
+                <br />
+                請輸入基本資料 <br/>
+                聲部：{this.state.person_part}
+                </DialogContentText>
+
+              <div className={classes.margin}>
+                <Grid container spacing={8} alignItems="flex-end">
+                  <Grid item>
+                    <TextField required label="姓名" 
+                    onChange={(evt) => this.setState({name: evt.target.value})}
+                    onKeyPress={ (event)=>{ 
+                       if(event.key === 'Enter') this.signup(this.state.username, this.state.password, client);
+                    }}
+                    />
+                  </Grid>
+                </Grid>
+              </div>
   
             </DialogContent>
             <DialogActions>
               <Button onClick={this.handleClose} color="primary">
                 取消
               </Button>
+              <Button onClick={ () => {
+                 this.signup(this.state.username, this.state.password, this.state.name, client);
+              }} 
+                color="primary">
+                註冊
+              </Button>
+              
+            </DialogActions>
+          </Dialog>
+
+          
+          
+        </div>
+         );} }</ApolloConsumer>
+      );
+    }
+  }
+
+);
+
+
+/*
 
               <Button onClick={() => {this.checkUP(this.state.username, this.state.password, this.state.checkPass, client);} } 
                 color="primary">
                 下一步
               </Button>
-            </DialogActions>
-          </Dialog>
+
 
           <Dialog
             open={this.state.step==3}
@@ -548,13 +584,6 @@ const NewMember = withStyles(styles)(
               </Button>             
             </DialogActions>
           </Dialog>
-          
-        </div>
-         );} }</ApolloConsumer>
-      );
-    }
-  }
-
-);
+*/
 
 export default LoginDialog;
