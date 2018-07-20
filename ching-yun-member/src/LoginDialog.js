@@ -274,6 +274,13 @@ const PersonalPage = withStyles(styles)(
             </AppBar>
            
             <DialogContent>
+              <TextField
+                autoFocus
+                margin="normal"
+                label="文章標題"
+                fullWidth
+                onChange={(evt) => this.setState({title: evt.target.value})}
+              />
               
             </DialogContent>
           </Dialog>
