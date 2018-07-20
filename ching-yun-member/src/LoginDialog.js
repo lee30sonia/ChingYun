@@ -32,8 +32,12 @@ import gql from 'graphql-tag';
 
 library.add(faUserCircle, faKey, faLock)
 
-function Transition(props) {
+function TransitionLeft(props) {
   return <Slide direction="left" {...props} />;
+}
+
+function TransitionUp(props) {
+  return <Slide direction="up" {...props} />;
 }
 
 const LoginDialog = withStyles(styles)(
@@ -117,16 +121,15 @@ const LoginDialog = withStyles(styles)(
       var login = (<Button color="inherit" onClick={this.handleClickOpen}>登入</Button>);
       var logout = (<Button color="inherit" onClick={this.logout}>登出</Button>);
       var button = this.props.loggedIn? logout: login;
-      var greet = this.props.loggedIn? (<Button color="inherit">{this.props.me.name}</Button>): (<div></div>);
-      //<PersonalPage me={this.props.me}/>
+      var greet = this.props.loggedIn? (<PersonalPage me={this.props.me}/>): (<div></div>);
+      //var greet = this.props.loggedIn? (<Button color="inherit">{this.props.me.name}</Button>): (<div></div>);
          
       return (
          <ApolloConsumer>
          { client => (
          
         <div>
-          {greet}
-          {button}
+          {greet}{button}
           <Dialog
             open={this.state.open}
             onClose={this.handleClose}
@@ -249,13 +252,13 @@ const PersonalPage = withStyles(styles)(
       const { classes } = this.props;
 
       return (
-        <div>
+        <div className="personal">
           <Button color="inherit" onClick={this.handleClickOpen}>{this.props.me.name}</Button>
           <Dialog
             fullScreen
             open={this.state.open}
             onClose={this.handleClose}
-            TransitionComponent={Transition}
+            TransitionComponent={TransitionUp}
           >
             
             <AppBar className={classes.appBar}>
@@ -264,7 +267,7 @@ const PersonalPage = withStyles(styles)(
                   <CloseIcon />
                 </IconButton>
                 <Typography variant="title" color="inherit" className={classes.flex}>
-                  發表新文章
+                  個人資料
                 </Typography>
                 
               </Toolbar>
@@ -506,7 +509,7 @@ const NewMember = withStyles(styles)(
           <Dialog
             open={this.state.step==2}
             onClose={this.handleClose}
-            TransitionComponent={Transition}
+            TransitionComponent={TransitionLeft}
             keepMounted
           >
             <DialogTitle>新團員註冊：Step {this.state.step}</DialogTitle>

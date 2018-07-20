@@ -19,15 +19,19 @@ body {
 } /* for CKEditor display */
 
 .chatArticle {
-    text-align: left;
+  text-align: left;
 }
 
 .articleEditor {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 
 .announce {
-    margin-bottom: 20px;
-    padding: 20px 20px 20px 20px;
-    text-align: left;
+  margin-bottom: 20px;
+  padding: 20px 20px 20px 20px;
+  text-align: left;
+}
+
+.personal {
+  display: inline-flex;
 }
