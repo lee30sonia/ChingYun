@@ -12,5 +12,5 @@ module.exports = AuthNum;
 
 /*
    auth: Root, Teacher, Leader(part), Member, etc.
-   part: Sope1, Alto2, ect
+   part: Sop1, Alto2, ect
 */

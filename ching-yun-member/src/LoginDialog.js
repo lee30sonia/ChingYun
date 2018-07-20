@@ -22,15 +22,17 @@ import Slide from '@material-ui/core/Slide';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserCircle, faKey, faLock } from '@fortawesome/free-solid-svg-icons'
+import { faUserCircle, faKey, faLock, faEnvelope, faPhone, faSmile } from '@fortawesome/free-solid-svg-icons'
 
+import { Query, Mutation } from 'react-apollo';
 import { ApolloConsumer } from 'react-apollo';
 import gql from 'graphql-tag';
 
-library.add(faUserCircle, faKey, faLock)
+library.add(faUserCircle, faKey, faLock, faEnvelope, faPhone, faSmile)
 
 function TransitionLeft(props) {
   return <Slide direction="left" {...props} />;
@@ -101,7 +103,7 @@ const LoginDialog = withStyles(styles)(
       {
         this.props.login(data.login.person);
         this.setState({snackBarOpen: true});
-         this.handleClose();
+        this.handleClose();
       }
        else
       {
@@ -230,11 +232,35 @@ const LoginDialog = withStyles(styles)(
   }
 );
 
+var mutation = gql`
+   mutation update($uid: String!, $n: String, $e: String, $p: String) {
+      update(username: $uid, name: $n, email: $e, phone: $p)
+}`; // should add more
+
+var query = gql`
+  query getPerson($uid: String!){
+    getPerson(username: $uid) {
+      name
+      username
+      password
+      auth
+      part
+      job
+      email
+      phone
+    }
+  }`;
+
+
 const PersonalPage = withStyles(styles)(
   class extends Component {
     constructor(props) {
       super(props);
       this.state={
+        open: false,
+        name: '',
+        email: '',
+        phone: ''
       };
       this.handleClickOpen = this.handleClickOpen.bind(this);
       this.handleClose = this.handleClose.bind(this);
@@ -248,43 +274,106 @@ const PersonalPage = withStyles(styles)(
       this.setState({ open: false });
     }
 
+    async save(Update)
+    {
+      // check for requirements
+
+       await Update({
+         variables: {
+            "uid": this.props.me.username,
+            "n": this.state.name, 
+            "e": this.state.email,
+            "p": this.state.phone
+         }
+         //,refetchQueries: [{ query: query }]
+       })
+          .catch( err => {
+             console.log(err);
+          });
+
+      this.handleClose();
+    }
+
     render() {
       const { classes } = this.props;
 
       return (
-        <div className="personal">
-          <Button color="inherit" onClick={this.handleClickOpen}>{this.props.me.name}</Button>
-          <Dialog
+        <Query query={query} variables={{ "uid": this.props.me.username }}>
+          { ({ loading, err, data, refetch}) => {
+            if(loading)
+              return <CircularProgress className={classes.progress} />;
+            if(err)
+              return `Error! ${err.message}`;
+
+            return(
+              <div className="personal">
+                <Button color="inherit" onClick={this.handleClickOpen}>{this.props.me.name}</Button>
+                <Dialog
             fullScreen
             open={this.state.open}
             onClose={this.handleClose}
             TransitionComponent={TransitionUp}
-          >
-            
-            <AppBar className={classes.appBar}>
-              <Toolbar>
-                <IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
-                  <CloseIcon />
-                </IconButton>
-                <Typography variant="title" color="inherit" className={classes.flex}>
-                  個人資料
-                </Typography>
-                
-              </Toolbar>
-            </AppBar>
-           
-            <DialogContent>
-              <TextField
-                autoFocus
-                margin="normal"
-                label="文章標題"
-                fullWidth
-                onChange={(evt) => this.setState({title: evt.target.value})}
-              />
-              
-            </DialogContent>
-          </Dialog>
-        </div>
+                >
+                  
+                  <AppBar className={classes.appBar}>
+                    <Toolbar>
+                      <IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
+                        <CloseIcon />
+                      </IconButton>
+                      <Typography variant="title" color="inherit" className={classes.flex}>
+                        個人資料
+                      </Typography>
+                      <Button color="inherit" onClick={this.handleClose} > 取消 </Button>
+                      <Mutation mutation={mutation}>
+                         { Update => (
+                            <Button color="inherit" onClick={() => {this.save(Update)}} >
+                              儲存
+                            </Button> )}
+                      </Mutation>
+                    </Toolbar>
+                  </AppBar>
+                 
+                  <DialogContent>
+                    <Grid container spacing={8} alignItems="flex-end">
+                      <Grid item>
+                        <FontAwesomeIcon icon="smile" />
+                      </Grid>
+                      <Grid item>
+                        <TextField
+                          autoFocus margin="normal" label="姓名" required defaultValue={data.getPerson.name}
+                          onChange={(evt) => this.setState({name: evt.target.value})}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid container spacing={8} alignItems="flex-end">
+                      <Grid item>
+                        <FontAwesomeIcon icon="envelope" />
+                      </Grid>
+                      <Grid item>
+                        <TextField
+                          margin="normal" label="email" defaultValue={data.getPerson.email}
+                          onChange={(evt) => this.setState({email: evt.target.value})}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid container spacing={8} alignItems="flex-end">
+                      <Grid item>
+                        <FontAwesomeIcon icon="key" />
+                      </Grid>
+                      <Grid item>
+                        <TextField
+                          margin="normal" label="電話" defaultValue={data.getPerson.phone}
+                          onChange={(evt) => this.setState({phone: evt.target.value})}
+                        />
+                      </Grid>
+                    </Grid>
+                    
+                  </DialogContent>
+                </Dialog>
+              </div>
+            );
+          }}
+        </Query>
       );
     }
   }
@@ -562,7 +651,6 @@ const NewMember = withStyles(styles)(
                 <DialogContentText>
                 <br />
                 你的聲部是：{this.state.person_part} <br/>
-                請輸入基本資料
                 </DialogContentText>
 
               <div className={classes.margin}>
