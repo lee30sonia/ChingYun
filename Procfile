@@ -1,1 +1,1 @@
-web cd ching-yun-member; npm start;
+web cd ching-yun-member && npm start
