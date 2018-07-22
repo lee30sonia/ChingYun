@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import styles from './styles'
 
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CloseIcon from '@material-ui/icons/Close';
@@ -563,7 +562,7 @@ const NewMember = withStyles(styles)(
           <Button onClick={this.handleClickOpen}> 新團員註冊 </Button>
 
           <Dialog
-            open={this.state.step==1}
+            open={this.state.step===1}
             onClose={this.handleClose}
           >
             <DialogTitle>新團員註冊：Step {this.state.step}</DialogTitle>
@@ -603,7 +602,7 @@ const NewMember = withStyles(styles)(
 
 
           <Dialog
-            open={this.state.step==2}
+            open={this.state.step===2}
             onClose={this.handleClose}
             TransitionComponent={TransitionLeft}
             keepMounted
