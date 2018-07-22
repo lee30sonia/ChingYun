@@ -276,15 +276,14 @@ const PersonalPage = withStyles(styles)(
     async save(Update)
     {
       // check for requirements
-
-       await Update({
+      await Update({
          variables: {
             "uid": this.props.me.username,
             "n": this.state.name, 
             "e": this.state.email,
             "p": this.state.phone
          }
-         //,refetchQueries: [{ query: query }]
+         ,refetchQueries: [{ query: query, variables: {"uid": this.props.me.username} }]
        })
           .catch( err => {
              console.log(err);
@@ -306,7 +305,7 @@ const PersonalPage = withStyles(styles)(
 
             return(
               <div className="personal">
-                <Button color="inherit" onClick={this.handleClickOpen}>{this.props.me.name}</Button>
+                <Button color="inherit" onClick={this.handleClickOpen}>{data.getPerson.name}</Button>
                 <Dialog
             fullScreen
             open={this.state.open}
@@ -357,7 +356,7 @@ const PersonalPage = withStyles(styles)(
                     </Grid>
                     <Grid container spacing={8} alignItems="flex-end">
                       <Grid item>
-                        <FontAwesomeIcon icon="key" />
+                        <FontAwesomeIcon icon="phone" />
                       </Grid>
                       <Grid item>
                         <TextField
