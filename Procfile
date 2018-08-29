@@ -1,1 +1,1 @@
-web: npm start_public
+web: npm run public

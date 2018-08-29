@@ -28,7 +28,7 @@
     "react-scripts": "1.1.4"
   },
   "scripts": {
-    "start_public": "cd ching-yun-public && npm start",
+    "public": "cd ching-yun-public && npm start",
     "start": "cd ching-yun-member && npm start",
     "build": "cd ching-yun-member && npm build",
     "test": "react-scripts test --env=jsdom",
