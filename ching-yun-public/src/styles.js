@@ -3,7 +3,7 @@ import green from '@material-ui/core/colors/green';
 
 export const theme = createMuiTheme({
   palette: {
-    primary: {main: '#408c8c'}, //'#d9a99d'},
+    primary: {main: '#d9a99d'}, //'#408c8c'},
   },
   status: {
     danger: 'orange',
@@ -30,7 +30,37 @@ export const styles = theme => ({
   root: {
     flexGrow: 1,
   },
-   tableroot: {
+
+  Nav: {
+    marginBottom: theme.spacing.unit*3,
+    height: '90px',
+  },
+
+  NavList: {
+    display: 'flex', //'inline-block',
+    flexDirection: 'row',
+    padding: 0,
+  },
+
+  NavListItem: {
+    padding: 0
+  },
+
+  NavListText: {
+    width: '90px',
+    textAlign: 'center',
+    paddingRight: 0,
+  },
+
+  NavListLogo: {
+    width: '200px',
+  },
+
+  logo: {
+    height: '70px'
+  },
+
+  /*tableroot: {
      width: '100%',
      marginTop: theme.spacing.unit * 3,
      overflowX: 'auto',
@@ -83,7 +113,7 @@ export const styles = theme => ({
   appBar: {
     position: 'relative',
     textAlign: 'center'
-  },
+  },*/
 });
 
 export default styles;

@@ -4,10 +4,8 @@ import LoginDialog from './LoginDialog';
 import MainPage from './MainPage';
 
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import { withTheme } from '@material-ui/core/styles'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import styles from './styles'
+import { MuiThemeProvider, withTheme, withStyles } from '@material-ui/core/styles';
+import { styles, theme } from './styles';
 
 // material-ui
 import AppBar from '@material-ui/core/AppBar';
@@ -20,31 +18,6 @@ import Typography from '@material-ui/core/Typography';
 import { ApolloProvider } from 'react-apollo';
 import client from './client';
 
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {main: '#d9a99d'},//'#408c8c'},
-  },
-  status: {
-    danger: 'orange',
-  },
-  /*typography: {
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      '標楷體',
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(','),
-  },*/
-});
 
 const App = withTheme()(withStyles(styles)(
   class extends Component {
