@@ -8,10 +8,10 @@ export const theme = createMuiTheme({
   status: {
     danger: 'orange',
   },
-  /*typography: {
+  typography: {
     // Use the system font instead of the default Roboto font.
     fontFamily: [
-      '標楷體',
+      '微軟正黑體',
       '-apple-system',
       'BlinkMacSystemFont',
       '"Segoe UI"',
@@ -23,7 +23,7 @@ export const theme = createMuiTheme({
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
     ].join(','),
-  },*/
+  },
 });
 
 export const styles = theme => ({
