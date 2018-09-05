@@ -1,15 +1,14 @@
 {
-  "short_name": "青&#38901;官網",
-  "name": "青&#38901;合唱團全球資訊網",
+  "short_name": "青韵官網",
+  "name": "青韵合唱團全球資訊網",
   "icons": [
     {
       "src": "logo.jpg",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
     }
   ],
   "start_url": "./index.html",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#095d79",
   "background_color": "#ffffff"
 }
