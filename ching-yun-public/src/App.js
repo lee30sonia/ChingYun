@@ -15,13 +15,13 @@ import { styles, theme, Navtheme } from './styles';
 
 import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+//import IconButton from '@material-ui/core/IconButton';
+//import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+//import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
+//import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 
@@ -61,7 +61,7 @@ const Navigation = withStyles(styles)(
               <AppBar position="static" className={classes.Nav}>
                 <Toolbar>
                   <List className={classes.NavList}>
-                    <ListItem className={classes.NavListLogo} component={NavLink} to="/"> <img src={logo} className={classes.logo}/> </ListItem>
+                    <ListItem className={classes.NavListLogo} component={NavLink} to="/"> <img src={logo} alt="logo" className={classes.logo}/> </ListItem>
                     <NavItem to="/" text="首頁"/>
                     <NavItem to="/about" text="關於"/>
                   </List>
@@ -79,7 +79,7 @@ const NavItem = withStyles(styles)(
     render() {
       const { classes } = this.props;
       return ( 
-        <ListItem button component={NavLink} to={this.props.to} className={classes.NavListItem} > 
+        <ListItem button component={NavLink} to={this.props.to} exact className={classes.NavListItem} activeClassName="MuiButtonBase-disabled-176 MuiListItem-disabled-162"> 
           <ListItemText className={classes.NavListText} primary={this.props.text}> 
           </ListItemText> 
         </ListItem>
