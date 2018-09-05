@@ -1,6 +1,7 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 
+
 export const theme = createMuiTheme({
   palette: {
     primary: {main: '#095d79', light: '#2b9fc5', contrastText: '#b5e8eb'}, // '#408c8c' '#d9a99d'
@@ -11,7 +12,6 @@ export const theme = createMuiTheme({
   typography: {
     // Use the system font instead of the default Roboto font.
     fontFamily: [
-      'cwTeXKai',
       '微軟正黑體',
       '-apple-system',
       'BlinkMacSystemFont',
@@ -72,6 +72,12 @@ export const styles = theme => ({
 
   logo: {
     height: '70px'
+  },
+
+  Paper: {
+    padding: theme.spacing.unit * 2,
+    margin: theme.spacing.unit * 2,
+    textAlign: 'center',
   },
 
   /*tableroot: {
