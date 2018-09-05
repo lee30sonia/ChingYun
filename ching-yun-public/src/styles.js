@@ -12,7 +12,7 @@ export const theme = createMuiTheme({
   typography: {
     // Use the system font instead of the default Roboto font.
     fontFamily: [
-      '微軟正黑體',
+      'Noto Sans TC',
       '-apple-system',
       'BlinkMacSystemFont',
       '"Segoe UI"',
