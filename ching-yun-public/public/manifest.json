@@ -1,9 +1,9 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "青&#38901;官網",
+  "name": "青&#38901;合唱團全球資訊網",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "logo.jpg",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }

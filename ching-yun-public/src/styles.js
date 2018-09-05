@@ -13,6 +13,7 @@ export const theme = createMuiTheme({
     // Use the system font instead of the default Roboto font.
     fontFamily: [
       'Noto Sans TC',
+      '微軟正黑體',
       '-apple-system',
       'BlinkMacSystemFont',
       '"Segoe UI"',
@@ -24,6 +25,7 @@ export const theme = createMuiTheme({
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
     ].join(','),
+    fontSize: 20,
   },
 });
 
