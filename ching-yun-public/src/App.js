@@ -7,11 +7,11 @@ import {
   //Redirect,
   //withRouter
 } from 'react-router-dom'
-import logo from './img/logo.png'
+import logo from './img/logo_shallow.png'
 
 import PropTypes from 'prop-types';
 import { MuiThemeProvider, withTheme, withStyles } from '@material-ui/core/styles';
-import { styles, theme } from './styles';
+import { styles, theme, Navtheme } from './styles';
 
 import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
@@ -54,7 +54,7 @@ const Navigation = withStyles(styles)(
     render() {
       const { classes } = this.props;
       return ( 
-        <div>
+        <MuiThemeProvider theme={Navtheme}>
           <Grid container>
             <Grid item xs={12}>
               <AppBar position="static" className={classes.Nav}>
@@ -68,7 +68,7 @@ const Navigation = withStyles(styles)(
               </AppBar>
             </Grid>
           </Grid>
-        </div>
+        </MuiThemeProvider>
       );
     }
 });
@@ -78,8 +78,9 @@ const NavItem = withStyles(styles)(
     render() {
       const { classes } = this.props;
       return ( 
-        <ListItem button component={NavLink} to={this.props.to} className={classes.NavListItem}> 
-          <ListItemText className={classes.NavListText} primary={this.props.text}/> 
+        <ListItem button component={NavLink} to={this.props.to} className={classes.NavListItem} > 
+          <ListItemText className={classes.NavListText} primary={this.props.text}> 
+          </ListItemText> 
         </ListItem>
       );
     }

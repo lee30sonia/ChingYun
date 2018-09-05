@@ -3,14 +3,15 @@ import green from '@material-ui/core/colors/green';
 
 export const theme = createMuiTheme({
   palette: {
-    primary: {main: '#d9a99d'}, //'#408c8c'},
-  },
+    primary: {main: '#095d79', light: '#2b9fc5', contrastText: '#b5e8eb'}, // '#408c8c' '#d9a99d'
+  }, // '#b5e8eb' '#8adde2' '#71ced3' '#2b9fc5' '#095d79'
   status: {
     danger: 'orange',
   },
   typography: {
     // Use the system font instead of the default Roboto font.
     fontFamily: [
+      'cwTeXKai',
       '微軟正黑體',
       '-apple-system',
       'BlinkMacSystemFont',
@@ -23,6 +24,17 @@ export const theme = createMuiTheme({
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
     ].join(','),
+  },
+});
+
+export const Navtheme = outerTheme => ({
+  ...outerTheme,
+  typography: {
+    ...outerTheme.typography,
+    subheading: {
+      ...outerTheme.typography.subheading,
+      color: outerTheme.palette.primary.contrastText
+    },
   },
 });
 
@@ -50,10 +62,12 @@ export const styles = theme => ({
     width: '90px',
     textAlign: 'center',
     paddingRight: 0,
+    color: theme.palette.primary.contrastText
   },
 
   NavListLogo: {
     width: '200px',
+    marginRight: '100px'
   },
 
   logo: {
