@@ -24,7 +24,12 @@ import ListItem from '@material-ui/core/ListItem';
 //import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
-
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Menu from '@material-ui/core/Menu';
+import MenuList from '@material-ui/core/MenuList';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const App = withTheme()(withStyles(styles)(
   class extends Component {    
@@ -38,8 +43,8 @@ const App = withTheme()(withStyles(styles)(
             <Navigation />
             
             <Switch>
-              <Route exact={true} path="/" component={Index}/>
-              <Route path="/about" component={About}/>
+              <Route exact path="/" component={Index}/>
+              <Route exact path="/about" component={About}/>
               <Route component={NotFound}/>
             </Switch>
           </div>
@@ -52,6 +57,19 @@ const App = withTheme()(withStyles(styles)(
 
 const Navigation = withStyles(styles)(
   class extends Component {
+    constructor(props) {
+      super(props);
+      this.state={
+        expandOpen: null
+      };   
+      this.handleExpandOpen = this.handleExpandOpen.bind(this);
+    }
+
+    handleExpandOpen = (b) => {
+      this.setState({expandOpen: b});
+      //console.log(b)
+    };
+
     render() {
       const { classes } = this.props;
       return ( 
@@ -61,9 +79,24 @@ const Navigation = withStyles(styles)(
               <AppBar position="static" className={classes.Nav}>
                 <Toolbar>
                   <List className={classes.NavList}>
-                    <ListItem className={classes.NavListLogo} component={NavLink} to="/"> <img src={logo} alt="logo" className={classes.logo}/> </ListItem>
+                    <ListItem className={classes.NavListLogo} component={NavLink} to="/"> 
+                      <img src={logo} alt="logo" className={classes.logo}/> 
+                    </ListItem>
                     <NavItem to="/" text="首頁"/>
-                    <NavItem to="/about" text="關於"/>
+                    <NavItem to="/about" text="關於青韵" set={this.handleExpandOpen} notExact={true}
+                      sublist={(
+                        <Menu open={Boolean(this.state.expandOpen)} anchorEl={this.state.expandOpen} 
+                          disableAutoFocusItem classes={{paper:classes.SubNavMenu}}>
+                          <MenuList onMouseLeave={()=>{this.handleExpandOpen(null)}}>
+                            <NavItem to="/about" text="關於青韵" />
+                            <NavItem to="/about/teachers" text="音樂指導" />
+                            <NavItem to="/about/history" text="演出大事" />
+                          </MenuList> 
+                        </Menu> )}/>
+                    <NavItem to="/performances" text="精彩演出"/>
+                    <NavItem to="/rent" text="場地出租"/>
+                    <NavItem to="/publications" text="委託創作"/>
+                    <NavItem to="/contact" text="聯絡我們"/>
                   </List>
                 </Toolbar>
               </AppBar>
@@ -78,10 +111,17 @@ const NavItem = withStyles(styles)(
   class extends Component {
     render() {
       const { classes } = this.props;
+
+      //var expand = (this.props.expand)? (this.props.open? <ExpandLess /> : <ExpandMore />): (<div></div>);
+
       return ( 
-        <ListItem button component={NavLink} to={this.props.to} exact className={classes.NavListItem} activeClassName="MuiButtonBase-disabled-176 MuiListItem-disabled-162"> 
+        <ListItem button component={NavLink} to={this.props.to} exact={!this.props.notExact}
+          className={classes.NavListItem} activeClassName="disabledButton"
+          onMouseEnter={(e)=>{if(this.props.set) this.props.set(e.currentTarget);}} 
+          onMouseLeave={()=>{if(this.props.set) this.props.set(null);}} > 
           <ListItemText className={classes.NavListText} primary={this.props.text}> 
           </ListItemText> 
+          {this.props.sublist}
         </ListItem>
       );
     }
@@ -99,15 +139,17 @@ const Index = withStyles(styles)(
     }
 });
 
-class About extends Component {
-  render() {
-    return (
-      <div>
-        關於
-      </div>
-    );
-  }
-}
+const About = withStyles(styles)(
+  class extends Component {
+    render() {
+      const { classes } = this.props;
+      return (
+        <Paper className={classes.Paper}>
+          關於
+        </Paper>
+      );
+    }
+});
 
 const NotFound = withStyles(styles)(
   class extends Component {

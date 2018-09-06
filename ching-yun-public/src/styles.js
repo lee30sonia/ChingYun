@@ -25,7 +25,7 @@ export const theme = createMuiTheme({
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
     ].join(','),
-    fontSize: 20,
+    fontSize: 16,
   },
 });
 
@@ -56,20 +56,38 @@ export const styles = theme => ({
     padding: 0,
   },
 
+  NavCollapseOn: {
+    overflow: 'visible'
+  },
+
+  NavCollapseOff: {
+    overflow: 'hidden'
+  },
+
+  SubNavMenu: {
+    marginTop: '50px',
+    //width: '100px',
+    //height: '100px',
+    backgroundColor: theme.palette.primary.main
+  },
+
   NavListItem: {
-    padding: 0
+    paddingLeft: theme.spacing.unit*0.8,
+    paddingRight: theme.spacing.unit*0.8,
+    paddingTop: theme.spacing.unit*1.5,
+    paddingBottom: theme.spacing.unit*1.5,
   },
 
   NavListText: {
-    width: '90px',
+    width: '80px',
     textAlign: 'center',
     paddingRight: 0,
     color: theme.palette.primary.contrastText
   },
 
   NavListLogo: {
-    width: '200px',
-    marginRight: '100px'
+    width: '150px',
+    marginRight: '50px'
   },
 
   logo: {

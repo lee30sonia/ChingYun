@@ -5,3 +5,8 @@ body {
   padding: 0;
   font-family: 'Noto Sans TC', sans-serif;
 }
+
+.disabledButton {
+    opacity: 0.5;
+    cursor: default;
+}
