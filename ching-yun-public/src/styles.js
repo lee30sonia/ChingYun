@@ -3,6 +3,15 @@ import { createMuiTheme } from '@material-ui/core/styles';
 
 
 export const theme = createMuiTheme({
+  breakpoints:{
+    values: {
+      xs: 0,
+      sm: 530,
+      md: 670,
+      lg: 960,
+      xl: 1920
+    }
+  },
   palette: {
     primary: {main: '#095d79', light: '#2b9fc5', contrastText: '#b5e8eb'}, // '#408c8c' '#d9a99d'
   }, // '#b5e8eb' '#8adde2' '#71ced3' '#2b9fc5' '#095d79'
@@ -47,7 +56,6 @@ export const styles = theme => ({
 
   Nav: {
     marginBottom: theme.spacing.unit*3,
-    height: '90px',
   },
 
   NavList: {
@@ -66,14 +74,14 @@ export const styles = theme => ({
 
   SubNavMenu: {
     marginTop: '50px',
-    //width: '100px',
+    width: '50%',
     //height: '100px',
     backgroundColor: theme.palette.primary.main
   },
 
   NavListItem: {
-    paddingLeft: theme.spacing.unit*0.8,
-    paddingRight: theme.spacing.unit*0.8,
+    paddingLeft: 0,//theme.spacing.unit*0.8,
+    paddingRight: 0,//theme.spacing.unit*0.8,
     paddingTop: theme.spacing.unit*1.5,
     paddingBottom: theme.spacing.unit*1.5,
   },
@@ -85,9 +93,8 @@ export const styles = theme => ({
     color: theme.palette.primary.contrastText
   },
 
-  NavListLogo: {
-    width: '150px',
-    marginRight: '50px'
+  menuIcon: {
+    color: theme.palette.primary.contrastText
   },
 
   logo: {
