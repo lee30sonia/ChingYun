@@ -81,17 +81,18 @@ const Navigation = withStyles(styles)(
             <Grid item xs={12}>
               <AppBar position="static" className={classes.Nav}><Toolbar>
                 <Grid container component={List} alignItems="center" className={classes.NavList}>
-                  <Hidden mdDown><Grid item lg={3} xl={4}>
-                    <ListItem component={NavLink} to="/"> 
-                      <img src={logo} alt="logo" className={classes.logo}/> 
-                    </ListItem>
-                  </Grid></Hidden>
 
-                  <Hidden smUp>
+                  <Hidden smUp><Grid xs={3}>
                     <IconButton aria-label="Menu" className={classes.menuIcon}>
                       <MenuIcon />
                     </IconButton>
-                  </Hidden>
+                  </Grid></Hidden>
+
+                  <Grid item xs={4} lg={3} xl={4}>
+                    <ListItem component={NavLink} to="/"> 
+                      <img src={logo} alt="logo" className={classes.logo}/> 
+                    </ListItem>
+                  </Grid>
                   
                   <Hidden xsDown>
                     <Grid item sm={12} md={10} lg={7} xl={4}><Grid container spacing={8}>
