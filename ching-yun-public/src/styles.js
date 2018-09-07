@@ -73,10 +73,14 @@ export const styles = theme => ({
   },
 
   SubNavMenu: {
-    marginTop: '50px',
-    width: '50%',
+    
+    //[theme.breakpoints.down('xs')]:{width: '9%'},
+    [theme.breakpoints.only('sm')]:{width: '15%',marginTop: '110px',},
+    [theme.breakpoints.only('md')]:{width: '12%',marginTop: '110px',},
+    [theme.breakpoints.only('lg')]:{width: '9%',marginTop: '50px',},
+    [theme.breakpoints.only('xl')]:{width: '5%',marginTop: '50px',},
     //height: '100px',
-    backgroundColor: theme.palette.primary.main
+    backgroundColor: theme.palette.primary.main,
   },
 
   NavListItem: {

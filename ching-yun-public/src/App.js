@@ -143,7 +143,7 @@ const NavItem = withStyles(styles)(
           <ListItem button component={NavLink} to={this.props.to} exact={!this.props.notExact}
             className={classes.NavListItem} activeClassName="disabledButton"
             onMouseEnter={(e)=>{if(this.props.set) this.props.set(e.currentTarget);}} 
-             > 
+            onMouseLeave={()=>{if(this.props.set) this.props.set(null);}} > 
             <ListItemText className={classes.NavListText} primary={this.props.text}> 
             </ListItemText> 
             {this.props.sublist}
@@ -151,7 +151,7 @@ const NavItem = withStyles(styles)(
         </Grid>
       );
     }
-});//onMouseLeave={()=>{if(this.props.set) this.props.set(null);}}
+});//
 
 const Index = withStyles(styles)(
   class extends Component {
