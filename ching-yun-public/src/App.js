@@ -8,6 +8,8 @@ import {
   //withRouter
 } from 'react-router-dom'
 import logo from './img/logo_shallow.png'
+import Index from './IndexPage'
+import About from './About'
 
 import PropTypes from 'prop-types';
 import { MuiThemeProvider, withTheme, withStyles } from '@material-ui/core/styles';
@@ -23,6 +25,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import CloseIcon from '@material-ui/icons/Close';
 import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import Collapse from '@material-ui/core/Collapse';
@@ -33,6 +36,7 @@ import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import Hidden from '@material-ui/core/Hidden';
 import withWidth from '@material-ui/core/withWidth';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 
 const App = withTheme()(withStyles(styles)(
   class extends Component {    
@@ -63,13 +67,20 @@ const Navigation = withStyles(styles)(
     constructor(props) {
       super(props);
       this.state={
-        expandOpen: null
+        expandOpen: null,
+        MobileNavOpen: false
       };   
       this.handleExpandOpen = this.handleExpandOpen.bind(this);
+      this.handleMobileNav = this.handleMobileNav.bind(this);
     }
 
     handleExpandOpen = (b) => {
       this.setState({expandOpen: b});
+      //console.log(b)
+    };
+
+    handleMobileNav = (b) => {
+      this.setState({MobileNavOpen: b});
       //console.log(b)
     };
 
@@ -83,9 +94,11 @@ const Navigation = withStyles(styles)(
                 <Grid container component={List} alignItems="center" className={classes.NavList}>
 
                   <Hidden smUp><Grid xs={3}>
-                    <IconButton aria-label="Menu" className={classes.menuIcon}>
+                    <IconButton aria-label="Menu" className={classes.menuIcon}
+                      onClick={()=>{this.handleMobileNav(true)}}>
                       <MenuIcon />
                     </IconButton>
+                    <MobileNav open={this.state.MobileNavOpen} set={(b)=>{this.handleMobileNav(b)}}/>
                   </Grid></Hidden>
 
                   <Grid item xs={4} lg={3} xl={4}>
@@ -151,28 +164,60 @@ const NavItem = withStyles(styles)(
         </Grid>
       );
     }
-});//
-
-const Index = withStyles(styles)(
-  class extends Component {
-    render() {
-      const { classes } = this.props;
-      return (
-        <Paper className={classes.Paper}>
-          首頁
-        </Paper>
-      );
-    }
 });
 
-const About = withStyles(styles)(
+const MobileNav = withStyles(styles)(
   class extends Component {
+    constructor(props) {
+      super(props);
+      this.state={
+        open: false
+      };
+    }
+
     render() {
       const { classes } = this.props;
-      return (
-        <Paper className={classes.Paper}>
-          關於
-        </Paper>
+
+      return ( 
+          <SwipeableDrawer
+            open={this.props.open}
+            onClose={()=>{this.props.set(false)}}
+            onClick={()=>{this.props.set(false)}}
+            onOpen={()=>{this.props.set(true)}}
+          >
+            <div
+              tabIndex={0}
+              role="button"
+              onKeyDown={()=>{this.props.set(false)}}
+              className={classes.MobileNav}
+            >
+              <IconButton color="inherit" onClick={()=>{this.props.set(false)}} aria-label="Close">
+                <CloseIcon className={classes.menuIcon} />
+              </IconButton>
+              <div className={classes.list}>
+                <List>
+                  <NavItem to="/" text="首頁" submenu={true}/>
+                  <NavItem to="/about" text="關於青韵" notExact={true} submenu={true} />
+                    {this.state.open ? 
+                      <ExpandLess onClick={()=>{this.setState({open:false})}} className={classes.menuIcon} /> : 
+                      <ExpandMore onClick={()=>{this.setState({open:true})}} className={classes.menuIcon} />}
+
+                    <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                      <List component="div" disablePadding>
+                        <NavItem inset to="/about" text="關於青韵" submenu={true} />
+                        <NavItem to="/about/teachers" text="音樂指導" submenu={true} />
+                        <NavItem to="/about/history" text="演出大事" submenu={true} />
+                      </List>
+                    </Collapse>
+
+                  <NavItem to="/performances" text="精彩演出" submenu={true}/>
+                  <NavItem to="/rent" text="場地出租" submenu={true}/>
+                  <NavItem to="/publications" text="委託創作" submenu={true}/>
+                  <NavItem to="/contact" text="聯絡我們" submenu={true}/>
+                </List>
+              </div>
+            </div>
+          </SwipeableDrawer>
       );
     }
 });

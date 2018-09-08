@@ -40,6 +40,13 @@ export const theme = createMuiTheme({
 
 export const Navtheme = outerTheme => ({
   ...outerTheme,
+  palette: {
+    ...outerTheme.palette,
+    background: {
+      ...outerTheme.palette.background,
+      paper: outerTheme.palette.primary.main
+    }
+  },
   typography: {
     ...outerTheme.typography,
     subheading: {
@@ -73,7 +80,6 @@ export const styles = theme => ({
   },
 
   SubNavMenu: {
-    
     //[theme.breakpoints.down('xs')]:{width: '9%'},
     [theme.breakpoints.only('sm')]:{width: '15%',marginTop: '110px',},
     [theme.breakpoints.only('md')]:{width: '12%',marginTop: '110px',},
@@ -81,6 +87,10 @@ export const styles = theme => ({
     [theme.breakpoints.only('xl')]:{width: '5%',marginTop: '50px',},
     //height: '100px',
     backgroundColor: theme.palette.primary.main,
+  },
+
+  MobileNav: {
+    padding: theme.spacing.unit*3,
   },
 
   NavListItem: {
@@ -109,6 +119,7 @@ export const styles = theme => ({
     padding: theme.spacing.unit * 2,
     margin: theme.spacing.unit * 2,
     textAlign: 'center',
+    height: '500px',
   },
 
   /*tableroot: {
