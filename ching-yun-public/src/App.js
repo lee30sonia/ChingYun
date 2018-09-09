@@ -232,12 +232,16 @@ const NotFound = withStyles(styles)(
     render() {
       const { classes } = this.props;
       return (
-        <Paper className={classes.Paper}>
-          <h1> 404 </h1>
-          <p>
-            您欲前往的頁面不存在，或正在施工中...
-          </p>
-        </Paper>
+        <div className={classes.MainPage}>
+          <Grid container><Grid item xs={12}>
+            <Paper className={classes.Paper}>
+              <h1> 404 </h1>
+              <p>
+                您欲前往的頁面不存在，或正在施工中...
+              </p>
+            </Paper>
+          </Grid></Grid>
+        </div>
       );
     }
 });
