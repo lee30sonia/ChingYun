@@ -102,13 +102,21 @@ export const styles = theme => ({
 
   NavListText: {
     width: '80px',
-    textAlign: 'center',
+    [theme.breakpoints.up('sm')]: {textAlign: 'center'},
     paddingRight: 0,
     color: theme.palette.primary.contrastText
   },
 
   menuIcon: {
-    color: theme.palette.primary.contrastText
+    color: theme.palette.primary.contrastText,
+  },
+
+  alignLeft: {
+    justifyContent: 'flex-start'
+  },
+
+  inset: {
+    paddingLeft: theme.spacing.unit * 4,
   },
 
   logo: {

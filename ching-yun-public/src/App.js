@@ -38,6 +38,8 @@ import Hidden from '@material-ui/core/Hidden';
 import withWidth from '@material-ui/core/withWidth';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 
+var classNames = require('classnames');
+
 const App = withTheme()(withStyles(styles)(
   class extends Component {    
     render() {
@@ -148,13 +150,12 @@ const NavItem = withStyles(styles)(
   class extends Component {
     render() {
       const { classes } = this.props;
-
+      
       //var expand = (this.props.expand)? (this.props.open? <ExpandLess /> : <ExpandMore />): (<div></div>);
-
       return ( 
         <Grid item xs={this.props.submenu? 12: 2}>
           <ListItem button component={NavLink} to={this.props.to} exact={!this.props.notExact}
-            className={classes.NavListItem} activeClassName="disabledButton"
+            className={classes.NavListItem+(this.props.inset?(" "+classes.inset):"")} activeClassName="disabledButton"
             onMouseEnter={(e)=>{if(this.props.set) this.props.set(e.currentTarget);}} 
             onMouseLeave={()=>{if(this.props.set) this.props.set(null);}} > 
             <ListItemText className={classes.NavListText} primary={this.props.text}> 
@@ -191,24 +192,16 @@ const MobileNav = withStyles(styles)(
               onKeyDown={()=>{this.props.set(false)}}
               className={classes.MobileNav}
             >
-              <IconButton color="inherit" onClick={()=>{this.props.set(false)}} aria-label="Close">
+              <IconButton color="inherit" onClick={()=>{this.props.set(false)}} aria-label="Close" className={classes.alignLeft}>
                 <CloseIcon className={classes.menuIcon} />
               </IconButton>
               <div className={classes.list}>
                 <List>
                   <NavItem to="/" text="首頁" submenu={true}/>
                   <NavItem to="/about" text="關於青韵" notExact={true} submenu={true} />
-                    {this.state.open ? 
-                      <ExpandLess onClick={()=>{this.setState({open:false})}} className={classes.menuIcon} /> : 
-                      <ExpandMore onClick={()=>{this.setState({open:true})}} className={classes.menuIcon} />}
-
-                    <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-                      <List component="div" disablePadding>
-                        <NavItem inset to="/about" text="關於青韵" submenu={true} />
-                        <NavItem to="/about/teachers" text="音樂指導" submenu={true} />
-                        <NavItem to="/about/history" text="演出大事" submenu={true} />
-                      </List>
-                    </Collapse>
+                      <NavItem to="/about" text="關於青韵" submenu={true} inset={true}/>
+                      <NavItem to="/about/teachers" text="音樂指導" submenu={true} inset={true}/>
+                      <NavItem to="/about/history" text="演出大事" submenu={true} inset={true}/>
 
                   <NavItem to="/performances" text="精彩演出" submenu={true}/>
                   <NavItem to="/rent" text="場地出租" submenu={true}/>
@@ -221,6 +214,20 @@ const MobileNav = withStyles(styles)(
       );
     }
 });
+
+/*
+                    {this.state.open ? 
+                      <ExpandLess onClick={()=>{this.setState({open:false})}} className={classes.menuIcon} /> : 
+                      <ExpandMore onClick={()=>{this.setState({open:true})}} className={classes.menuIcon} />}
+
+                    <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                      <List component="div" disablePadding>
+                        <NavItem inset to="/about" text="關於青韵" submenu={true} />
+                        <NavItem to="/about/teachers" text="音樂指導" submenu={true} />
+                        <NavItem to="/about/history" text="演出大事" submenu={true} />
+                      </List>
+                    </Collapse>
+*/
 
 const NotFound = withStyles(styles)(
   class extends Component {
