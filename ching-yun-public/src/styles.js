@@ -63,6 +63,13 @@ export const styles = theme => ({
 
   Nav: {
     marginBottom: theme.spacing.unit*3,
+    position: 'fixed'
+  },
+
+  MainPage: {
+    [theme.breakpoints.down('sm')]:{marginTop: theme.spacing.unit*3+70},
+    [theme.breakpoints.up('md')]:{marginTop: theme.spacing.unit*3+70},
+    [theme.breakpoints.between('sm','md')]:{marginTop: theme.spacing.unit*3+120}
   },
 
   NavList: {
@@ -126,8 +133,19 @@ export const styles = theme => ({
   Paper: {
     padding: theme.spacing.unit * 2,
     margin: theme.spacing.unit * 2,
-    textAlign: 'center',
-    height: '500px',
+  },
+
+  photoDisplay: {
+    [theme.breakpoints.up('sm')]: {
+      position: 'relative',
+      right: theme.spacing.unit * 2,
+    },
+    margin: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 2
+  },
+
+  img: {
+    width: '100%',
   },
 
   /*tableroot: {

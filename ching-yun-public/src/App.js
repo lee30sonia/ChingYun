@@ -24,21 +24,21 @@ import Toolbar from '@material-ui/core/Toolbar';
 //import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
+//import ListItemIcon from '@material-ui/core/ListItemIcon';
 import CloseIcon from '@material-ui/icons/Close';
 import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
-import Collapse from '@material-ui/core/Collapse';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+//import Collapse from '@material-ui/core/Collapse';
+//import ExpandLess from '@material-ui/icons/ExpandLess';
+//import ExpandMore from '@material-ui/icons/ExpandMore';
 import Menu from '@material-ui/core/Menu';
 import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
+//import MenuItem from '@material-ui/core/MenuItem';
 import Hidden from '@material-ui/core/Hidden';
-import withWidth from '@material-ui/core/withWidth';
+//import withWidth from '@material-ui/core/withWidth';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 
-var classNames = require('classnames');
+//var classNames = require('classnames');
 
 const App = withTheme()(withStyles(styles)(
   class extends Component {    
@@ -106,7 +106,7 @@ const Navigation = withStyles(styles)(
               <AppBar position="static" className={classes.Nav}><Toolbar>
                 <Grid container component={List} alignItems="center" className={classes.NavList}>
 
-                  <Hidden smUp><Grid xs={3}>
+                  <Hidden smUp><Grid item xs={3}>
                     <IconButton aria-label="Menu" className={classes.menuIcon}
                       onClick={()=>{this.handleMobileNav(true)}}>
                       <MenuIcon />
@@ -144,7 +144,7 @@ const Navigation = withStyles(styles)(
                   </Hidden>
                   
                   <Hidden smDown><Grid item md={2} lg={2} xl={4}>
-                    <Grid container><Grid sm={6} xl={9}></Grid><Grid sm={6} xl={3}>
+                    <Grid container><Grid item sm={6} xl={9}></Grid><Grid item sm={6} xl={3}>
                     <Button>登入</Button>
                     </Grid></Grid>
                   </Grid></Hidden>

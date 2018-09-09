@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { styles } from './styles';
 
@@ -13,8 +12,9 @@ const About = withStyles(styles)(
     render() {
       const { classes } = this.props;
       return (
-        <Paper className={classes.Paper}>
-          關於
+        <Paper className={classes.Paper}> 
+        關於青韵      
+          
         </Paper>
       );
     }
