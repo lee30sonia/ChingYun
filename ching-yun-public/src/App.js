@@ -112,15 +112,16 @@ const Navigation = withStyles(styles)(
                   <Hidden xsDown>
                     <Grid item sm={12} md={10} lg={7} xl={4}><Grid container spacing={8}>
                       <NavItem to="/" text="首頁"/>
-                      <NavItem to="/about" text="關於青韵" set={this.handleExpandOpen} notExact={true}
+                      <NavItem to="/about" text="關於青韵" set={this.handleExpandOpen} notExact={true} onMouseLeave={()=>{this.handleExpandOpen(null)}}
                       sublist={(
                         <Menu open={Boolean(this.state.expandOpen)} anchorEl={this.state.expandOpen} 
-                          disableAutoFocusItem classes={{paper:classes.SubNavMenu}}>
+                          disableAutoFocusItem classes={{paper:classes.SubNavMenu}}
+                          onMouseLeave={()=>{this.handleExpandOpen(null)}} >
                           <MenuList onMouseLeave={()=>{this.handleExpandOpen(null)}}>
-                            <Grid container>
-                              <NavItem to="/about" text="關於青韵" submenu={true} />
-                              <NavItem to="/about/teachers" text="音樂指導" submenu={true} />
-                              <NavItem to="/about/history" text="演出大事" submenu={true} />
+                            <Grid container onMouseLeave={()=>{this.handleExpandOpen(null)}}>
+                              <NavItem to="/about" text="關於青韵" submenu={true} onClick={()=>{this.handleExpandOpen(null)}}/>
+                              <NavItem to="/about/teachers" text="音樂指導" submenu={true} onClick={()=>{this.handleExpandOpen(null)}}/>
+                              <NavItem to="/about/history" text="演出大事" submenu={true} onClick={()=>{this.handleExpandOpen(null)}}/>
                             </Grid>
                           </MenuList> 
                         </Menu> )}/>
@@ -214,20 +215,6 @@ const MobileNav = withStyles(styles)(
       );
     }
 });
-
-/*
-                    {this.state.open ? 
-                      <ExpandLess onClick={()=>{this.setState({open:false})}} className={classes.menuIcon} /> : 
-                      <ExpandMore onClick={()=>{this.setState({open:true})}} className={classes.menuIcon} />}
-
-                    <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-                      <List component="div" disablePadding>
-                        <NavItem inset to="/about" text="關於青韵" submenu={true} />
-                        <NavItem to="/about/teachers" text="音樂指導" submenu={true} />
-                        <NavItem to="/about/history" text="演出大事" submenu={true} />
-                      </List>
-                    </Collapse>
-*/
 
 const NotFound = withStyles(styles)(
   class extends Component {
