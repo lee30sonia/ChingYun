@@ -78,6 +78,17 @@ const Navigation = withStyles(styles)(
 
     handleExpandOpen = (b) => {
       this.setState({expandOpen: b});
+      var timer;
+      if (b!==null)
+      {
+        //console.log("enter")
+        timer = setTimeout(()=>{ 
+          this.setState({expandOpen: null}); 
+          //console.log("time out") 
+        }, 5000);
+      }
+      else
+        clearTimeout(timer);
       //console.log(b)
     };
 
@@ -112,16 +123,16 @@ const Navigation = withStyles(styles)(
                   <Hidden xsDown>
                     <Grid item sm={12} md={10} lg={7} xl={4}><Grid container spacing={8}>
                       <NavItem to="/" text="首頁"/>
-                      <NavItem to="/about" text="關於青韵" set={this.handleExpandOpen} notExact={true} onMouseLeave={()=>{this.handleExpandOpen(null)}}
+                      <NavItem to="/about" text="關於青韵" set={this.handleExpandOpen} notExact={true}
                       sublist={(
                         <Menu open={Boolean(this.state.expandOpen)} anchorEl={this.state.expandOpen} 
                           disableAutoFocusItem classes={{paper:classes.SubNavMenu}}
                           onMouseLeave={()=>{this.handleExpandOpen(null)}} >
                           <MenuList onMouseLeave={()=>{this.handleExpandOpen(null)}}>
                             <Grid container onMouseLeave={()=>{this.handleExpandOpen(null)}}>
-                              <NavItem to="/about" text="關於青韵" submenu={true} onClick={()=>{this.handleExpandOpen(null)}}/>
-                              <NavItem to="/about/teachers" text="音樂指導" submenu={true} onClick={()=>{this.handleExpandOpen(null)}}/>
-                              <NavItem to="/about/history" text="演出大事" submenu={true} onClick={()=>{this.handleExpandOpen(null)}}/>
+                              <NavItem to="/about" text="關於青韵" submenu={true}/>
+                              <NavItem to="/about/teachers" text="音樂指導" submenu={true}/>
+                              <NavItem to="/about/history" text="演出大事" submenu={true}/>
                             </Grid>
                           </MenuList> 
                         </Menu> )}/>
