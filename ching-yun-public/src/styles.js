@@ -59,6 +59,8 @@ export const Navtheme = outerTheme => ({
 export const styles = theme => ({
   root: {
     flexGrow: 1,
+    [theme.breakpoints.down('sm')]:{ minHeight: window.innerHeight - 200},
+    [theme.breakpoints.up('sm')]:{ minHeight: window.innerHeight - 100},
   },
 
   Nav: {
@@ -136,16 +138,29 @@ export const styles = theme => ({
   },
 
   photoDisplay: {
-    [theme.breakpoints.up('sm')]: {
-      position: 'relative',
-      right: theme.spacing.unit * 2,
-    },
     margin: theme.spacing.unit * 2,
-    padding: theme.spacing.unit * 2
   },
 
   img: {
     width: '100%',
+    margin: theme.spacing.unit * 2,
+  },
+
+  ActivityItem: {
+
+  },
+
+  Footer: {
+    padding: theme.spacing.unit * 2,
+    fontSize: theme.typography.fontSize*0.8,
+    textAlign: 'center'
+    /*position: 'fixed',
+    bottom: '0',
+    width: '100%'*/
+  },
+
+  teacherImg: {
+    height: '200px',
   },
 
   /*tableroot: {

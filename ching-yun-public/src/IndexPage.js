@@ -53,7 +53,6 @@ const Index = withStyles(styles)(
     render() {
       const { classes } = this.props;
 
-      var musicIcon = (<ListItemIcon><FontAwesomeIcon icon="music"/></ListItemIcon>);
       const imgDisplay = [
         {
           label: '1',
@@ -78,11 +77,11 @@ const Index = withStyles(styles)(
               <Typography variant="headline" component="h1" gutterBottom color="primary" align="center">
                 關於青韵
               </Typography>
-              <Typography component="p">
+              <Typography component="p" style={{textIndent: '0'}}>
                 青韵合唱團，1973年由台大之建北校友合唱團轉型而來，<br />
                 團員年齡層橫跨大學生及社會人士。<br />
-                近年在「客席指揮」、「出國比賽」、「台灣巡迴」三年一輪的固定規劃<br />
-                及李葭儀、翁佳芬、戴怡音、張成璞等老師指導之下，音樂品質穩定成長。
+                近年在「客席指揮」、「出國比賽」、「台灣巡迴」三年一輪的固定規劃，<br />
+                以及李葭儀、翁佳芬、戴怡音、張成璞等老師指導之下，音樂品質穩定成長。
               </Typography>
             </Paper>
           </Grid>
@@ -90,37 +89,44 @@ const Index = withStyles(styles)(
         </Grid>
 
         <Grid container>
-          <Grid item xs={1} sm={2} md={2} lg={3} xl={4}></Grid>
-          <Grid item xs={10} sm={8} md={8} lg={6} xl={4}>
+          <Grid item xs={false} md={1} lg={1} xl={3}></Grid>
+          <Grid item xs={12} sm={12} md={10} lg={10} xl={6}>
             <Paper className={classes.Paper}>
               <Typography variant="headline" component="h1" gutterBottom color="primary" align="center">
                 最新消息
               </Typography>
               
               <List>
-                <ListItem>
-                  {musicIcon}<ListItemText>馬德利加五十五週年音樂會 2018.10.26（五）19:30 @國家音樂廳</ListItemText>
-                </ListItem>
-                <ListItem>
-                  {musicIcon}<ListItemText>新韻之聲 2018.11.18（日）14:30 @東吳大學松怡廳</ListItemText>
-                </ListItem>
+                <ActivityItem 
+                  txt="瑪德利加合唱團55週年音樂會（聯演）" 
+                  txt2="2018.10.26（五）19:30 @國家音樂廳"
+                  img="./img/madz.png" 
+                  link="https://www.artsticket.com.tw/CKSCC2005/Product/Product00/ProductsDetailsPage.aspx?ProductID=hsobWfDDQ3SWdE7SJ52jZw"
+                />
+                <ActivityItem 
+                  txt="2017-18 新韻之聲音樂會（協演）"
+                  txt2="2018.11.18（日）14:30 @東吳大學松怡廳" 
+                  img="" 
+                  link="https://www.artsticket.com.tw/CKSCC2005/Product/Product00/ProductsDetailsPage.aspx?ProductID=rotyiUrPteTR8O3lWSJ%2fvw"
+                />
               </List>
             </Paper>
           </Grid>
-          <Grid item xs={1} sm={2} md={2} lg={3} xl={4}></Grid>
+          <Grid item xs={false} md={1} lg={1} xl={3}></Grid>
         </Grid>
 
         <Grid container>
           <Grid item xs={1} sm={2} md={2} lg={3} xl={4}></Grid>
-          <Grid item xs={10} sm={8} md={8} lg={6} xl={4} className={classes.photoDisplay}>
+          <Grid item xs={10} sm={8} md={8} lg={6} xl={4}>
             <SwipeableViews
               axis='x'
               index={this.state.imgStep}
               onChangeIndex={this.handleStepChange}
               enableMouseEvents
+              className={classes.photoDisplay}
             >
               {imgDisplay.map(step => (
-                <img key={step.label} className={classes.img} src={step.imgPath} alt={step.label} />
+                <img key={step.label} style={{width:'100%'}} src={step.imgPath} alt={step.label} />
               ))}
             </SwipeableViews>
             <MobileStepper
@@ -146,6 +152,31 @@ const Index = withStyles(styles)(
         </Grid>
 
         </div>
+      );
+    }
+});
+
+
+const ActivityItem = withStyles(styles)(
+  class extends Component {
+    render() {
+      const { classes } = this.props;
+
+      return (
+        <ListItem component="a" href={this.props.link} className={classes.ActivityItem} divider button>
+          <Grid container>
+            <Grid item xs={1}>
+              <ListItemIcon><FontAwesomeIcon icon="music"/></ListItemIcon>
+            </Grid>
+            <Grid item xs={11} md={7}>
+              <ListItemText>{this.props.txt}</ListItemText>
+              <ListItemText>{this.props.txt2}</ListItemText>
+            </Grid>
+            <Grid item xs={false} md={4}>
+              {this.props.img!==""? <img src={this.props.img} className={classes.img} alt="poster"/>: <div />}
+            </Grid>
+          </Grid>
+        </ListItem>
       );
     }
 });

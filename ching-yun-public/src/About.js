@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { styles } from './styles';
 
 import Grid from '@material-ui/core/Grid';
-//import Typography from '@material-ui/core/Typography';
+import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
 const About = withStyles(styles)(
@@ -14,10 +14,12 @@ const About = withStyles(styles)(
       return (
         <div className={classes.MainPage}>
           <Grid container>
-            <Grid item xs={0} sm={1} md={1} lg={2} xl={3}></Grid>
-            <Grid item xs={12} sm={10} md={10} lg={8} xl={6}>
+            <Grid item xs={false} sm={1} md={1} lg={1} xl={3}></Grid>
+            <Grid item xs={12} sm={10} md={10} lg={10} xl={6}>
               <Paper className={classes.Paper}>
-                <h1> 關於青韵 </h1>
+                <Typography variant="headline" component="h1" gutterBottom color="primary">
+                  關於青韵
+                </Typography>
               
 <p>青韵合唱團前身為台大之建中、北一女校友合唱團，至今已有四十三年歷史，於 1973 年擴大
 吸收社會上愛好音樂之校友，並定名「青韵合唱團」，為台灣歷史悠久的合唱團之一。歷年
@@ -40,7 +42,7 @@ const About = withStyles(styles)(
               
               </Paper>
             </Grid>
-            <Grid item xs={0} sm={1} md={1} lg={2} xl={3}></Grid>
+            <Grid item xs={false} sm={1} md={1} lg={1} xl={3}></Grid>
           </Grid>
         </div>
       );

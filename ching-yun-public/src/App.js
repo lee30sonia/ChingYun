@@ -10,6 +10,9 @@ import {
 import logo from './img/logo_shallow.png'
 import Index from './IndexPage'
 import About from './About'
+import Teachers from './Teachers'
+import History from './History'
+import Contact from './Contact'
 
 import PropTypes from 'prop-types';
 import { MuiThemeProvider, withTheme, withStyles } from '@material-ui/core/styles';
@@ -21,7 +24,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
-//import Typography from '@material-ui/core/Typography';
+import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 //import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -37,6 +40,8 @@ import MenuList from '@material-ui/core/MenuList';
 import Hidden from '@material-ui/core/Hidden';
 //import withWidth from '@material-ui/core/withWidth';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import Divider from '@material-ui/core/Divider';
+
 
 //var classNames = require('classnames');
 
@@ -54,10 +59,15 @@ const App = withTheme()(withStyles(styles)(
             <Switch>
               <Route exact path="/" component={Index}/>
               <Route exact path="/about" component={About}/>
+              <Route path="/about/teachers" component={Teachers}/>
+              <Route path="/about/history" component={History}/>
+              <Route path="/contact" component={Contact}/>
               <Route component={NotFound}/>
             </Switch>
           </div>
           </Router>
+
+          <Footer id="foot"/>
         </MuiThemeProvider>
       );
     }
@@ -227,6 +237,42 @@ const MobileNav = withStyles(styles)(
     }
 });
 
+const Footer = withStyles(styles)(
+  class extends Component {
+    render() {
+      const { classes } = this.props;
+      
+      return (
+        <footer className={classes.Footer}>
+          <Divider/>
+          <Grid container>
+            <Grid item xs={12} md={4}>
+              <p style={{textIndent: '0'}}><strong>青韵合唱團</strong><br/>
+                練唱時間：每週六下午14:00-17:00
+              </p>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <p style={{textIndent: '0'}}>
+                <a href="https://www.chinyun.org.tw/index2.html">團員專區</a> | 
+                <a href="https://www.facebook.com/Chinyunchorus/" target="_blank" rel='noreferrer noopener'>粉絲專頁</a> | 
+                <a href="https://www.youtube.com/channel/UCabg1M4wYRyJWvfbg_V-dGw" target="_blank" rel='noreferrer noopener'>YouTube</a> | 
+                <a href="https://www.chinyun.org.tw/index2.html" target="_blank" rel='noreferrer noopener'>舊版官網</a> <br/>
+                <a href="map.html">網站地圖</a> | 
+                <a href="https://goo.gl/forms/POFFfIQGLJ7frTIV2" target="_blank" rel='noreferrer noopener'>Bug Report & Comments</a>
+              </p>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <p style={{textIndent: '0'}}>
+                地址：新北市新店區順安街4號B1<br/>
+                E-mail: <a href="mailto:chingyunchoir@gmail.com">chingyunchoir@gmail.com</a>
+              </p>
+            </Grid>
+          </Grid>            
+        </footer>
+      );
+    }
+});
+
 const NotFound = withStyles(styles)(
   class extends Component {
     render() {
@@ -235,7 +281,9 @@ const NotFound = withStyles(styles)(
         <div className={classes.MainPage}>
           <Grid container><Grid item xs={12}>
             <Paper className={classes.Paper}>
-              <h1> 404 </h1>
+              <Typography variant="headline" component="h1" gutterBottom color="primary">
+                404 Not Found
+              </Typography>
               <p>
                 您欲前往的頁面不存在，或正在施工中...
               </p>
