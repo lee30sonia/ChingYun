@@ -75,9 +75,9 @@ const Rent = withStyles(styles)(
 
       return (
         <div className={classes.MainPage}>
-        <Grid container alignItems='center'>
+        <Grid container alignItems='stretch'>
           <Hidden only={['xs']}><Grid item xs={false} sm={1} md={2} lg={1} xl={3}></Grid></Hidden>
-          <Grid item xs={12} sm={10} md={8} lg={5} xl={4}>
+          <Grid item xs={12} sm={10} md={8} lg={4} xl={4}>
             <Paper className={classes.Paper}>
               <Typography variant="headline" component="h1" gutterBottom color="primary" align="center">
                 大坪林團部場地出租
@@ -180,7 +180,26 @@ const Rent = withStyles(styles)(
                   <img className={classes.imgFitIn} src='./img/rent6.jpg'/>
                 </Grid>
               </Grid>
-             
+            </Paper>
+          </Grid>         
+        </Grid>
+
+        <Grid container alignItems='center'>
+          <Hidden only={['xs']}><Grid item xs={false} sm={1} md={1} lg={1} xl={3}></Grid></Hidden>
+          <Grid item xs={12} sm={10} md={10} lg={10} xl={7}>
+            <Paper className={classes.Paper}>
+              <Typography variant="title" gutterBottom color="primary" align="center">線上申請場地租借</Typography>
+              <List>
+                1. 確認以下行事曆之可租借時段
+                <iframe className={classes.calendar} src="https://www.google.com/calendar/embed?src=chingyunchoir%40gmail.com&ctz=Asia/Taipei" ></iframe>
+                <br/>2. 填寫<a href="http://goo.gl/forms/pC9vobM9Ey" target="_blank">「場地租借申請表」</a> <br/>
+                3. 填寫申請表不等於完成租借流程，表單送出後，我們會主動與您聯繫，並與您預約時間參觀場地，請耐心等候，若２日內未取得回覆，再麻煩透過以下方式與我們聯繫：
+                  <List>
+                    <ListItem className={classes.ListItemDense}>電話：0961-336-170 李小姐 </ListItem>
+                    <ListItem className={classes.ListItemDense}>Email：chingyunchoir@gmail.com </ListItem>
+                    <ListItem className={classes.ListItemDense}>發訊息至<a href="http://www.facebook.com/Chinyunchorus/" target="_blank">「青韵合唱團」粉絲專頁</a></ListItem>
+                  </List>
+              </List>
             </Paper>
           </Grid>         
         </Grid>

@@ -190,6 +190,14 @@ export const styles = theme => ({
       height: '297px' },
   },
 
+  calendar: {
+    height: '600px',
+    width: '80%',
+    border: '0',
+    margin: theme.spacing.unit * 2,
+    marginLeft: theme.spacing.unit * 5,
+  },
+
   /*tableroot: {
      width: '100%',
      marginTop: theme.spacing.unit * 3,
