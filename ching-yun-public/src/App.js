@@ -12,7 +12,10 @@ import Index from './IndexPage'
 import About from './About'
 import Teachers from './Teachers'
 import History from './History'
+import Performances from './Performances'
+import Rent from './Rent'
 import Contact from './Contact'
+import Map_ from './Map'
 
 import PropTypes from 'prop-types';
 import { MuiThemeProvider, withTheme, withStyles } from '@material-ui/core/styles';
@@ -61,7 +64,10 @@ const App = withTheme()(withStyles(styles)(
               <Route exact path="/about" component={About}/>
               <Route path="/about/teachers" component={Teachers}/>
               <Route path="/about/history" component={History}/>
+              <Route path="/performances" component={Performances}/>
+              <Route path="/rent" component={Rent}/>
               <Route path="/contact" component={Contact}/>
+              <Route path="/map" component={Map_}/>
               <Route component={NotFound}/>
             </Switch>
           </div>
@@ -155,7 +161,7 @@ const Navigation = withStyles(styles)(
                   
                   <Hidden smDown><Grid item md={2} lg={2} xl={4}>
                     <Grid container><Grid item sm={6} xl={9}></Grid><Grid item sm={6} xl={3}>
-                    <Button>登入</Button>
+                      <Button href="https://chingyuntest.herokuapp.com/">登入</Button>
                     </Grid></Grid>
                   </Grid></Hidden>
 
@@ -246,23 +252,23 @@ const Footer = withStyles(styles)(
         <footer className={classes.Footer}>
           <Divider/>
           <Grid container>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={12} lg={4}><br/>
               <p style={{textIndent: '0'}}><strong>青韵合唱團</strong><br/>
                 練唱時間：每週六下午14:00-17:00
               </p>
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6} lg={4}>
               <p style={{textIndent: '0'}}>
-                <a href="https://www.chinyun.org.tw/index2.html">團員專區</a> | 
-                <a href="https://www.facebook.com/Chinyunchorus/" target="_blank" rel='noreferrer noopener'>粉絲專頁</a> | 
-                <a href="https://www.youtube.com/channel/UCabg1M4wYRyJWvfbg_V-dGw" target="_blank" rel='noreferrer noopener'>YouTube</a> | 
-                <a href="https://www.chinyun.org.tw/index2.html" target="_blank" rel='noreferrer noopener'>舊版官網</a> <br/>
-                <a href="map.html">網站地圖</a> | 
-                <a href="https://goo.gl/forms/POFFfIQGLJ7frTIV2" target="_blank" rel='noreferrer noopener'>Bug Report & Comments</a>
+                <Button size="small" href="https://chingyuntest.herokuapp.com/">團員專區</Button> | 
+                <Button size="small" href="https://www.facebook.com/Chinyunchorus/" target="_blank" rel='noreferrer noopener'>粉絲專頁</Button> | 
+                <Button size="small" href="https://www.youtube.com/channel/UCabg1M4wYRyJWvfbg_V-dGw" target="_blank" rel='noreferrer noopener'>YouTube</Button> | 
+                <Button size="small" href="https://www.chinyun.org.tw" target="_blank" rel='noreferrer noopener'>舊版官網</Button> <br/>
+                <Button size="small" href="map">網站地圖</Button> | 
+                <Button size="small" href="https://goo.gl/forms/POFFfIQGLJ7frTIV2" target="_blank" rel='noreferrer noopener'>Bug Report & Comments</Button>
               </p>
             </Grid>
-            <Grid item xs={12} md={4}>
-              <p style={{textIndent: '0'}}>
+            <Grid item xs={12} md={6} lg={4}>
+              <p style={{textIndent: '0'}}><br/>
                 地址：新北市新店區順安街4號B1<br/>
                 E-mail: <a href="mailto:chingyunchoir@gmail.com">chingyunchoir@gmail.com</a>
               </p>

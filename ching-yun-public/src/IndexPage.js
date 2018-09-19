@@ -13,6 +13,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import SwipeableViews from 'react-swipeable-views';
+import { autoPlay } from 'react-swipeable-views-utils';
+
 import MobileStepper from '@material-ui/core/MobileStepper';
 import Button from '@material-ui/core/Button';
 
@@ -21,6 +23,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMusic } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faMusic);
+const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const Index = withStyles(styles)(
   class extends Component {
@@ -98,7 +101,7 @@ const Index = withStyles(styles)(
               
               <List>
                 <ActivityItem 
-                  txt="瑪德利加合唱團55週年音樂會（聯演）" 
+                  txt="瑪德利加合唱團55週年音樂會（共同演出）" 
                   txt2="2018.10.26（五）19:30 @國家音樂廳"
                   img="./img/madz.png" 
                   link="https://www.artsticket.com.tw/CKSCC2005/Product/Product00/ProductsDetailsPage.aspx?ProductID=hsobWfDDQ3SWdE7SJ52jZw"
@@ -118,7 +121,7 @@ const Index = withStyles(styles)(
         <Grid container>
           <Grid item xs={1} sm={2} md={2} lg={3} xl={4}></Grid>
           <Grid item xs={10} sm={8} md={8} lg={6} xl={4}>
-            <SwipeableViews
+            <AutoPlaySwipeableViews
               axis='x'
               index={this.state.imgStep}
               onChangeIndex={this.handleStepChange}
@@ -128,7 +131,7 @@ const Index = withStyles(styles)(
               {imgDisplay.map(step => (
                 <img key={step.label} style={{width:'100%'}} src={step.imgPath} alt={step.label} />
               ))}
-            </SwipeableViews>
+            </AutoPlaySwipeableViews>
             <MobileStepper
               steps={imgDisplay.length}
               position="static"
@@ -163,7 +166,7 @@ const ActivityItem = withStyles(styles)(
       const { classes } = this.props;
 
       return (
-        <ListItem component="a" href={this.props.link} className={classes.ActivityItem} divider button>
+        <ListItem component="a" href={this.props.link} target="_blank" className={classes.ActivityItem} divider button>
           <Grid container>
             <Grid item xs={1}>
               <ListItemIcon><FontAwesomeIcon icon="music"/></ListItemIcon>

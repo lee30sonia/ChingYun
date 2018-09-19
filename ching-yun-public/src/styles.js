@@ -129,7 +129,7 @@ export const styles = theme => ({
   },
 
   logo: {
-    height: '70px'
+    height: '60px'
   },
 
   Paper: {
@@ -146,13 +146,28 @@ export const styles = theme => ({
     margin: theme.spacing.unit * 2,
   },
 
+  imgFitIn: {
+    margin: theme.spacing.unit * 2,
+    marginTop: theme.spacing.unit * 5,
+    [theme.breakpoints.only('xl')]:{width: '60%'},
+    [theme.breakpoints.only('lg')]:{width: '80%'},
+    [theme.breakpoints.only('md')]:{width: '80%'},
+    [theme.breakpoints.only('sm')]:{width: '90%'},
+    [theme.breakpoints.only('xs')]:{width: '70%', marginTop: '0'},
+    
+  },
+
   ActivityItem: {
 
   },
 
+  ListItemDense: {
+    paddingTop: '0'
+  },
+
   Footer: {
     padding: theme.spacing.unit * 2,
-    fontSize: theme.typography.fontSize*0.8,
+    fontSize: theme.typography.fontSize*0.9,
     textAlign: 'center'
     /*position: 'fixed',
     bottom: '0',
@@ -161,6 +176,18 @@ export const styles = theme => ({
 
   teacherImg: {
     height: '200px',
+  },
+
+  video: {
+    [theme.breakpoints.down('xs')]: {
+      width: '272px',
+      height: '153px'},
+    [theme.breakpoints.between('sm','md')]: {
+      width: '400px',
+      height: '225px'},
+    [theme.breakpoints.up('md')]: {
+      width: '528px',
+      height: '297px' },
   },
 
   /*tableroot: {
