@@ -137,6 +137,20 @@ export const styles = theme => ({
     margin: theme.spacing.unit * 2,
   },
 
+  PaperTitle: {
+    padding: theme.spacing.unit * 1,
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    [theme.breakpoints.up('md')]:{
+      marginLeft: window.innerWidth * 0.3,
+      marginRight: window.innerWidth * 0.3,}
+  },
+
+  Card: {
+
+    margin: theme.spacing.unit * 2,
+  },
+
   photoDisplay: {
     margin: theme.spacing.unit * 2,
   },
@@ -155,10 +169,6 @@ export const styles = theme => ({
     [theme.breakpoints.only('sm')]:{width: '90%'},
     [theme.breakpoints.only('xs')]:{width: '70%', marginTop: '0'},
     
-  },
-
-  ActivityItem: {
-
   },
 
   ListItemDense: {
@@ -198,60 +208,21 @@ export const styles = theme => ({
     marginLeft: theme.spacing.unit * 5,
   },
 
-  /*tableroot: {
-     width: '100%',
-     marginTop: theme.spacing.unit * 3,
-     overflowX: 'auto',
-   },
-  flex: {
-    flex: 1,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
-  paper: {
-    padding: theme.spacing.unit * 2,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-  list: {
-    width: '75%',
-    maxWidth: 360,
-    backgroundColor: theme.palette.primary.light,
-  },
-  margin: {
+  Chip: {
     margin: theme.spacing.unit,
   },
-  success: {
-    backgroundColor: green[600],
+
+  BuyTextField: {
+    width: '50%',
+    [theme.breakpoints.between('sm','lg')]: {width: '100%',},
+    margin: theme.spacing.unit
   },
-  icon: {
-    fontSize: 20,
+
+  TextField: {
+    [theme.breakpoints.only('lg')]: {width: '45%',},
+    marginRight: theme.spacing.unit,
+    marginBottom: theme.spacing.unit
   },
-  message: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  addBtn: {
-    position: 'fixed',
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 3,
-  },
-  progress: {
-    margin: theme.spacing.unit * 2,
-   },
-  table: {
-    minWidth: 700,
-   },
-  article: {
-    minWidth: 275,
-    marginBottom: 30
-  },
-  appBar: {
-    position: 'relative',
-    textAlign: 'center'
-  },*/
 });
 
 export default styles;

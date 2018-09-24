@@ -166,7 +166,7 @@ const ActivityItem = withStyles(styles)(
       const { classes } = this.props;
 
       return (
-        <ListItem component="a" href={this.props.link} target="_blank" className={classes.ActivityItem} divider button>
+        <ListItem component="a" href={this.props.link} target="_blank" divider button>
           <Grid container>
             <Grid item xs={1}>
               <ListItemIcon><FontAwesomeIcon icon="music"/></ListItemIcon>

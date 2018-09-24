@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import {
-  BrowserRouter as Router,
-  Route,
+  //BrowserRouter as Router,
+  //Route,
   NavLink,
-  Switch
+  //Switch
   //Redirect,
   //withRouter
 } from 'react-router-dom'

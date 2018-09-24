@@ -14,6 +14,8 @@ import Teachers from './Teachers'
 import History from './History'
 import Performances from './Performances'
 import Rent from './Rent'
+import Publications from './Publications'
+import Buy from './Buy'
 import Contact from './Contact'
 import Map_ from './Map'
 
@@ -66,6 +68,8 @@ const App = withTheme()(withStyles(styles)(
               <Route path="/about/history" component={History}/>
               <Route path="/performances" component={Performances}/>
               <Route path="/rent" component={Rent}/>
+              <Route exact path="/publications" component={Publications}/>
+              <Route path="/publications/buy" component={Buy}/>
               <Route path="/contact" component={Contact}/>
               <Route path="/map" component={Map_}/>
               <Route component={NotFound}/>
@@ -154,7 +158,7 @@ const Navigation = withStyles(styles)(
                         </Menu> )}/>
                       <NavItem to="/performances" text="精彩演出"/>
                       <NavItem to="/rent" text="場地出租"/>
-                      <NavItem to="/publications" text="委託創作"/>
+                      <NavItem to="/publications" text="委託創作" notExact={true}/>
                       <NavItem to="/contact" text="聯絡我們"/>
                     </Grid></Grid>
                   </Hidden>
