@@ -84,8 +84,6 @@ const People = withStyles(styles)(
   }
 );
 
-People.propTypes = {
-     classes: PropTypes.object.isRequired,
-};
+
 
 export default People;

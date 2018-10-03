@@ -74,8 +74,8 @@ const Index = withStyles(styles)(
       return (
         <div className={classes.MainPage}>
         <Grid container>
-          <Grid item xs={1} sm={2} md={2} lg={3} xl={4}></Grid>
-          <Grid item xs={10} sm={8} md={8} lg={6} xl={4}>
+          <Grid item xs={false} sm={1} md={1} lg={3} xl={4}></Grid>
+          <Grid item xs={12} sm={10} md={10} lg={6} xl={4}>
             <Paper className={classes.Paper}>
               <Typography variant="headline" component="h1" gutterBottom color="primary" align="center">
                 關於青韵
@@ -88,12 +88,12 @@ const Index = withStyles(styles)(
               </Typography>
             </Paper>
           </Grid>
-          <Grid item xs={1} sm={2} md={2} lg={3} xl={4}></Grid>
+          <Grid item xs={false} sm={1} md={1} lg={3} xl={4}></Grid>
         </Grid>
 
         <Grid container>
-          <Grid item xs={false} md={1} lg={1} xl={3}></Grid>
-          <Grid item xs={12} sm={12} md={10} lg={10} xl={6}>
+          <Grid item xs={false} sm={1} md={1} lg={1} xl={3}></Grid>
+          <Grid item xs={12} sm={10} md={10} lg={10} xl={6}>
             <Paper className={classes.Paper}>
               <Typography variant="headline" component="h1" gutterBottom color="primary" align="center">
                 最新消息
@@ -115,12 +115,12 @@ const Index = withStyles(styles)(
               </List>
             </Paper>
           </Grid>
-          <Grid item xs={false} md={1} lg={1} xl={3}></Grid>
+          <Grid item xs={false} sm={1} md={1} lg={1} xl={3}></Grid>
         </Grid>
 
         <Grid container>
-          <Grid item xs={1} sm={2} md={2} lg={3} xl={4}></Grid>
-          <Grid item xs={10} sm={8} md={8} lg={6} xl={4}>
+          <Grid item xs={false} sm={1} md={2} lg={3} xl={4}></Grid>
+          <Grid item xs={12} sm={10} md={8} lg={6} xl={4}>
             <AutoPlaySwipeableViews
               axis='x'
               index={this.state.imgStep}
@@ -151,7 +151,7 @@ const Index = withStyles(styles)(
               }
             />
           </Grid>
-          <Grid item xs={1} sm={2} md={2} lg={3} xl={4}></Grid>
+          <Grid item xs={false} sm={1} md={2} lg={3} xl={4}></Grid>
         </Grid>
 
         </div>

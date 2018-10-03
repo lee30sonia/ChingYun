@@ -2,16 +2,26 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 
 export const theme = createMuiTheme({
-  palette: {
-    primary: {main: '#408c8c'}, //'#d9a99d'},
+  breakpoints:{
+    values: {
+      xs: 0,
+      sm: 530,
+      md: 670,
+      lg: 960,
+      xl: 1920
+    }
   },
+  palette: {
+    primary: {main: '#095d79', light: '#2b9fc5', contrastText: '#b5e8eb'}, // '#408c8c' '#d9a99d'
+  }, // '#b5e8eb' '#8adde2' '#71ced3' '#2b9fc5' '#095d79'
   status: {
     danger: 'orange',
   },
-  /*typography: {
+  typography: {
     // Use the system font instead of the default Roboto font.
     fontFamily: [
-      '標楷體',
+      'Noto Sans TC',
+      '微軟正黑體',
       '-apple-system',
       'BlinkMacSystemFont',
       '"Segoe UI"',
@@ -23,12 +33,16 @@ export const theme = createMuiTheme({
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
     ].join(','),
-  },*/
+    fontSize: 16,
+  },
 });
 
 export const styles = theme => ({
   root: {
     flexGrow: 1,
+  },
+  logo: {
+    height: '50px'
   },
    tableroot: {
      width: '100%',

@@ -17,7 +17,7 @@ const Announcement = withStyles(styles)(
     }
   
     render() {
-      //const { classes } = this.props;
+      const { classes } = this.props;
 
       return (
         <Paper>  

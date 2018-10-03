@@ -3,9 +3,9 @@ import {
   BrowserRouter as Router,
   Route,
   NavLink,
-  Switch
+  Switch,
   //Redirect,
-  //withRouter
+  withRouter
 } from 'react-router-dom'
 import logo from './img/logo_shallow.png'
 import Index from './IndexPage'
@@ -58,7 +58,7 @@ const App = withTheme()(withStyles(styles)(
       return (
         <MuiThemeProvider theme={theme}>
           <Router>
-          <div className={classes.root}>
+          <ScrollToTop className={classes.root}>
             <Navigation />
             
             <Switch>
@@ -74,7 +74,7 @@ const App = withTheme()(withStyles(styles)(
               <Route path="/map" component={Map_}/>
               <Route component={NotFound}/>
             </Switch>
-          </div>
+          </ScrollToTop>
           </Router>
 
           <Footer id="foot"/>
@@ -303,6 +303,20 @@ const NotFound = withStyles(styles)(
       );
     }
 });
+
+const ScrollToTop = withRouter(
+  class extends Component {
+    componentDidUpdate(prevProps) {
+      if (this.props.location !== prevProps.location) {
+        window.scrollTo(0, 0);
+      }
+    }
+  
+    render() {
+      return this.props.children;
+    }
+});
+
 
 App.propTypes = {
   classes: PropTypes.object.isRequired,

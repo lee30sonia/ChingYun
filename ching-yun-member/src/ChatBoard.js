@@ -64,7 +64,7 @@ const ChatBoard = withStyles(styles)(
                  <div>
                    <NewPost submit={ ()=>{this.render()} } me={this.props.me} />
                    { data.allPost.map( post => (
-                      <Card className={classes.article}>
+                      <Card className={classes.article} key={post.title}>
                         <Typography gutterBottom variant="headline" component="h2">
                            {post.title}
                         </Typography>

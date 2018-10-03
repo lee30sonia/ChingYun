@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import logo from './img/logo_shallow.png';
 
 import LoginDialog from './LoginDialog';
 import MainPage from './MainPage';
@@ -17,7 +18,6 @@ import Typography from '@material-ui/core/Typography';
 
 import { ApolloProvider } from 'react-apollo';
 import client from './client';
-
 
 const App = withTheme()(withStyles(styles)(
   class extends Component {
@@ -43,16 +43,14 @@ const App = withTheme()(withStyles(styles)(
       const { classes } = this.props;
 
       return (
-         <ApolloProvider client={client}>
+        <ApolloProvider client={client}>
         <MuiThemeProvider theme={theme}>
           <div className={classes.root+" root"}>
             <Grid container className="Nav">
               <Grid item xs={12}>
               <AppBar position="static">
                 <Toolbar>
-                  <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-                    <MenuIcon />
-                  </IconButton>
+                  <img src={logo} alt="logo" className={classes.logo}/>
                   <Typography variant="title" color="inherit" className={classes.flex}>
                     團員專區
                   </Typography>
@@ -65,12 +63,11 @@ const App = withTheme()(withStyles(styles)(
               </AppBar>
               </Grid>
             </Grid>
-
+            
             <MainPage loggedIn={this.state.loggedIn} me={this.state.me}/>
-
           </div>
         </MuiThemeProvider>
-     </ApolloProvider>
+        </ApolloProvider>
       );
     }
   }
