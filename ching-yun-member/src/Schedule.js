@@ -16,10 +16,12 @@ const Schedule = withStyles(styles)(
     }
   
     render() {
-      //const { classes } = this.props;
+      const { classes } = this.props;
 
       return (
-        <Paper> 練唱進度 </Paper>
+        <div className={classes.content}>
+        <Paper className={classes.Paper}> 練唱進度 </Paper>
+        </div>
       );
     }
   }

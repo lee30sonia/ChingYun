@@ -41,14 +41,91 @@ export const styles = theme => ({
   root: {
     flexGrow: 1,
   },
+
+  appBar: {
+    position: 'fixed',
+    textAlign: 'center',
+    zIndex: theme.zIndex.drawer + 1,
+    height: '65px',
+    width: window.width
+  },
+
   logo: {
     height: '50px'
   },
-   tableroot: {
-     width: '100%',
-     marginTop: theme.spacing.unit * 3,
-     overflowX: 'auto',
-   },
+
+  menuIcon: {
+    color: theme.palette.primary.contrastText,
+    position: 'fixed',
+    left: '10px',
+    top: '10px'
+  },
+
+  Paper: {
+    padding: theme.spacing.unit * 2,
+    margin: theme.spacing.unit * 2,
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+
+  drawerPaper: {
+    paddingTop: '65px',
+    position: 'fixed',
+    [theme.breakpoints.up('md')]:{ width: '15%'},
+    [theme.breakpoints.between('xs','md')]:{ width: '19%'},
+    [theme.breakpoints.between('xs','sm')]:{ width: '23%'},
+    [theme.breakpoints.down('xs')]:{ width: '0', left: '-10px'},
+    backgroundColor: theme.palette.primary.main,
+    marginRight: '0px',
+  },
+
+  mobileDrawer: {
+    backgroundColor: theme.palette.primary.main,
+    paddingTop: '65px',
+    padding: '10px',
+  },
+
+  drawerText: {
+    textAlign: 'center',
+    color: theme.palette.primary.contrastText,
+    padding: 0,
+  },
+
+  MainPage: {
+    flexGrow: 1,
+    zIndex: 1,
+    overflow: 'hidden',
+    //position: 'relative',
+    display: 'flex',
+  },
+
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing.unit * 3,
+    display: 'flex',
+    position: 'relative',
+    top: '65px',
+    [theme.breakpoints.up('md')]:{ left: '18%', width: '75%'},
+    [theme.breakpoints.between('xs','md')]:{ left: '22%', width: '75%'},
+    [theme.breakpoints.between('xs','sm')]:{ left: '28%', width: '70%'},
+    [theme.breakpoints.down('xs')]:{ left: '0%', width: '100%'},
+    //minWidth: 0, // So the Typography noWrap works
+  },
+
+  Announcement: {
+    marginBottom: '20px',
+    padding: '20px',
+    textAlign: 'left',
+    width: '100%',
+  },
+
+
+
+  tableroot: {
+    width: '100%',
+    marginTop: theme.spacing.unit * 3,
+    overflowX: 'auto',
+  },
   flex: {
     flex: 1,
   },
@@ -56,16 +133,19 @@ export const styles = theme => ({
     marginLeft: -12,
     marginRight: 20,
   },
-  paper: {
-    padding: theme.spacing.unit * 2,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
+  
+  /*
   list: {
     width: '75%',
     maxWidth: 360,
-    backgroundColor: theme.palette.primary.light,
-  },
+    backgroundColor: theme.palette.primary.main,
+  },*/
+
+
+  
+
+  
+
   margin: {
     margin: theme.spacing.unit,
   },
@@ -94,10 +174,7 @@ export const styles = theme => ({
     minWidth: 275,
     marginBottom: 30
   },
-  appBar: {
-    position: 'relative',
-    textAlign: 'center'
-  },
+
 });
 
 export default styles;

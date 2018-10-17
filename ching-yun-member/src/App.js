@@ -15,6 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Hidden from '@material-ui/core/Hidden';
 
 import { ApolloProvider } from 'react-apollo';
 import client from './client';
@@ -26,6 +27,7 @@ const App = withTheme()(withStyles(styles)(
       this.state={
           me: null, /* {name, username, auth, part} */
           loggedIn: false,
+          NavOpen: false,
       };
       this.login = this.login.bind(this);
       this.logout = this.logout.bind(this);
@@ -38,6 +40,11 @@ const App = withTheme()(withStyles(styles)(
     logout() {
       this.setState({loggedIn: false, me: null});
     }
+
+    handleMobileNav = (b) => {
+      this.setState({NavOpen: b});
+      //console.log(b)
+    };
     
     render() {
       const { classes } = this.props;
@@ -48,12 +55,21 @@ const App = withTheme()(withStyles(styles)(
           <div className={classes.root+" root"}>
             <Grid container className="Nav">
               <Grid item xs={12}>
-              <AppBar position="static">
+              <AppBar className={classes.appBar}>
                 <Toolbar>
-                  <img src={logo} alt="logo" className={classes.logo}/>
+                  <Hidden smUp><Grid item xs={3}>
+                    <IconButton aria-label="Menu" className={classes.menuIcon}
+                      onClick={()=>{this.handleMobileNav(true)}}>
+                      <MenuIcon />
+                    </IconButton>
+                  </Grid></Hidden>
+
+                  <Hidden only={['xs']}> <img src={logo} alt="logo" className={classes.logo}/></Hidden>
+                  
                   <Typography variant="title" color="inherit" className={classes.flex}>
                     團員專區
                   </Typography>
+                  
                   <LoginDialog 
                     login={(person)=>{this.login(person);}} 
                     logout={()=>{this.logout();}} 
@@ -64,14 +80,14 @@ const App = withTheme()(withStyles(styles)(
               </Grid>
             </Grid>
             
-            <MainPage loggedIn={this.state.loggedIn} me={this.state.me}/>
+            <MainPage loggedIn={true} me={this.state.me} NavOpen={this.state.NavOpen} set={(b)=>{this.handleMobileNav(b)}}/>
           </div>
         </MuiThemeProvider>
         </ApolloProvider>
       );
     }
   }
-));
+)); //loggedIn={this.state.loggedIn}
 
 App.propTypes = {
   classes: PropTypes.object.isRequired,

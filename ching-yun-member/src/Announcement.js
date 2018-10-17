@@ -20,11 +20,13 @@ const Announcement = withStyles(styles)(
       const { classes } = this.props;
 
       return (
-        <Paper>  
-          <Typography component="p" className="announce">
+        <div className={classes.content}>
+        <Paper className={classes.Announcement}>  
+          <Typography component="p"  >
             新樂季練唱將於7/21開始！
           </Typography>
         </Paper>
+        </div>
       );
     }
   }

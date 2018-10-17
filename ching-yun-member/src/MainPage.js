@@ -25,6 +25,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import Drawer from '@material-ui/core/Drawer';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import Hidden from '@material-ui/core/Hidden';
 
 const MainPage = withStyles(styles)(
   class extends Component {
@@ -42,8 +45,54 @@ const MainPage = withStyles(styles)(
       {
         return (
           <Router>
-            <ScrollToTop>
-              <Grid container spacing={24}>
+            <ScrollToTop className={classes.MainPage}>
+
+              <Hidden smUp><SwipeableDrawer
+                open={this.props.NavOpen}
+                onClose={()=>{this.props.set(false)}}
+                onClick={()=>{this.props.set(false)}}
+                onOpen={()=>{this.props.set(true)}}
+                classes={{
+                  paper: classes.mobileDrawer,
+                }}
+              >
+                <NavList/>
+              </SwipeableDrawer></Hidden>
+
+              <Drawer
+                variant="permanent"
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+              >
+                <NavList/>
+              </Drawer>
+              
+                  <Switch>
+                    <Route exact path="/" component={Announcement}/>
+                    <Route path="/schedule" component={Schedule}/>
+                    <Route path="/chatboard" component={ChatBoard}/>
+                    <Route path="/people" component={People}/>
+                    <Route path="/attendance" component={Attendance}/>
+                    <Route component={NotFound}/>
+                  </Switch>
+                
+            </ScrollToTop>
+          </Router>
+        );
+      }
+      else 
+      {
+        return (
+          <div> 請先登入 </div>
+        );
+      }
+    }
+  }
+);
+
+/*
+<Grid container spacing={24}>
                 <Grid item xs={3}>
                   <List className={classes.list}> 
                     <NavItem to="/" text="公告"/>
@@ -66,19 +115,23 @@ const MainPage = withStyles(styles)(
                 
                 </Grid>
               </Grid>
-            </ScrollToTop>
-          </Router>
-        );
-      }
-      else 
-      {
-        return (
-          <div> 請先登入 </div>
-        );
-      }
+              */
+
+const NavList = withStyles(styles)(
+  class extends Component {
+    render() {
+      const { classes } = this.props;
+      return ( 
+        <List> 
+          <NavItem to="/" text="公告"/>
+          <NavItem to="/schedule" text="練唱進度"/>
+          <NavItem to="/chatBoard" text="討論區"/>
+          <NavItem to="/people" text="通訊錄"/>
+          <NavItem to="/attendance" text="出席表"/>
+        </List>
+      );
     }
-  }
-);
+});
 
 const NavItem = withStyles(styles)(
   class extends Component {
@@ -89,7 +142,7 @@ const NavItem = withStyles(styles)(
       return ( 
         <ListItem button component={NavLink} to={this.props.to} exact={!this.props.notExact}
           activeClassName="disabledButton" > 
-          <ListItemText primary={this.props.text}/> 
+          <ListItemText primary={this.props.text} className={classes.drawerText} primaryTypographyProps={{color: 'inherit'}}/> 
         </ListItem>
       );
     }

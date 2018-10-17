@@ -46,6 +46,7 @@ const People = withStyles(styles)(
                   return "Error: can not load data.";
 
                return (
+                <div className={classes.content}>
                  <Paper className={classes.tableroot}>
                     <Table className={classes.table}>
 
@@ -76,6 +77,7 @@ const People = withStyles(styles)(
                      </TableBody>
                   </Table>
                </Paper>
+               </div>
                );
             }}
          </Query>

@@ -16,9 +16,9 @@ body {
   text-align: center;
 }
 
-.Nav {
+/*.Nav {
   padding-bottom: 30px;
-}
+}*/
 
 .marker {
   background-color: Yellow;
@@ -30,12 +30,6 @@ body {
 
 .articleEditor {
   margin-top: 30px;
-}
-
-.announce {
-  margin-bottom: 20px;
-  padding: 20px 20px 20px 20px;
-  text-align: left;
 }
 
 .personal {

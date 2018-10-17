@@ -61,7 +61,7 @@ const ChatBoard = withStyles(styles)(
                   return `Error! ${err.message}`;
 
                return (
-                 <div>
+                 <div className={classes.content}>
                    <NewPost submit={ ()=>{this.render()} } me={this.props.me} />
                    { data.allPost.map( post => (
                       <Card className={classes.article} key={post.title}>

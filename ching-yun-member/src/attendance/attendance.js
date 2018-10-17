@@ -132,7 +132,7 @@ const Attendance = withStyles(styles)(
                   return `Error! ${err.message}`;
 
                return (
-                  <div className="Attendance">
+                  <div className={classes.content + " Attendance"}>
                      <h3>點名表</h3>
                      <Mutation mutation={mutation}>
                         { addDate => (
