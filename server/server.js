@@ -13,6 +13,7 @@ const Dates = require('./model/dates');
 const Post = require('./model/post');
 const query = require('./query');
 const mutation = require('./mutation');
+const util = require('./util');
 
 // connect to mongodb
 var mongoose = require('mongoose');
@@ -74,7 +75,8 @@ var schema = buildSchema(`
       getPerson(username: String!): Person,
       allPeople: [Person],
       getDates(name: String!): [String],
-      allPost: [Post]
+      allPost: [Post],
+      sendMail(email: String!, str: String!): String
    }
 
    type Mutation {
@@ -99,7 +101,8 @@ const resolver = {
    authUpdate: mutation.authUpdate,
    addDate: mutation.addDate,
    addPost: mutation.addPost,
-   addResponse: mutation.addResponse
+   addResponse: mutation.addResponse,
+   sendMail: util.sendMail
 };
 
 app.use(cors());

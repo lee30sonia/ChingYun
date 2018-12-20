@@ -47,6 +47,8 @@ import Hidden from '@material-ui/core/Hidden';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import Divider from '@material-ui/core/Divider';
 
+import { ApolloProvider } from 'react-apollo';
+import client from './client';
 
 //var classNames = require('classnames');
 
@@ -56,6 +58,7 @@ const App = withTheme()(withStyles(styles)(
       const { classes } = this.props;
 
       return (
+        <ApolloProvider client={client}>
         <MuiThemeProvider theme={theme}>
           <Router>
           <ScrollToTop className={classes.root}>
@@ -79,6 +82,7 @@ const App = withTheme()(withStyles(styles)(
 
           <Footer id="foot"/>
         </MuiThemeProvider>
+        </ApolloProvider>
       );
     }
   }

@@ -18,6 +18,10 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMusic } from '@fortawesome/free-solid-svg-icons'
 
+import { Query, Mutation } from 'react-apollo';
+import { ApolloConsumer } from 'react-apollo';
+import gql from 'graphql-tag';
+
 library.add(faMusic);
 
 const Buy = withStyles(styles)(
@@ -62,7 +66,14 @@ const Buy = withStyles(styles)(
       });
     }
 
-    send = () => {
+    async send(client) 
+    {
+      if (!this.state.name || !this.state.email || !this.state.phone || !this.state.address || !this.state.account)
+      {
+        alert("請填寫完整資料再送出！");
+        return;
+      }
+
       var sum = 0;
       var str = ("訂購人姓名："+this.state.name+
       "\nemail："+this.state.email+
@@ -85,7 +96,26 @@ const Buy = withStyles(styles)(
       "\nWagi ka'ta ki Bavatug-an 今天就是歡慶之日："+this.state.num[9]+
       "\n夢與追尋之旅組曲（七首含殼）："+this.state.num[7]);
 
-      alert(str);
+      //alert(str);
+
+      //await client.util.sendMail(str, this.state.email); //???
+      const { data } = await client.query({
+        query: gql`
+          query sendMail($e: String!, $s: String!) {
+            sendMail(email: $e, str: $s) 
+          }`,
+        variables: {
+          "e": this.state.email,
+          "s": str
+        }
+      })
+      .catch( err => {
+         console.log(err);
+      });
+      alert(data.sendMail);
+      //if (data) alert("確認信已寄至您所提供的信箱（"+this.state.email+"）！");
+      //else alert("確認信寄送失敗。若此情況持續發生，請聯繫網頁工程師");
+      this.cancle();
     }
 
     render() {
@@ -113,6 +143,9 @@ const Buy = withStyles(styles)(
       this.sum = sum+80;
 
       return (
+        <ApolloConsumer>
+        { client => (
+
         <div className={classes.MainPage}>
           <Paper className={classes.PaperTitle}>
             <Typography variant="headline" component="h1" color="primary" align="center">
@@ -238,12 +271,15 @@ const Buy = withStyles(styles)(
                 <br/><br/>
 
                 <Button variant='outlined' style={{margin: '5px'}} onClick={this.cancle}> 清除重填 </Button>
-                <Button variant='outlined' style={{margin: '5px'}} onClick={this.send}> 確認送出 </Button>
+                <Button variant='outlined' style={{margin: '5px'}} onClick={()=>{this.send(client);}}> 確認送出 </Button>
               </Paper>
             </Grid>
 
           </Grid>
         </div>
+        
+        )}
+        </ApolloConsumer>
       );
     }
 });
