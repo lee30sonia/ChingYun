@@ -94,7 +94,8 @@ const Buy = withStyles(styles)(
       "\n青天的韵腳："+this.state.num[6]+
       "\nPairua Meyrang ki Reya 平安的主！請來！："+this.state.num[8]+
       "\nWagi ka'ta ki Bavatug-an 今天就是歡慶之日："+this.state.num[9]+
-      "\n夢與追尋之旅組曲（七首含殼）："+this.state.num[7]);
+      "\n夢與追尋之旅組曲（七首含殼）："+this.state.num[7]+
+      "\n\n請勿直接回覆本信，若有問題請 email 至：chingyunchoir@gmail.com");
 
       //alert(str);
 
