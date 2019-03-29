@@ -192,7 +192,7 @@ const Buy = withStyles(styles)(
                 運費：80 元<br/>
                 總價：<span style={{color:"red"}}>{sum+80} 元</span><br/><br/>
 
-                <p>請將總價匯款至青韵帳戶後，填妥以下表格，我們將在收到匯款後寄送 email 與您確認郵寄資訊。<br/></p>
+                <p>請將總價匯款至青韵帳戶後，填妥以下表格，我們將在收到匯款後七日內以 email 與您確認郵寄資訊。<br/></p>
                 戶名：青韵合唱團<br/>帳號：020118090403<br/>開戶行：凱基銀行 松江分行<br/><br/>
 
                 <TextField
