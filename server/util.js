@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 async function sendMail(args) {
   let mailOptions = {
     from: '"Ching Yun Robot" <chingyunchoir@gmail.com>',
-    to: args.email+",chingyunchoir@gmail.com, joe101525@gmail.com"
+    to: args.email+",chingyunchoir@gmail.com, joe101525@gmail.com",
     subject: '青韵線上購譜確認信', // Subject line
     text: args.str, // plain text body
     //html: '<b>Hello world?</b>' // html body
