@@ -5,7 +5,7 @@ import {
   Route,
   NavLink,
   Switch,
-  //Redirect,
+  Redirect,
   withRouter
 } from 'react-router-dom'
 
@@ -14,10 +14,13 @@ import Schedule from './Schedule';
 import ChatBoard from './ChatBoard';
 import People from './People';
 import Attendance from './attendance/attendance';
+import LoginDialog from './LoginDialog';
 
 //import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import styles from './styles'
+//import injectTapEventPlugin from 'react-tap-event-plugin';
+import Auth from './modules/Auth';
 
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -28,6 +31,36 @@ import Typography from '@material-ui/core/Typography';
 import Drawer from '@material-ui/core/Drawer';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import Hidden from '@material-ui/core/Hidden';
+
+
+// remove tap delay, essential for MaterialUI to work properly
+//injectTapEventPlugin();
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={props => (
+    Auth.isUserAuthenticated() ? (
+      <Component {...props} {...rest} />
+    ) : (
+      <Redirect to={{
+        pathname: '/',
+        state: { from: props.location }
+      }}/>
+    )
+  )}/>
+)
+
+const LoggedOutRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={props => (
+    Auth.isUserAuthenticated() ? (
+      <Redirect to={{
+        pathname: '/',
+        state: { from: props.location }
+      }}/>
+    ) : (
+      <Component {...props} {...rest} />
+    )
+  )}/>
+)
 
 const MainPage = withStyles(styles)(
   class extends Component {
@@ -68,14 +101,15 @@ const MainPage = withStyles(styles)(
                 <NavList/>
               </Drawer>
               
-                  <Switch>
-                    <Route exact path="/" component={Announcement}/>
-                    <Route path="/schedule" component={Schedule}/>
-                    <Route path="/chatboard" component={ChatBoard}/>
-                    <Route path="/people" component={People}/>
-                    <Route path="/attendance" component={Attendance}/>
-                    <Route component={NotFound}/>
-                  </Switch>
+              <Switch>
+                <PrivateRoute exact path="/" component={Announcement}/>
+                <PrivateRoute path="/schedule" component={Schedule}/>
+                <PrivateRoute path="/chatboard" component={ChatBoard}/>
+                <PrivateRoute path="/people" component={People}/>
+                <PrivateRoute path="/attendance" component={Attendance}/>
+                
+                <Route component={NotFound}/>
+              </Switch>        
                 
             </ScrollToTop>
           </Router>
@@ -90,6 +124,24 @@ const MainPage = withStyles(styles)(
     }
   }
 );
+
+/*
+<Switch>
+                <PrivateRoute exact path="/" component={Announcement}/>
+                <PrivateRoute path="/schedule" component={Schedule}/>
+                <PrivateRoute path="/chatboard" component={ChatBoard}/>
+                <PrivateRoute path="/people" component={People}/>
+                <PrivateRoute path="/attendance" component={Attendance}/>
+                <LoggedOutRoute path="/login" component={LoginDialog}/>
+
+                <PrivateRoute component={LoginDialog} path="/login"
+                login={(person)=>{this.props.login(person);}} 
+                logout={()=>{this.props.logout();}} 
+                loggedIn={this.props.loggedIn}
+                me={this.props.me} />
+                <Route component={NotFound}/>
+              </Switch>
+*/
 
 /*
 <Grid container spacing={24}>

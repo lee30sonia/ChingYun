@@ -8,6 +8,17 @@ import PropTypes from 'prop-types';
 import { MuiThemeProvider, withTheme, withStyles } from '@material-ui/core/styles';
 import { styles, theme } from './styles';
 
+//import injectTapEventPlugin from 'react-tap-event-plugin';
+import Auth from './modules/Auth';
+import {
+  BrowserRouter as Router,
+  Route,
+  NavLink,
+  Switch,
+  //Redirect,
+  withRouter
+} from 'react-router-dom'
+
 // material-ui
 import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
@@ -25,7 +36,7 @@ const App = withTheme()(withStyles(styles)(
     constructor(props) {
       super(props);
       this.state={
-          me: null, /* {name, username, auth, part} */
+          me: null, //{name: "dd", username: "admin", auth: "Root", part: "Teacher"}, /* {name, username, auth, part} */
           loggedIn: false,
           NavOpen: false,
       };
@@ -33,8 +44,20 @@ const App = withTheme()(withStyles(styles)(
       this.logout = this.logout.bind(this);
     }
 
+    /*componentDidMount() {
+      // check if user is logged in on refresh
+      this.toggleAuthenticateStatus()
+    }*/
+    
+    toggleAuthenticateStatus() {
+      // check authenticated status and toggle state based on that
+      if (Auth.isUserAuthenticated())
+        this.setState({ loggedIn: true })
+    }
+
     login(person) {
       this.setState({loggedIn: true, me: person});
+      this.toggleAuthenticateStatus();
     }
 
     logout() {
@@ -75,12 +98,14 @@ const App = withTheme()(withStyles(styles)(
                     logout={()=>{this.logout();}} 
                     loggedIn={this.state.loggedIn}
                     me={this.state.me} />
+                  
                 </Toolbar>
               </AppBar>
               </Grid>
             </Grid>
-            
-            <MainPage loggedIn={true} me={this.state.me} NavOpen={this.state.NavOpen} set={(b)=>{this.handleMobileNav(b)}}/>
+
+            <MainPage loggedIn={this.state.loggedIn} me={this.state.me} NavOpen={this.state.NavOpen}
+                      set={(b)=>{this.handleMobileNav(b)}}/>
           </div>
         </MuiThemeProvider>
         </ApolloProvider>
@@ -88,6 +113,16 @@ const App = withTheme()(withStyles(styles)(
     }
   }
 )); //loggedIn={this.state.loggedIn}
+
+/*
+                    <LoginDialog 
+                    login={(person)=>{this.login(person);}} 
+                    logout={()=>{this.logout();}} 
+                    loggedIn={this.state.loggedIn}
+                    me={this.state.me} />
+
+                    </Toolbar>
+*/
 
 App.propTypes = {
   classes: PropTypes.object.isRequired,

@@ -2,10 +2,13 @@ const express = require('express');
 const express_graphql = require('express-graphql');
 const { buildSchema } = require('graphql');
 const cors = require('cors');
+const passport = require('passport');
+const session = require("express-session");
 
 const port = 4001;
 const app = express();
 const server = require('http').createServer(app);
+const axios = require('axios');
 
 const People = require('./model/people');
 const AuthNum = require('./model/authNum');
@@ -36,7 +39,8 @@ var schema = buildSchema(`
 
    type Match {
       match: Boolean,
-      person: Person
+      person: Person,
+      token: String
    }
 
    type Person {
@@ -117,5 +121,49 @@ app.use("/graphql", express_graphql({
    rootValue: resolver,
    graphiql: true
 }));
+
+
+// pass the passport middleware
+app.use(passport.initialize());
+// load passport strategies
+//const localSignupStrategy = require('./passport/local-signup');
+const localLoginStrategy = require('./passport/local-login');
+//passport.use('local-signup', localSignupStrategy);
+passport.use('local-login', localLoginStrategy);
+
+app.post(
+   '/login',
+   passport.authenticate('local-login', { session: true }),
+   function (req, res) {
+      //console.log(req)
+      //req.logIn(req.authInfo, function (err) { });
+      res.send({user: req.authInfo, token: req.user});
+   }
+);
+
+
+// pass the authenticaion checker middleware
+const authCheckMiddleware = require('./passport/auth-check');
+app.get('/api', authCheckMiddleware);
+
+
+// session
+app.use(session({ 
+   secret: "cats",
+   resave: false,
+   saveUninitialized: false, }));
+app.use(passport.session());
+passport.serializeUser(function(user, done) {
+   console.log("serialize: ",user)
+   done(null, user);
+});
+
+passport.deserializeUser(function(id, done) {
+   console.log("deserialize: ", id)
+   //axios.get("http://localhost:4001/api");
+  People.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
 
 server.listen(port, () => console.log(`Listening on localhost:${port}/graphql`))

@@ -30,6 +30,7 @@ import { faUserCircle, faKey, faLock, faEnvelope, faPhone, faSmile } from '@fort
 import { Query, Mutation } from 'react-apollo';
 import { ApolloConsumer } from 'react-apollo';
 import gql from 'graphql-tag';
+import Auth from './modules/Auth';
 
 library.add(faUserCircle, faKey, faLock, faEnvelope, faPhone, faSmile)
 
@@ -73,6 +74,7 @@ const LoginDialog = withStyles(styles)(
   
     async login(username, password, client)
     {
+      console.log("login in LoginDialog")
        if(!username || !password)
           return;
        const { data } = await client.query({
@@ -86,6 +88,7 @@ const LoginDialog = withStyles(styles)(
                   auth
                   part
                }
+               token
             }
          }`,
          variables: {
@@ -101,6 +104,8 @@ const LoginDialog = withStyles(styles)(
       if (data.login.match)
       {
         this.props.login(data.login.person);
+        console.log(data.login);
+        Auth.authenticateUser(data.login.token);
         this.setState({snackBarOpen: true});
         this.handleClose();
       }

@@ -2,30 +2,89 @@ const People = require('./model/people');
 const AuthNum = require('./model/authNum');
 const Dates = require("./model/dates");
 const Post = require('./model/post');
+const passport = require('passport');
+const axios = require('axios');
+//const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 async function Login(args) {
-   console.log('login request', args.username);
+   console.log('login request in query ', args);
    var result;
-   await People.findOne(args)
+
+   await axios.post("http://localhost:4001/login?username="+args.username+"&password="+args.password, {
+   })
+   .then(function (response) {
+      if (response.status==200)
+      {
+         //console.log(response.data);
+         result = {
+            match: true,
+            person: response.data.user,
+            token: response.data.token
+         }; 
+      }
+      else
+         result = { match: false };
+   })
+   .catch(function (error) {
+      console.log(error);
+      result = { match: false };
+   });
+
+/*   await People.findOne(args)
       .exec()
-      .then( match => {
+      .then( async function(match) {
          if(match) {
             result = {
                match: true,
                person: match
             };
-            // console.log(result);
+
+            // create an AJAX request
+            params = "username="+result.person.username+"&password="+result.person.password;
+            const xhr = new XMLHttpRequest();
+            xhr.open('post', 'http://localhost:4001/auth/login?'+params);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            //xhr.setRequestHeader("Content-length", params.length);
+            xhr.responseType = 'json';
+            xhr.addEventListener('load', () => {
+               //console.log("xhr: ",xhr)
+               if (xhr.status === 200) {
+                  // success
+                  
+                  // save the token
+                  //authenticateUser(JSON.parse(xhr.responseText).token);
+                  result = {
+                     match: true,
+                     person: match,
+                     token: JSON.parse(xhr.responseText).token
+                  };
+                  return result;
+                  // update authenticated state
+                  //this.props.toggleAuthenticateStatus()
+               
+                  // redirect signed in user to dashboard
+                  //this.props.history.push('/dashboard');
+               } 
+               else {
+                  // failure
+                  //console.log("fail, xhr: ", xhr)
+               }
+            });
+            xhr.send(null)
+            //xhr.send(`username=${result.person.username}&password=${result.person.password}`);
          }
          else {
             result = {
                match: false
             };
+            return result;
          }
       })
       .catch( err => {
          console.error(err);
       });
-   // console.log(result);
+*/
+   //console.log("result: ", result)
    return result;
 }
 
