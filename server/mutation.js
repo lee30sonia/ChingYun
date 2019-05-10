@@ -51,6 +51,24 @@ async function Update(args) {
    return result;
 }
 
+async function ChangePassword(args) {
+   var result = true;
+   await People.findOne({username: args.username, password: args.oldpass})
+      .exec()
+      .then( async function(match) {
+         if(match) 
+         {
+            console.log("match!")
+            result = true;
+            await People.updateOne( { username: args.username }, { password: args.newpass });
+         }
+         else
+            result = false;
+      });
+   
+   return {res: result};
+}
+
 async function AuthUpdate(args) {
    var result = true;
    await People.update( { username: args.username }, {
@@ -141,6 +159,7 @@ async function addResponse(args) {
 var mutation = {
    Signup: Signup,
    Update: Update,
+   ChangePassword: ChangePassword,
    AuthUpdate: AuthUpdate,
    addDate: addDate,
    addPost: addPost,

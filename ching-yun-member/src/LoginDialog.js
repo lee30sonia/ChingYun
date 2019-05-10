@@ -239,7 +239,13 @@ const LoginDialog = withStyles(styles)(
 var mutation = gql`
    mutation update($uid: String!, $n: String, $e: String, $p: String) {
       update(username: $uid, name: $n, email: $e, phone: $p)
-}`; // should add more
+   }`; // should add more
+
+var mutationChangePass = gql`
+  mutation changePassword($uid: String!, $opw: String!, $npw: String!) {
+      changePassword(username: $uid, oldpass: $opw, newpass: $npw) {res}
+   }
+`;
 
 var query = gql`
   query getPerson($uid: String!){
@@ -263,11 +269,12 @@ const PersonalPage = withStyles(styles)(
       this.state={
         open: false,
         name: '',
-        email: '',
-        phone: ''
+        email: ' ',
+        phone: ' '
       };
       this.handleClickOpen = this.handleClickOpen.bind(this);
       this.handleClose = this.handleClose.bind(this);
+      this.changePass = this.changePass.bind(this);
     }
 
     handleClickOpen(){
@@ -278,15 +285,30 @@ const PersonalPage = withStyles(styles)(
       this.setState({ open: false });
     }
 
-    async save(Update)
+    async changePass(oldpass, newpass, ChangePass, res)
+    {
+      await ChangePass({
+         variables: {
+            "uid": this.props.me.username,
+            "opw": oldpass,
+            "npw": newpass
+         }
+       })
+       .catch( err => {
+          console.log(err);
+       });
+      await console.log(res)
+    }
+
+    async save(Update, data)
     {
       // check for requirements
       await Update({
          variables: {
             "uid": this.props.me.username,
-            "n": this.state.name, 
-            "e": this.state.email,
-            "p": this.state.phone
+            "n": this.state.name? this.state.name: data.getPerson.name, 
+            "e": this.state.email===' '? data.getPerson.email: this.state.email,
+            "p": this.state.phone===' '? data.getPerson.phone: this.state.phone
          }
          ,refetchQueries: [{ query: query, variables: {"uid": this.props.me.username} }]
        })
@@ -312,10 +334,10 @@ const PersonalPage = withStyles(styles)(
               <div className="personal">
                 <Button color="inherit" onClick={this.handleClickOpen}>{data.getPerson.name}</Button>
                 <Dialog
-            fullScreen
-            open={this.state.open}
-            onClose={this.handleClose}
-            TransitionComponent={TransitionUp}
+                  fullScreen
+                  open={this.state.open}
+                  onClose={this.handleClose}
+                  TransitionComponent={TransitionUp}
                 >
                   
                   <AppBar className={classes.appBar}>
@@ -329,7 +351,7 @@ const PersonalPage = withStyles(styles)(
                       <Button color="inherit" onClick={this.handleClose} > 取消 </Button>
                       <Mutation mutation={mutation}>
                          { Update => (
-                            <Button color="inherit" onClick={() => {this.save(Update)}} >
+                            <Button color="inherit" onClick={() => {this.save(Update, data)}} >
                               儲存
                             </Button> )}
                       </Mutation>
@@ -370,6 +392,15 @@ const PersonalPage = withStyles(styles)(
                         />
                       </Grid>
                     </Grid>
+
+                    <br/> <br/>
+                    <Mutation mutation={mutationChangePass}>
+                      { (cp, data) => (
+                        <ChangePass changePass={(o,n)=>{this.changePass(o,n,cp,data)}}/>
+                      )}
+                    </Mutation>
+                    
+                    
                     
                   </DialogContent>
                 </Dialog>
@@ -377,6 +408,92 @@ const PersonalPage = withStyles(styles)(
             );
           }}
         </Query>
+      );
+    }
+  }
+);
+
+const ChangePass = withStyles(styles)(
+  class extends Component {
+    constructor(props) {
+      super(props);
+      this.state={
+        open: false,
+        pass: '',
+        newpass: '',
+        newpass2: ''
+      };   
+      this.handleClickOpen = this.handleClickOpen.bind(this);
+      this.changePass = this.changePass.bind(this);
+    }
+  
+    handleClickOpen = () => {
+      this.setState({ open: true });
+    };
+
+    changePass = () => {
+      if (this.state.newpass!==this.state.newpass2)
+      {
+        alert("請輸入相同的新密碼");
+        return;
+      }
+      this.props.changePass(this.state.pass, this.state.newpass);
+      this.setState({
+        open: false,
+        pass: '',
+        newpass: '',
+        newpass2: ''
+      });
+    };
+  
+    render() {
+      const { classes } = this.props;
+      
+      var cont = this.state.open? (
+        <div>
+        <Button variant="outlined" className={classes.btn_floatLeft} onClick={this.changePass}>確認</Button>
+        <Grid container spacing={8} alignItems="flex-end">
+          <Grid item>
+            <FontAwesomeIcon icon="key" />
+          </Grid>
+          <Grid item>
+            <TextField
+              margin="normal" label="舊密碼" type="password" required
+              onChange={(evt) => this.setState({pass: evt.target.value})}
+            />
+          </Grid>
+        </Grid>
+        <Grid container spacing={8} alignItems="flex-end">
+          <Grid item>
+            <FontAwesomeIcon icon="key" />
+          </Grid>
+          <Grid item>
+            <TextField
+              margin="normal" label="新密碼" type="password" required
+              onChange={(evt) => this.setState({newpass: evt.target.value})}
+            />
+          </Grid>
+        </Grid>
+        <Grid container spacing={8} alignItems="flex-end">
+          <Grid item>
+            <FontAwesomeIcon icon="key" />
+          </Grid>
+          <Grid item>
+            <TextField
+              margin="normal" label="重新輸入新密碼" type="password" required
+              onChange={(evt) => this.setState({newpass2: evt.target.value})}
+            />
+          </Grid>
+        </Grid>
+
+        </div>
+      ):(<div></div>);
+
+      return (
+        <div>
+          <Button variant="outlined" className={classes.btn_floatLeft} onClick={this.handleClickOpen}>變更密碼</Button>
+          {cont}
+        </div>
       );
     }
   }

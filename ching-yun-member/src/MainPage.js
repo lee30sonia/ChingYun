@@ -118,7 +118,7 @@ const MainPage = withStyles(styles)(
       else 
       {
         return (
-          <div> 請先登入 </div>
+          <div> <br/> <br/> 請先登入 </div>
         );
       }
     }

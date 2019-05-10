@@ -44,7 +44,7 @@ export const styles = theme => ({
   },
 
   appBar: {
-    position: 'fixed',
+    position: 'relative',
     textAlign: 'center',
     zIndex: theme.zIndex.drawer + 1,
     height: '65px',
@@ -105,12 +105,16 @@ export const styles = theme => ({
     padding: theme.spacing.unit * 3,
     display: 'flex',
     position: 'relative',
-    top: '65px',
+    //top: '65px',
     [theme.breakpoints.up('md')]:{ left: '18%', width: '75%'},
     [theme.breakpoints.between('xs','md')]:{ left: '22%', width: '75%'},
     [theme.breakpoints.between('xs','sm')]:{ left: '28%', width: '70%'},
     [theme.breakpoints.down('xs')]:{ left: '0%', width: '100%'},
     //minWidth: 0, // So the Typography noWrap works
+  },
+
+  DialogContent: {
+    position: 'relative'
   },
 
   Announcement: {
@@ -134,7 +138,11 @@ export const styles = theme => ({
     marginLeft: -12,
     marginRight: 20,
   },
-  
+
+  btn_floatLeft: {
+    float: 'left', 
+    margin: 3
+  },
   /*
   list: {
     width: '75%',

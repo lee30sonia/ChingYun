@@ -20,7 +20,7 @@ const util = require('./util');
 
 // connect to mongodb
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://user:AA123456@ds121871.mlab.com:21871/chingyuntest');
+mongoose.connect('mongodb://user:AA123456@ds121871.mlab.com:21871/chingyuntest', { useNewUrlParser: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -73,6 +73,10 @@ var schema = buildSchema(`
       text: String
    }
 
+   type Result {
+      res: Boolean
+   }
+
    type Query {
       login(username: String!, password: String!): Match,
       getAuth(number: String!): AuthNum,
@@ -86,6 +90,7 @@ var schema = buildSchema(`
    type Mutation {
       signup(name: String, username: String!, password: String!, auth: String, part: String): Boolean,
       update(username: String!, name: String, email: String, phone: String): Boolean,
+      changePassword(username: String!, oldpass: String!, newpass: String!): Result,
       authUpdate(username: String!, auth: String, part: String, job: String): Boolean,
       addDate(name: String!, date: String!): Int,
       addPost(title: String, author: String, date: String, content: String): String,
@@ -102,6 +107,7 @@ const resolver = {
    allPost: query.allPost,
    signup: mutation.Signup,
    update: mutation.Update,
+   changePassword: mutation.ChangePassword,
    authUpdate: mutation.authUpdate,
    addDate: mutation.addDate,
    addPost: mutation.addPost,
