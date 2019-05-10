@@ -133,7 +133,7 @@ passport.use('local-login', localLoginStrategy);
 
 app.post(
    '/login',
-   passport.authenticate('local-login', { session: true }),
+   passport.authenticate('local-login', { session: false }),
    function (req, res) {
       //console.log(req)
       //req.logIn(req.authInfo, function (err) { });

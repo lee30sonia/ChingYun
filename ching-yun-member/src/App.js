@@ -52,7 +52,7 @@ const App = withTheme()(withStyles(styles)(
     async toggleAuthenticateStatus() {
       // check authenticated status and toggle state based on that
       var user = await Auth.isUserAuthenticated();
-      if (user.username != null)
+      if (user != null)
         this.setState({ loggedIn: true, me: user })
     }
 
