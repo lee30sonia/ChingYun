@@ -7,13 +7,13 @@ const People = require('../model/people');
  *  The Auth Checker middleware function.
  */
 module.exports = (req, res, next) => {
-  console.log("auth check api/")
-  if (!req.headers.authorization) {
+  console.log("auth check api/ ")
+
+  if (!req.query) {
     return res.status(401).end();
   }
 
-  // get the last part from a authorization header string like "bearer token-value"
-  const token = req.headers.authorization.split(' ')[1];
+  const token = req.query.token;
 
   // decode the token using a secret key-phrase
   return jwt.verify(token, "secret!!", (err, decoded) => {
@@ -28,11 +28,13 @@ module.exports = (req, res, next) => {
         return res.status(401).end();
       }
       // pass user details onto next route
-      //req.user = user
-      console.log(userId, user)
-      res.data = user;//JSON.stringify(user)
-      console.log(res)
-      return res.status(200).end();
+      //res.data = user; //JSON.stringify(user)
+      return res.status(200).send({user: {
+        name: user.name, 
+        username: user.username, 
+        auth: user.auth, 
+        part: user.part
+      }});
     });
   });
 };

@@ -44,24 +44,26 @@ const App = withTheme()(withStyles(styles)(
       this.logout = this.logout.bind(this);
     }
 
-    /*componentDidMount() {
+    componentDidMount() {
       // check if user is logged in on refresh
-      this.toggleAuthenticateStatus()
-    }*/
+      this.toggleAuthenticateStatus();
+    }
     
-    toggleAuthenticateStatus() {
+    async toggleAuthenticateStatus() {
       // check authenticated status and toggle state based on that
-      if (Auth.isUserAuthenticated())
-        this.setState({ loggedIn: true })
+      var user = await Auth.isUserAuthenticated();
+      if (user.username != null)
+        this.setState({ loggedIn: true, me: user })
     }
 
     login(person) {
       this.setState({loggedIn: true, me: person});
-      this.toggleAuthenticateStatus();
+      //this.toggleAuthenticateStatus();
     }
 
     logout() {
       this.setState({loggedIn: false, me: null});
+      Auth.deauthenticateUser();
     }
 
     handleMobileNav = (b) => {

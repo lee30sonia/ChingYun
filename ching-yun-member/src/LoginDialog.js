@@ -103,9 +103,9 @@ const LoginDialog = withStyles(styles)(
        // this.setState({snackBarOpen: true});
       if (data.login.match)
       {
-        this.props.login(data.login.person);
         console.log(data.login);
         Auth.authenticateUser(data.login.token);
+        this.props.login(data.login.person);
         this.setState({snackBarOpen: true});
         this.handleClose();
       }

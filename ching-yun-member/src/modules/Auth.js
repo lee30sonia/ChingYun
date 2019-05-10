@@ -18,15 +18,30 @@ class Auth {
    *
    * @returns {boolean}
    */
-  static isUserAuthenticated() {
+  static async isUserAuthenticated() {
     console.log("authenticated?")
+    var result
+    await axios.post("http://localhost:4001/api?token="+localStorage.getItem('token'), {})
+    .then(function (response) {
+       if (response.status==200)
+       {
+          result = response.data.user; 
+       }
+       else
+          result = null;
+    })
+    .catch(function (error) {
+       console.log(error);
+       result = null;
+    });
 
-
-    axios.get("http://localhost:4001/api", { 'headers': { 'Authorization': 'Bearer '+ localStorage.getItem('token')} })
+    //console.log(result);
+    /*axios.get("http://localhost:4001/api", { 'headers': { 'Authorization': 'Bearer '+ localStorage.getItem('token')} })
       .then(function (response) {
-        console.log("auth check response: ",response.data);
-      })
-    return localStorage.getItem('token') !== null;
+        console.log("auth check response: ",response);
+      })*/
+    return result;
+    //return localStorage.getItem('token') !== null;
   }
 
   /**

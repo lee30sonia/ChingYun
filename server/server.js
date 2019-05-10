@@ -144,7 +144,10 @@ app.post(
 
 // pass the authenticaion checker middleware
 const authCheckMiddleware = require('./passport/auth-check');
-app.get('/api', authCheckMiddleware);
+app.post(
+   '/api', 
+   authCheckMiddleware
+);
 
 
 // session
@@ -154,7 +157,7 @@ app.use(session({
    saveUninitialized: false, }));
 app.use(passport.session());
 passport.serializeUser(function(user, done) {
-   console.log("serialize: ",user)
+   console.log("serialize")
    done(null, user);
 });
 

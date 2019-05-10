@@ -7,11 +7,10 @@ const axios = require('axios');
 //const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 async function Login(args) {
-   console.log('login request in query ', args);
+   //console.log('login request in query ', args);
    var result;
 
-   await axios.post("http://localhost:4001/login?username="+args.username+"&password="+args.password, {
-   })
+   await axios.post("http://localhost:4001/login?username="+args.username+"&password="+args.password, {})
    .then(function (response) {
       if (response.status==200)
       {

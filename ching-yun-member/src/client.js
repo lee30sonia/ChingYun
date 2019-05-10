@@ -9,7 +9,7 @@ const client = new ApolloClient({
 });
 
 // this is for testing if client is working
- client.query({
+ /*client.query({
     query: gql`
       query login($u: String!, $p: String!) {
        login(username: $u, password: $p) {
@@ -30,6 +30,7 @@ const client = new ApolloClient({
     .catch( err => {
        console.log(err);
     });
+    */
 
 
 export default client
