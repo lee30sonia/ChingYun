@@ -1,11 +1,10 @@
 import ApolloClient from 'apollo-boost';
 import gql from 'graphql-tag';
+const URL = require('./URL');
 
 // connect to the server
 const client = new ApolloClient({
-   //uri: "https://chingyun.now.sh/graphql"
-   uri: "https://chingyun-server.now.sh/graphql"
-   //uri: "http://localhost:4001/graphql"
+  uri: URL+"/graphql"
 });
 
 // this is for testing if client is working

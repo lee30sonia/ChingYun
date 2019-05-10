@@ -4,13 +4,16 @@ const Dates = require("./model/dates");
 const Post = require('./model/post');
 const passport = require('passport');
 const axios = require('axios');
+const URL = "https://chingyun-server.now.sh";
+//const URL = "http://localhost:4001";
 //const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 async function Login(args) {
    //console.log('login request in query ', args);
    var result;
 
-   await axios.post("http://localhost:4001/login?username="+args.username+"&password="+args.password, {})
+   //await axios.post("http://localhost:4001/login?username="+args.username+"&password="+args.password, {})
+   await axios.post(URL+"/login?username="+args.username+"&password="+args.password, {})
    .then(function (response) {
       if (response.status==200)
       {

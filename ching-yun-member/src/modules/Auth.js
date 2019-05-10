@@ -1,4 +1,6 @@
 const axios = require('axios');
+const URL = require('../URL');
+
 class Auth {
 
   /**
@@ -21,7 +23,8 @@ class Auth {
   static async isUserAuthenticated() {
     console.log("authenticated?")
     var result
-    await axios.post("http://localhost:4001/api?token="+localStorage.getItem('token'), {})
+    //await axios.post("http://localhost:4001/api?token="+localStorage.getItem('token'), {})
+    await axios.post(URL+"/api?token="+localStorage.getItem('token'), {})
     .then(function (response) {
        if (response.status==200)
        {
