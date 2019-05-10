@@ -77,7 +77,7 @@ const Index = withStyles(styles)(
           <Grid item xs={false} sm={1} md={1} lg={3} xl={4}></Grid>
           <Grid item xs={12} sm={10} md={10} lg={6} xl={4}>
             <Paper className={classes.Paper}>
-              <Typography variant="headline" component="h1" gutterBottom color="primary" align="center">
+              <Typography variant="h5" gutterBottom color="primary" align="center">
                 關於青韵
               </Typography>
               <Typography component="p" style={{textIndent: '0'}}>
@@ -95,7 +95,7 @@ const Index = withStyles(styles)(
           <Grid item xs={false} sm={1} md={1} lg={1} xl={3}></Grid>
           <Grid item xs={12} sm={10} md={10} lg={10} xl={6}>
             <Paper className={classes.Paper}>
-              <Typography variant="headline" component="h1" gutterBottom color="primary" align="center">
+              <Typography variant="h5" gutterBottom color="primary" align="center">
                 最新消息
               </Typography>
               

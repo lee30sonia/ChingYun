@@ -194,7 +194,7 @@ const NavItem = withStyles(styles)(
             className={classes.NavListItem+(this.props.inset?(" "+classes.inset):"")} activeClassName="disabledButton"
             onMouseEnter={(e)=>{if(this.props.set) this.props.set(e.currentTarget);}} 
             onMouseLeave={()=>{if(this.props.set) this.props.set(null);}} > 
-            <ListItemText variant="subtitle1" className={classes.NavListText} primary={this.props.text}> 
+            <ListItemText variant="subtitle1" className={classes.NavListText} primary={this.props.text} primaryTypographyProps={{color: 'inherit'}}> 
             </ListItemText> 
             {this.props.sublist}
           </ListItem>

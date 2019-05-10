@@ -148,7 +148,7 @@ const Buy = withStyles(styles)(
 
         <div className={classes.MainPage}>
           <Paper className={classes.PaperTitle}>
-            <Typography variant="headline" component="h1" color="primary" align="center">
+            <Typography variant="h5" color="primary" align="center">
               委創樂譜線上訂購
             </Typography>
           </Paper>
