@@ -14,7 +14,7 @@ import Schedule from './Schedule';
 import ChatBoard from './ChatBoard';
 import People from './People';
 import Attendance from './attendance/attendance';
-import LoginDialog from './LoginDialog';
+//import LoginDialog from './LoginDialog';
 
 //import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -49,7 +49,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   )}/>
 )
 
-const LoggedOutRoute = ({ component: Component, ...rest }) => (
+/*const LoggedOutRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
     Auth.isUserAuthenticated() ? (
       <Redirect to={{
@@ -60,7 +60,7 @@ const LoggedOutRoute = ({ component: Component, ...rest }) => (
       <Component {...props} {...rest} />
     )
   )}/>
-)
+)*/
 
 const MainPage = withStyles(styles)(
   class extends Component {
@@ -172,7 +172,7 @@ const MainPage = withStyles(styles)(
 const NavList = withStyles(styles)(
   class extends Component {
     render() {
-      const { classes } = this.props;
+      //const { classes } = this.props;
       return ( 
         <List> 
           <NavItem to="/" text="公告"/>

@@ -26,7 +26,7 @@ class Auth {
     //await axios.post("http://localhost:4001/api?token="+localStorage.getItem('token'), {})
     await axios.post(URL+"/api?token="+localStorage.getItem('token'), {})
     .then(function (response) {
-       if (response.status==200)
+       if (response.status===200)
        {
           result = response.data.user; 
        }

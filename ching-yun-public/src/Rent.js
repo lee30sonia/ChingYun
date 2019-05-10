@@ -76,7 +76,7 @@ const Rent = withStyles(styles)(
       return (
         <div className={classes.MainPage}>
         <Paper className={classes.PaperTitle}>
-          <Typography variant="headline" component="h1" color="primary" align="center">
+          <Typography variant="h5" color="primary" align="center">
             大坪林團部場地出租
           </Typography>
         </Paper>
@@ -84,25 +84,25 @@ const Rent = withStyles(styles)(
           <Hidden only={['xs']}><Grid item xs={false} sm={1} md={2} lg={1} xl={3}></Grid></Hidden>
           <Grid item xs={12} sm={10} md={8} lg={4} xl={4}>
             <Paper className={classes.Paper}>
-              <Typography variant="title" gutterBottom color="primary">空間特色</Typography>
+              <Typography variant="h6" gutterBottom color="primary">空間特色</Typography>
                 場地明亮寬敞、隔音佳，備有K.KAWAI 平台鋼琴。<br/>
                 適合合唱團、阿卡貝拉、小型室內樂團、戲劇、音樂劇等藝文活動排演，<br/>
                 也可作為對外公開演出或展覽的獨立空間。<br/><br/>
               
-              <Typography variant="title" gutterBottom color="primary">場地資訊</Typography>
+              <Typography variant="h6" gutterBottom color="primary">場地資訊</Typography>
                 大小：約26坪，長方格局<br/>
                 容納人數：最多 60 人<br/><br/>
             
-              <Typography variant="title" gutterBottom color="primary">交通位置</Typography>
+              <Typography variant="h6" gutterBottom color="primary">交通位置</Typography>
                 新北市新店區順安街 4 號 B1 <br/>
                 （捷運大坪林站 4 號出口步行三分鐘）<br/><br/>
 
-              <Typography variant="title" gutterBottom color="primary">使用用途</Typography>
+              <Typography variant="h6" gutterBottom color="primary">使用用途</Typography>
                 合唱團排練、室內樂團排練、戲劇排演、音樂劇排練、<br/>
                 社團課程與活動、研討會、演講、<br/>
                 小型演奏會、發表會...等<br/><br/>
 
-              <Typography variant="title" gutterBottom color="primary">計價方式</Typography>
+              <Typography variant="h6" gutterBottom color="primary">計價方式</Typography>
                 1200元／3小時（長期租借合作另有價格優惠）<br/>
                 出租時段：08:00-22:00<br/>
                 請注意：週六12:00-22:00 為固定不出租時段<br/><br/>    
@@ -113,7 +113,7 @@ const Rent = withStyles(styles)(
 
           <Grid item xs={12} sm={10} md={10} lg={6} xl={3}>
             <Paper className={classes.Paper}>
-              <Typography variant="title" gutterBottom color="primary">場地實景</Typography>
+              <Typography variant="h6" gutterBottom color="primary">場地實景</Typography>
               <Typography component="p" style={{textIndent: '0'}}>實景擺設僅供參考，可自由調整<br/></Typography> 
               <AutoPlaySwipeableViews
                 axis='x'
@@ -152,10 +152,10 @@ const Rent = withStyles(styles)(
           <Hidden only={['xs']}><Grid item xs={false} sm={1} md={1} lg={1} xl={3}></Grid></Hidden>
           <Grid item xs={12} sm={10} md={10} lg={10} xl={7}>
             <Paper className={classes.Paper}>
-              <Typography variant="title" gutterBottom color="primary" align="center">免費設備提供</Typography>  
+              <Typography variant="h6" gutterBottom color="primary" align="center">免費設備提供</Typography>  
               <Grid container style={{marginTop:'40px'}}>
                 <Grid item xs={12} sm={6} md={6} lg={3} xl={2}>         
-                  <Typography variant="subheading" gutterBottom color="primary">一般設備</Typography>
+                  <Typography variant="subtitle1" gutterBottom color="primary">一般設備</Typography>
                   <List>
                     <ListItem className={classes.ListItemDense}>白板</ListItem>
                     <ListItem className={classes.ListItemDense}>椅子：約50 張</ListItem>
@@ -169,7 +169,7 @@ const Rent = withStyles(styles)(
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={6} lg={3} xl={2}> 
-                  <Typography variant="subheading" gutterBottom color="primary">專業設備</Typography>
+                  <Typography variant="subtitle1" gutterBottom color="primary">專業設備</Typography>
                   <List>
                     <ListItem className={classes.ListItemDense}>K.KAWAI 平台鋼琴1架</ListItem>
                     <ListItem className={classes.ListItemDense}>譜架7支</ListItem>
@@ -190,7 +190,7 @@ const Rent = withStyles(styles)(
           <Hidden only={['xs']}><Grid item xs={false} sm={1} md={1} lg={1} xl={3}></Grid></Hidden>
           <Grid item xs={12} sm={10} md={10} lg={10} xl={7}>
             <Paper className={classes.Paper}>
-              <Typography variant="title" gutterBottom color="primary" align="center">線上申請場地租借</Typography>
+              <Typography variant="h6" gutterBottom color="primary" align="center">線上申請場地租借</Typography>
               <List>
                 1. 確認以下行事曆之可租借時段
                 <iframe className={classes.calendar} src="https://www.google.com/calendar/embed?src=chingyunchoir%40gmail.com&ctz=Asia/Taipei" title='calendar'></iframe>

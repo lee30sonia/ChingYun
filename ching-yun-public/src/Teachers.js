@@ -93,7 +93,7 @@ const Teachers = withStyles(styles)(
             <Grid item xs={false} sm={1} md={1} lg={1} xl={3}></Grid>
             <Grid item xs={12} sm={10} md={10} lg={10} xl={6}>
               <Paper className={classes.Paper}>
-                <Typography variant="headline" component="h1" gutterBottom color="primary">
+                <Typography variant="h5" gutterBottom color="primary">
                   音樂指導
                 </Typography>
 
@@ -109,7 +109,7 @@ const Teachers = withStyles(styles)(
                   <Grid item xs={12} lg={6} key={obj.key}>
                   <Card style={{height:'100%'}} ref={this.state.refs[obj.key].ref}>
                     <CardContent>
-                      <Typography variant="subheading" component="h3" gutterBottom color="primary">
+                      <Typography variant="subtitle1" component="h3" gutterBottom color="primary">
                         {obj.title}
                       </Typography>
                       <img src={obj.img} className={classes.teacherImg} alt={obj.title}/>

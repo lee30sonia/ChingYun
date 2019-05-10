@@ -1,5 +1,5 @@
 import ApolloClient from 'apollo-boost';
-import gql from 'graphql-tag';
+//import gql from 'graphql-tag';
 
 // connect to the server
 const client = new ApolloClient({

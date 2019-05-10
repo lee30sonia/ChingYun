@@ -323,7 +323,7 @@ const PersonalPage = withStyles(styles)(
                       <IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
                         <CloseIcon />
                       </IconButton>
-                      <Typography variant="title" color="inherit" className={classes.flex}>
+                      <Typography variant="h6" color="inherit" className={classes.flex}>
                         個人資料
                       </Typography>
                       <Button color="inherit" onClick={this.handleClose} > 取消 </Button>

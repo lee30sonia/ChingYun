@@ -194,7 +194,7 @@ const NavItem = withStyles(styles)(
             className={classes.NavListItem+(this.props.inset?(" "+classes.inset):"")} activeClassName="disabledButton"
             onMouseEnter={(e)=>{if(this.props.set) this.props.set(e.currentTarget);}} 
             onMouseLeave={()=>{if(this.props.set) this.props.set(null);}} > 
-            <ListItemText className={classes.NavListText} primary={this.props.text}> 
+            <ListItemText variant="subtitle1" className={classes.NavListText} primary={this.props.text}> 
             </ListItemText> 
             {this.props.sublist}
           </ListItem>
@@ -295,7 +295,7 @@ const NotFound = withStyles(styles)(
         <div className={classes.MainPage}>
           <Grid container><Grid item xs={12}>
             <Paper className={classes.Paper}>
-              <Typography variant="headline" component="h1" gutterBottom color="primary">
+              <Typography variant="h5" component="h1" gutterBottom color="primary">
                 404 Not Found
               </Typography>
               <p>

@@ -17,7 +17,7 @@ const Contact = withStyles(styles)(
             <Grid item xs={0} sm={1} md={1} lg={2} xl={3}></Grid>
             <Grid item xs={12} sm={10} md={10} lg={8} xl={6}>
               <Paper className={classes.Paper}>
-                <Typography variant="headline" component="h1" gutterBottom color="primary" align="center">
+                <Typography variant="h5" gutterBottom color="primary" align="center">
                   聯絡我們
                 </Typography>             
                 <p style={{textAlign:'center', textIndent:'0'}}> 團址：新北市新店區順安街4號B1 <br/>

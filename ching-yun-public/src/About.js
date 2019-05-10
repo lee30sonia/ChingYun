@@ -17,7 +17,7 @@ const About = withStyles(styles)(
             <Grid item xs={false} sm={1} md={1} lg={1} xl={3}></Grid>
             <Grid item xs={12} sm={10} md={10} lg={10} xl={6}>
               <Paper className={classes.Paper}>
-                <Typography variant="headline" component="h1" gutterBottom color="primary">
+                <Typography variant="h5" gutterBottom color="primary">
                   關於青韵
                 </Typography>
               

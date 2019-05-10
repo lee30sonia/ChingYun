@@ -18,7 +18,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMusic } from '@fortawesome/free-solid-svg-icons'
 
-import { Query, Mutation } from 'react-apollo';
+//import { Query, Mutation } from 'react-apollo';
 import { ApolloConsumer } from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -74,7 +74,6 @@ const Buy = withStyles(styles)(
         return;
       }
 
-      var sum = 0;
       var str = ("訂購人姓名："+this.state.name+
       "\nemail："+this.state.email+
       "\n聯絡電話："+this.state.phone+

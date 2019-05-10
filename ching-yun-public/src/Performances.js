@@ -58,7 +58,7 @@ const Performances = withStyles(styles)(
       return (
         <div className={classes.MainPage}>
           <Paper className={classes.PaperTitle}>
-            <Typography variant="headline" component="h1" color="primary" align="center">
+            <Typography variant="h5" component="h1" color="primary" align="center">
               青韵合唱團精彩演出
             </Typography>
           </Paper>
@@ -103,7 +103,7 @@ const Content = withStyles(styles)(
         <CardContent>
           <Grid container>
             <Grid item xs={12} lg={10} xl={10}>
-              <Typography variant="title" gutterBottom color="primary">
+              <Typography variant="h6" gutterBottom color="primary">
                 {this.props.title}
               </Typography>
             </Grid>
@@ -116,7 +116,7 @@ const Content = withStyles(styles)(
           
           <Grid container>
             <Grid item xs={12} md={12} lg={8} xl={7}>
-              <Typography variant="subheading" gutterBottom>
+              <Typography variant="subtitle1" gutterBottom>
                 <div dangerouslySetInnerHTML={{__html: this.props.info}} />
               </Typography>
               <iframe className={classes.video} src={"https://www.youtube.com/embed/"+this.props.link} title={this.props.title} frameBorder="0" allowFullScreen></iframe>

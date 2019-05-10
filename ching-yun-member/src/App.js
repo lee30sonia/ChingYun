@@ -11,12 +11,12 @@ import { styles, theme } from './styles';
 //import injectTapEventPlugin from 'react-tap-event-plugin';
 import Auth from './modules/Auth';
 import {
-  BrowserRouter as Router,
-  Route,
-  NavLink,
-  Switch,
+  //BrowserRouter as Router,
+  //Route,
+  //NavLink,
+  //Switch,
   //Redirect,
-  withRouter
+  //withRouter
 } from 'react-router-dom'
 
 // material-ui
@@ -91,7 +91,7 @@ const App = withTheme()(withStyles(styles)(
 
                   <Hidden only={['xs']}> <img src={logo} alt="logo" className={classes.logo}/></Hidden>
                   
-                  <Typography variant="title" color="inherit" className={classes.flex}>
+                  <Typography variant="h6" color="inherit" className={classes.flex}>
                     團員專區
                   </Typography>
                   
