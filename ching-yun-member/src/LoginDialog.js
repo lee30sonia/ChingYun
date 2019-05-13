@@ -270,7 +270,8 @@ const PersonalPage = withStyles(styles)(
         open: false,
         name: '',
         email: ' ',
-        phone: ' '
+        phone: ' ',
+        changingPass: false
       };
       this.handleClickOpen = this.handleClickOpen.bind(this);
       this.handleClose = this.handleClose.bind(this);
@@ -283,9 +284,11 @@ const PersonalPage = withStyles(styles)(
 
     handleClose(){
       this.setState({ open: false });
+      if (this.state.changingPass) 
+        alert("密碼未變更（請先按確認再關閉此視窗）")
     }
 
-    async changePass(oldpass, newpass, ChangePass, res)
+    async changePass(oldpass, newpass, ChangePass)
     {
       await ChangePass({
          variables: {
@@ -297,7 +300,6 @@ const PersonalPage = withStyles(styles)(
        .catch( err => {
           console.log(err);
        });
-      await console.log(res)
     }
 
     async save(Update, data)
@@ -394,9 +396,10 @@ const PersonalPage = withStyles(styles)(
                     </Grid>
 
                     <br/> <br/>
-                    <Mutation mutation={mutationChangePass}>
+                    <Mutation mutation={mutationChangePass} onCompleted={ function(d) { 
+                      if (d.changePassword.res) alert("密碼已變更！"); else alert("密碼變更失敗！") }} >
                       { (cp, data) => (
-                        <ChangePass changePass={(o,n)=>{this.changePass(o,n,cp,data)}}/>
+                        <ChangePass changePass={(o,n)=>{this.changePass(o,n,cp)}} state={(b)=>{this.setState({changingPass: b})}}/>
                       )}
                     </Mutation>
                     
@@ -429,12 +432,18 @@ const ChangePass = withStyles(styles)(
   
     handleClickOpen = () => {
       this.setState({ open: true });
+      this.props.state(true);
     };
 
     changePass = () => {
       if (this.state.newpass!==this.state.newpass2)
       {
         alert("請輸入相同的新密碼");
+        return;
+      }
+      if (this.state.newpass.length===0)
+      {
+        alert("密碼長度不可為零");
         return;
       }
       this.props.changePass(this.state.pass, this.state.newpass);
@@ -444,6 +453,7 @@ const ChangePass = withStyles(styles)(
         newpass: '',
         newpass2: ''
       });
+      this.props.state(false);
     };
   
     render() {
