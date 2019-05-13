@@ -53,19 +53,33 @@ async function Update(args) {
 
 async function ChangePassword(args) {
    var result = true;
-   await People.findOne({username: args.username, password: args.oldpass})
-      .exec()
-      .then( async function(match) {
-         if(match) 
-         {
-            console.log("match!")
-            result = true;
-            await People.updateOne( { username: args.username }, { password: args.newpass });
-         }
-         else
-            result = false;
-      });
-   
+   if (args.oldpass)
+   {
+      await People.findOne({username: args.username, password: args.oldpass})
+         .exec()
+         .then( async function(match) {
+            if(match) 
+            {
+               console.log("match!")
+               result = true;
+               await People.updateOne( { username: args.username }, { password: args.newpass });
+            }
+            else
+               result = false;
+         });
+   }
+   else
+   {
+      await People.findOneAndUpdate( { username: args.username }, { password: args.newpass })
+         .exec()
+         .then( function(match) {
+            if (match)
+               result = true;
+            else 
+               result = false;
+         });
+      
+   }
    return {res: result};
 }
 

@@ -143,6 +143,7 @@ export const styles = theme => ({
     float: 'left', 
     margin: 3
   },
+
   /*
   list: {
     width: '75%',

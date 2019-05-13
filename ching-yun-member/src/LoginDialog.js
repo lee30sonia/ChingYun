@@ -42,6 +42,32 @@ function TransitionUp(props) {
   return <Slide direction="up" {...props} />;
 }
 
+var mutation = gql`
+   mutation update($uid: String!, $n: String, $e: String, $p: String) {
+      update(username: $uid, name: $n, email: $e, phone: $p)
+   }`; // should add more
+
+var mutationChangePass = gql`
+  mutation changePassword($uid: String!, $opw: String, $npw: String!) {
+      changePassword(username: $uid, oldpass: $opw, newpass: $npw) {res}
+   }`;
+
+var query = gql`
+  query getPerson($uid: String!){
+    getPerson(username: $uid) {
+      name
+      username
+      password
+      auth
+      part
+      job
+      email
+      phone
+    } 
+  }`;
+
+
+
 const LoginDialog = withStyles(styles)(
   class extends Component {
     constructor(props) {
@@ -76,7 +102,10 @@ const LoginDialog = withStyles(styles)(
     {
       console.log("login in LoginDialog")
        if(!username || !password)
+       {
+          alert("請輸入帳號密碼")
           return;
+       }
        const { data } = await client.query({
           query: gql`
             query login($u: String!, $p: String!) {
@@ -111,7 +140,7 @@ const LoginDialog = withStyles(styles)(
       }
        else
       {
-        alert('wrong username/password!');
+        alert("帳號或密碼錯誤");
         this.setState({username: '', password: ''});
       }
     }
@@ -182,9 +211,6 @@ const LoginDialog = withStyles(styles)(
   
             </DialogContent>
             <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                取消
-              </Button>
               <Button onClick={() => {
                  this.login(this.state.username, this.state.password, client);
               }} 
@@ -235,32 +261,6 @@ const LoginDialog = withStyles(styles)(
     }
   }
 );
-
-var mutation = gql`
-   mutation update($uid: String!, $n: String, $e: String, $p: String) {
-      update(username: $uid, name: $n, email: $e, phone: $p)
-   }`; // should add more
-
-var mutationChangePass = gql`
-  mutation changePassword($uid: String!, $opw: String!, $npw: String!) {
-      changePassword(username: $uid, oldpass: $opw, newpass: $npw) {res}
-   }
-`;
-
-var query = gql`
-  query getPerson($uid: String!){
-    getPerson(username: $uid) {
-      name
-      username
-      password
-      auth
-      part
-      job
-      email
-      phone
-    }
-  }`;
-
 
 const PersonalPage = withStyles(styles)(
   class extends Component {
@@ -350,7 +350,6 @@ const PersonalPage = withStyles(styles)(
                       <Typography variant="h6" color="inherit" className={classes.flex}>
                         個人資料
                       </Typography>
-                      <Button color="inherit" onClick={this.handleClose} > 取消 </Button>
                       <Mutation mutation={mutation}>
                          { Update => (
                             <Button color="inherit" onClick={() => {this.save(Update, data)}} >
@@ -397,7 +396,7 @@ const PersonalPage = withStyles(styles)(
 
                     <br/> <br/>
                     <Mutation mutation={mutationChangePass} onCompleted={ function(d) { 
-                      if (d.changePassword.res) alert("密碼已變更！"); else alert("密碼變更失敗！") }} >
+                      if (d.changePassword.res) alert("密碼已變更！"); else alert("密碼變更失敗！（舊密碼錯誤）") }} >
                       { (cp, data) => (
                         <ChangePass changePass={(o,n)=>{this.changePass(o,n,cp)}} state={(b)=>{this.setState({changingPass: b})}}/>
                       )}
@@ -444,6 +443,11 @@ const ChangePass = withStyles(styles)(
       if (this.state.newpass.length===0)
       {
         alert("密碼長度不可為零");
+        return;
+      }
+      if (this.state.pass.length===0)
+      {
+        alert("請輸入舊密碼");
         return;
       }
       this.props.changePass(this.state.pass, this.state.newpass);
@@ -514,10 +518,12 @@ const ForgetPass = withStyles(styles)(
     constructor(props) {
       super(props);
       this.state={
-        open: false
+        open: false,
+        username: ''
       };   
       this.handleClickOpen = this.handleClickOpen.bind(this);
       this.handleClose = this.handleClose.bind(this);
+      this.forgetPass = this.forgetPass.bind(this);
     }
   
     handleClickOpen = () => {
@@ -528,6 +534,19 @@ const ForgetPass = withStyles(styles)(
       this.setState({ open: false });
     };
 
+    async forgetPass(ChangePass)
+    {
+      var newpass = 'aaa';
+      await ChangePass({
+        variables: {
+           "uid": this.state.username,
+           "npw": newpass
+        }
+      })
+      .catch( err => {
+         console.log(err);
+      });
+    }
   
     render() {
       const { classes } = this.props;
@@ -541,16 +560,37 @@ const ForgetPass = withStyles(styles)(
             <DialogTitle id="form-dialog-title">忘記密碼</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                忘記密碼要怎麼辦咧XD
+                請輸入帳號（ID），系統將重設密碼並將新密碼寄至幹部信箱(chingyunchoir@gmail.com)，請聯繫幹部取得新密碼，並儘速登入修改密碼（登入後點選右上角自己的名字）。
               </DialogContentText>
   
               <div className={classes.margin}>
-                
+                <Grid container spacing={8} alignItems="flex-end">
+                  <Grid item>
+                    <FontAwesomeIcon icon="user-circle" />
+                  </Grid>
+                  <Grid item>
+                    <TextField label="Username" autoFocus required
+                    onChange={(evt) => this.setState({username: evt.target.value})}
+                    />
+                  </Grid>
+                </Grid>
+
+                <br />
+                <ForgetID/>
 
               </div>
-  
             </DialogContent>
             <DialogActions>
+
+              <Mutation mutation={mutationChangePass} onCompleted={ function(d) { 
+                if (d.changePassword.res) alert("密碼已變更！"); else alert("重設密碼失敗！（帳號輸入錯誤）") }} >
+                { (cp, data) => (
+                  <Button onClick={ ()=>{this.forgetPass(cp)}} color="primary">
+                    確認
+                  </Button>
+                )}
+              </Mutation>
+
               <Button onClick={this.handleClose} color="primary">
                 取消
               </Button>
@@ -560,6 +600,106 @@ const ForgetPass = withStyles(styles)(
 
           
         </div>
+      );
+    }
+  }
+);
+
+
+const ForgetID = withStyles(styles)(
+  class extends Component {
+    constructor(props) {
+      super(props);
+      this.state={
+        open: false,
+        name: '',
+        results: []
+      };   
+      this.handleClickOpen = this.handleClickOpen.bind(this);
+      this.handleClose = this.handleClose.bind(this);
+      this.search = this.search.bind(this);
+    }
+  
+    handleClickOpen = () => {
+      this.setState({ open: true });
+    };
+  
+    handleClose = () => {
+      this.setState({ open: false });
+    };
+
+    async search(client) 
+    {
+      const { data } = await client.query({
+        query: gql`
+          query getIDbyName($n: String!){
+            getIDbyName(name: $n) {
+              username
+            }
+          }`,
+        variables: {
+          "n": this.state.name
+        }
+      })
+      .catch( err => {
+         console.log(err);
+      });
+      
+      this.setState({ results: data.getIDbyName.map( d => { return d.username }) });
+      if (this.state.results.length===0)
+        this.setState({ results: ["查無結果"] })
+    }
+  
+    render() {
+      const { classes } = this.props;
+
+      var Results = (this.state.results.length!==0)? 
+        (<div><br/>搜尋結果：<br/>{this.state.results.map(r => (<div>{r}<br/></div>))}</div>):
+        (<div></div>);
+
+      return (
+        <ApolloConsumer>
+         { client => (
+
+        <div>
+          <Button onClick={this.handleClickOpen} className={classes.btn_floatLeft}> 忘記帳號 </Button>
+          <Dialog
+            open={this.state.open}
+            onClose={this.handleClose}
+          >
+            <DialogTitle id="form-dialog-title">忘記帳號</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                請輸入姓名
+              </DialogContentText>
+  
+              <div className={classes.margin}>
+                <Grid container spacing={8} alignItems="flex-end">
+                  <Grid item>
+                    <FontAwesomeIcon icon="smile" />
+                  </Grid>
+                  <Grid item>
+                    <TextField label="姓名" autoFocus required
+                    onChange={(evt) => this.setState({name: evt.target.value})}
+                    onKeyPress={ (event) => { if(event.key === 'Enter') this.search(client) }} />
+                  </Grid>
+                </Grid>                
+                {Results}
+              </div>
+            </DialogContent>
+            
+            <DialogActions>
+              <Button onClick={()=>{this.search(client)}} color="primary">
+                查詢
+              </Button>
+
+              <Button onClick={this.handleClose} color="primary">
+                關閉
+              </Button>
+            </DialogActions>            
+          </Dialog>
+        </div>
+        )}</ApolloConsumer>
       );
     }
   }
@@ -720,10 +860,6 @@ const NewMember = withStyles(styles)(
   
             </DialogContent>
             <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                取消
-              </Button>
-
               <Button onClick={() => {this.authCheck(this.state.auth, client);}} 
                 color="primary">
                 下一步
@@ -798,16 +934,15 @@ const NewMember = withStyles(styles)(
   
             </DialogContent>
             <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                取消
-              </Button>
               <Button onClick={ () => {
                  this.signup(this.state.username, this.state.password, this.state.name, client);
               }} 
                 color="primary">
                 註冊
               </Button>
-              
+              <Button onClick={this.handleClose} color="primary">
+                取消
+              </Button>
             </DialogActions>
           </Dialog>
 
@@ -818,60 +953,6 @@ const NewMember = withStyles(styles)(
       );
     }
   }
-
 );
-
-
-/*
-
-              <Button onClick={() => {this.checkUP(this.state.username, this.state.password, this.state.checkPass, client);} } 
-                color="primary">
-                下一步
-              </Button>
-
-
-          <Dialog
-            open={this.state.step==3}
-            onClose={this.handleClose}
-          >
-            <DialogTitle>新團員註冊：Step {this.state.step}</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                請輸入基本資料
-              </DialogContentText>
-  
-              <div className={classes.margin}>
-                <Grid container spacing={8} alignItems="flex-end">
-                  <Grid item>
-                    聲部：{this.state.person_part}
-                  </Grid>
-                </Grid>
-                <Grid container spacing={8} alignItems="flex-end">
-                  <Grid item>
-                    <TextField required label="姓名" 
-                    onChange={(evt) => this.setState({name: evt.target.value})}
-                    onKeyPress={ (event)=>{ 
-                       if(event.key === 'Enter') this.signup(this.state.username, this.state.password, client);
-                    }}
-                    />
-                  </Grid>
-                </Grid>
-              </div>
-  
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                取消
-              </Button>
- 
-              <Button onClick={ () => {
-                 this.signup(this.state.username, this.state.password, client);
-              }} 
-                color="primary">
-                註冊
-              </Button>             
-            </DialogActions>
-          </Dialog>
-*/
 
 export default LoginDialog;

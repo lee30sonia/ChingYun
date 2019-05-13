@@ -128,6 +128,21 @@ async function getPerson(args) {
    return result;
 }
 
+async function getIDbyName(args) {
+   console.log('getIDbyName request', args.name);
+   var result;
+   await People.find({name: args.name})
+      .exec()
+      .then( matches => {
+         result = matches;   
+      })
+      .catch( err => {
+         console.error(err);
+      });
+   // console.log(result);
+   return result;
+}
+
 async function allPeople() {
    console.log('allPeople request');
    var result;
@@ -138,6 +153,7 @@ async function allPeople() {
             result = people;
             // console.log(result);
          }
+         else result = [];
       })
       .catch( err => {
          console.error(err);
@@ -202,6 +218,7 @@ var query = {
    Login: Login,
    getAuth: getAuth,
    getPerson: getPerson,
+   getIDbyName: getIDbyName,
    allPeople: allPeople,
    getDates: getDates,
    allPost: allPost
