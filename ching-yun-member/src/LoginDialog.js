@@ -204,7 +204,7 @@ const LoginDialog = withStyles(styles)(
 
                 <br />
                 
-                <ForgetPass/>
+                <ForgetPass client={client}/>
                 <NewMember/>
 
               </div>
@@ -524,6 +524,7 @@ const ForgetPass = withStyles(styles)(
       this.handleClickOpen = this.handleClickOpen.bind(this);
       this.handleClose = this.handleClose.bind(this);
       this.forgetPass = this.forgetPass.bind(this);
+      this.sendmail = this.sendmail.bind(this);
     }
   
     handleClickOpen = () => {
@@ -534,18 +535,50 @@ const ForgetPass = withStyles(styles)(
       this.setState({ open: false });
     };
 
-    async forgetPass(ChangePass)
+    async forgetPass(client) 
     {
-      var newpass = 'aaa';
-      await ChangePass({
+      var newpass =  Math.random().toString(36).substring(2, 8) ;
+
+      const { data } = await client.mutate({
+        mutation: gql`
+          mutation changePassword($uid: String!, $npw: String!) {
+            changePassword(username: $uid, newpass: $npw) { res, name }
+          }`,
         variables: {
-           "uid": this.state.username,
-           "npw": newpass
+          "uid": this.state.username,
+          "npw": newpass
         }
       })
       .catch( err => {
          console.log(err);
       });
+
+      if (data.changePassword.res)
+      {
+        await this.sendmail(client, data.changePassword.name, newpass);
+        this.handleClose();
+      }
+      else
+        alert("重設密碼失敗！（輸入的帳號不存在）")
+    }
+
+    async sendmail(client, name, newpass)
+    {
+      const { data } = await client.query({
+        query: gql`
+          query sendMailForgetPass($n: String!, $uid: String!, $npw: String!) {
+            sendMailForgetPass(name: $n, username: $uid, newpass: $npw) 
+          }`,
+        variables: {
+          "n": name,
+          "uid": this.state.username,
+          "npw": newpass
+        }
+      })
+      .catch( err => {
+         console.log(err);
+      });
+      alert(data.sendMailForgetPass);
     }
   
     render() {
@@ -569,27 +602,21 @@ const ForgetPass = withStyles(styles)(
                     <FontAwesomeIcon icon="user-circle" />
                   </Grid>
                   <Grid item>
-                    <TextField label="Username" autoFocus required
+                    <TextField label="Username" required
                     onChange={(evt) => this.setState({username: evt.target.value})}
                     />
                   </Grid>
                 </Grid>
 
                 <br />
-                <ForgetID/>
+                <ForgetID client={this.props.client}/>
 
               </div>
             </DialogContent>
             <DialogActions>
-
-              <Mutation mutation={mutationChangePass} onCompleted={ function(d) { 
-                if (d.changePassword.res) alert("密碼已變更！"); else alert("重設密碼失敗！（帳號輸入錯誤）") }} >
-                { (cp, data) => (
-                  <Button onClick={ ()=>{this.forgetPass(cp)}} color="primary">
-                    確認
-                  </Button>
-                )}
-              </Mutation>
+              <Button onClick={ ()=>{this.forgetPass(this.props.client)}} color="primary">
+                確認
+              </Button>
 
               <Button onClick={this.handleClose} color="primary">
                 取消
@@ -597,8 +624,6 @@ const ForgetPass = withStyles(styles)(
               
             </DialogActions>
           </Dialog>
-
-          
         </div>
       );
     }
@@ -658,9 +683,6 @@ const ForgetID = withStyles(styles)(
         (<div></div>);
 
       return (
-        <ApolloConsumer>
-         { client => (
-
         <div>
           <Button onClick={this.handleClickOpen} className={classes.btn_floatLeft}> 忘記帳號 </Button>
           <Dialog
@@ -679,9 +701,9 @@ const ForgetID = withStyles(styles)(
                     <FontAwesomeIcon icon="smile" />
                   </Grid>
                   <Grid item>
-                    <TextField label="姓名" autoFocus required
+                    <TextField label="姓名" required
                     onChange={(evt) => this.setState({name: evt.target.value})}
-                    onKeyPress={ (event) => { if(event.key === 'Enter') this.search(client) }} />
+                    onKeyPress={ (event) => { if(event.key === 'Enter') this.search(this.props.client) }} />
                   </Grid>
                 </Grid>                
                 {Results}
@@ -689,7 +711,7 @@ const ForgetID = withStyles(styles)(
             </DialogContent>
             
             <DialogActions>
-              <Button onClick={()=>{this.search(client)}} color="primary">
+              <Button onClick={()=>{this.search(this.props.client)}} color="primary">
                 查詢
               </Button>
 
@@ -699,7 +721,6 @@ const ForgetID = withStyles(styles)(
             </DialogActions>            
           </Dialog>
         </div>
-        )}</ApolloConsumer>
       );
     }
   }

@@ -74,7 +74,8 @@ var schema = buildSchema(`
    }
 
    type Result {
-      res: Boolean
+      res: Boolean,
+      name: String
    }
 
    type Query {
@@ -85,7 +86,8 @@ var schema = buildSchema(`
       allPeople: [Person],
       getDates(name: String!): [String],
       allPost: [Post],
-      sendMail(email: String!, str: String!): String
+      sendMail(email: String!, str: String!): String,
+      sendMailForgetPass(name: String!, username: String!, newpass: String!): String
    }
 
    type Mutation {
@@ -114,7 +116,8 @@ const resolver = {
    addDate: mutation.addDate,
    addPost: mutation.addPost,
    addResponse: mutation.addResponse,
-   sendMail: util.sendMail
+   sendMail: util.sendMail,
+   sendMailForgetPass: util.sendMailForgetPass
 };
 
 app.use(cors());
