@@ -79,6 +79,7 @@ var schema = buildSchema(`
    }
 
    type Query {
+      checkPass(username: String!, password: String!): Match,
       login(username: String!, password: String!): Match,
       getAuth(number: String!): AuthNum,
       getPerson(username: String!): Person,
@@ -102,6 +103,7 @@ var schema = buildSchema(`
 `);
 
 const resolver = {
+   checkPass: query.checkPass,
    login: query.Login,
    getAuth: query.getAuth,
    getPerson: query.getPerson,
@@ -137,17 +139,13 @@ app.use("/graphql", express_graphql({
 // pass the passport middleware
 app.use(passport.initialize());
 // load passport strategies
-//const localSignupStrategy = require('./passport/local-signup');
 const localLoginStrategy = require('./passport/local-login');
-//passport.use('local-signup', localSignupStrategy);
 passport.use('local-login', localLoginStrategy);
 
 app.post(
    '/login',
    passport.authenticate('local-login', { session: false }),
    function (req, res) {
-      //console.log(req)
-      //req.logIn(req.authInfo, function (err) { });
       res.send({user: req.authInfo, token: req.user});
    }
 );

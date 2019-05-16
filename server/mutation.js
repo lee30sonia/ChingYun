@@ -1,6 +1,7 @@
 const People = require("./model/people");
 const Dates = require("./model/dates");
 const Post = require('./model/post');
+const PasswordHash = require('password-hash');
 
 async function addNewAgent(name, username, password, auth, part) {
    var newAgent = new People({ 
@@ -56,14 +57,19 @@ async function ChangePassword(args) {
    var name = '';
    if (args.oldpass)
    {
-      await People.findOne({username: args.username, password: args.oldpass})
+      await People.findOne({username: args.username})
          .exec()
          .then( async function(match) {
             if(match) 
             {
-               //console.log("match!")
-               result = true;
-               await People.updateOne( { username: args.username }, { password: args.newpass });
+               if (PasswordHash.verify(args.oldpass, match.password))
+               {
+                  //console.log("match!")
+                  result = true;
+                  await People.updateOne( { username: args.username }, { password: args.newpass });  
+               }
+               else
+                  result = false;
             }
             else
                result = false;

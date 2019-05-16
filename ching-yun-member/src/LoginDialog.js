@@ -31,6 +31,7 @@ import { Query, Mutation } from 'react-apollo';
 import { ApolloConsumer } from 'react-apollo';
 import gql from 'graphql-tag';
 import Auth from './modules/Auth';
+import PasswordHash from 'password-hash';
 
 library.add(faUserCircle, faKey, faLock, faEnvelope, faPhone, faSmile)
 
@@ -132,7 +133,7 @@ const LoginDialog = withStyles(styles)(
        // this.setState({snackBarOpen: true});
       if (data.login.match)
       {
-        console.log(data.login);
+        //console.log(data.login);
         Auth.authenticateUser(data.login.token);
         this.props.login(data.login.person);
         this.setState({snackBarOpen: true});
@@ -450,7 +451,7 @@ const ChangePass = withStyles(styles)(
         alert("請輸入舊密碼");
         return;
       }
-      this.props.changePass(this.state.pass, this.state.newpass);
+      this.props.changePass(this.state.pass, PasswordHash.generate(this.state.newpass, {algorithm: 'sha256'}));
       this.setState({
         open: false,
         pass: '',
@@ -546,7 +547,7 @@ const ForgetPass = withStyles(styles)(
           }`,
         variables: {
           "uid": this.state.username,
-          "npw": newpass
+          "npw": PasswordHash.generate(newpass, {algorithm: 'sha256'})
         }
       })
       .catch( err => {
@@ -816,7 +817,7 @@ const NewMember = withStyles(styles)(
          variables: {
             "n": name,
             "u": username,
-            "p": password,
+            "p": PasswordHash.generate(password, {algorithm: 'sha256'}),
             "auth": this.state.person_auth,
             "part": this.state.person_part
          }
