@@ -4,9 +4,26 @@ const Dates = require("./model/dates");
 const Post = require('./model/post');
 const passport = require('passport');
 const axios = require('axios');
+const PasswordHash = require('password-hash');
 const URL = "https://chingyun-server.now.sh";
 //const URL = "http://localhost:4001";
 //const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
+// not used
+async function checkPass(args) {
+   People.findOne({username: args.username}, (err, user) => {
+      if (err) { return( { match: false } ); }
+      if (!user) { return( { match: false } ); }
+      if (PasswordHash.verify(args.password, user.password))
+      {
+         return ( {
+            match: true,
+            person: user,
+         });
+      }
+      else { return( { match: false } ); }
+   });
+}
 
 async function Login(args) {
    //console.log('login request in query ', args);
@@ -27,7 +44,7 @@ async function Login(args) {
          result = { match: false };
    })
    .catch(function (error) {
-      console.log(error);
+      //console.log(error);
       result = { match: false };
    });
 
@@ -124,7 +141,7 @@ async function getPerson(args) {
       .catch( err => {
          console.error(err);
       });
-   // console.log(result);
+   //console.log(result);
    return result;
 }
 
@@ -215,6 +232,7 @@ async function allPost() {
 }
 
 var query = {
+   checkPass: checkPass,
    Login: Login,
    getAuth: getAuth,
    getPerson: getPerson,
