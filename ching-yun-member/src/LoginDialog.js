@@ -59,15 +59,11 @@ var query = gql`
       name
       username
       password
-      auth
       part
-      job
       email
       phone
     } 
   }`;
-
-
 
 const LoginDialog = withStyles(styles)(
   class extends Component {
@@ -115,7 +111,6 @@ const LoginDialog = withStyles(styles)(
                person {
                   name
                   username
-                  auth
                   part
                }
                token
@@ -737,9 +732,8 @@ const NewMember = withStyles(styles)(
         username: '',
         password: '',
         checkPass: '',
-        person_auth: '',
-        person_part: '',
-        name: ''
+        person_name: '',
+        person_part: ''
       };   
       this.handleClickOpen = this.handleClickOpen.bind(this);
       this.handleClose = this.handleClose.bind(this);
@@ -761,9 +755,9 @@ const NewMember = withStyles(styles)(
           return;
        const { data } = await client.query({
           query: gql`
-            query getAuth($num: String!) {
-             getAuth(number: $num) {
-               auth
+            query getAdmit($num: String!) {
+             getAdmit(number: $num) {
+               name
                part
             }
          }`,
@@ -775,11 +769,11 @@ const NewMember = withStyles(styles)(
              console.log(err);
           });
 
-       if(data.getAuth) {
+       if(data.getAdmit) {
           this.setState({ 
              step: 2,
-             person_auth: data.getAuth.auth,
-             person_part: data.getAuth.part
+             person_name: data.getAdmit.name,
+             person_part: data.getAdmit.part
           });
        }
        else {
@@ -804,22 +798,20 @@ const NewMember = withStyles(styles)(
     }
     */
 
-    async signup(username, password, name, client)
+    async signup(client)
     {
-       if(!username || !password)
+       if(!this.state.username || !this.state.password)
           return;
 
        const { data } = await client.mutate({
           mutation: gql`
-            mutation signup($n: String, $u: String!, $p: String!, $auth: String, $part: String) {
-               signup(name: $n, username: $u, password: $p, auth: $auth, part: $part) 
+            mutation signup($u: String!, $p: String!, $auth: String!) {
+               signup(username: $u, password: $p, auth: $auth) 
          }`,
          variables: {
-            "n": name,
-            "u": username,
-            "p": PasswordHash.generate(password, {algorithm: 'sha256'}),
-            "auth": this.state.person_auth,
-            "part": this.state.person_part
+            "u": this.state.username,
+            "p": PasswordHash.generate(this.state.password, {algorithm: 'sha256'}),
+            "auth": this.state.auth
          }
        })
           .catch( err => {
@@ -831,7 +823,7 @@ const NewMember = withStyles(styles)(
          this.handleClose();
       }
       else {
-         alert("This username has already been used.");
+         alert("Something wrong.");
       }
     }
 
@@ -900,7 +892,8 @@ const NewMember = withStyles(styles)(
             <DialogContent>
 
               <DialogContentText>
-                請選擇一組帳號密碼
+                Hi {this.state.person_name}，歡迎加入青韵！你的聲部是{this.state.person_part}喔！<br/>
+                接下來，請選擇一組帳號密碼來註冊團員專區帳號
               </DialogContentText>
   
               <div className={classes.margin}>
@@ -935,29 +928,11 @@ const NewMember = withStyles(styles)(
                   </Grid>
                 </Grid>
               </div>
-
-                <DialogContentText>
-                <br />
-                你的聲部是：{this.state.person_part} <br/>
-                </DialogContentText>
-
-              <div className={classes.margin}>
-                <Grid container spacing={8} alignItems="flex-end">
-                  <Grid item>
-                    <TextField required label="姓名" 
-                    onChange={(evt) => this.setState({name: evt.target.value})}
-                    onKeyPress={ (event)=>{ 
-                       if(event.key === 'Enter') this.signup(this.state.username, this.state.password, client);
-                    }}
-                    />
-                  </Grid>
-                </Grid>
-              </div>
   
             </DialogContent>
             <DialogActions>
               <Button onClick={ () => {
-                 this.signup(this.state.username, this.state.password, this.state.name, client);
+                 this.signup(client);
               }} 
                 color="primary">
                 註冊

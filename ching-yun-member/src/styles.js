@@ -124,6 +124,13 @@ export const styles = theme => ({
     width: '100%',
   },
 
+  NewAdmit: {
+    marginBottom: '20px',
+    padding: '20px',
+    textAlign: 'left',
+    [theme.breakpoints.up('md')]: {width: '600px'},
+    [theme.breakpoints.down('md')]: {width: '85%'},
+  },
 
 
   tableroot: {

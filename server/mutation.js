@@ -1,14 +1,18 @@
 const People = require("./model/people");
+const Admission = require("./model/admission")
+const Role = require("./model/role")
 const Dates = require("./model/dates");
 const Post = require('./model/post');
+
 const PasswordHash = require('password-hash');
 
-async function addNewAgent(name, username, password, auth, part) {
+// helper function, not accessible outside
+async function addNewAgent(name, username, password, roles, part) {
    var newAgent = new People({ 
       name: name, 
       username: username, 
       password: password,
-      auth: auth,
+      roles: roles,
       part: part
    });
    await newAgent.save(function (err) {
@@ -18,17 +22,15 @@ async function addNewAgent(name, username, password, auth, part) {
    });
 }
 
-async function Signup(args) {
+async function Signup(args) { // permission: no-login
    console.log('signup request', args.username);
-   var result;
-   await People.findOne({ username: args.username })
+   var result = false;
+   await Admission.findOne({number: args.auth})
       .exec()
       .then( match => {
          if(match) {
-            result = false;
-         }
-         else {
-            addNewAgent(args.name, args.username, args.password, args.auth, args.part);
+            var roleID = 0; // to be modified
+            addNewAgent(match.name, args.username, args.password, [roleID], match.part)
             result = true;
          }
       })
@@ -39,7 +41,7 @@ async function Signup(args) {
    return result;
 }
 
-async function Update(args) {
+async function Update(args) { // permission: loggedin, self
    var result = true;
    await People.update( { username: args.username }, {
       name: args.name,
@@ -52,7 +54,7 @@ async function Update(args) {
    return result;
 }
 
-async function ChangePassword(args) {
+async function ChangePassword(args) { // permission: loggedin, self
    var result = true;
    var name = '';
    if (args.oldpass)
@@ -93,17 +95,25 @@ async function ChangePassword(args) {
    return { res: result, name: name };
 }
 
-async function AuthUpdate(args) {
-   var result = true;
-   await People.update( { username: args.username }, {
-      auth: args.auth,
-      part: args.part,
-      job: args.job
-   }, err => {
-      console.log(err);
-      result = false;
-   });
-   return result;
+async function newAdmission(args) { // permission: 招生
+   var result = false;
+   var admit = new Admission( { number: args.number, name: args.name, part: args.part } );
+   await Admission.findOne({number: args.number})
+      .exec()
+      .then( async function(match) {
+         if(match)
+            result = false;
+         else
+         {
+            await admit.save()
+               .then( p => {
+                  result = true;
+               })
+               .catch( err => console.log(err) );
+         }
+      })
+
+   return { res: result, name: '' };
 }
 
 async function addDate(args) {
@@ -184,7 +194,7 @@ var mutation = {
    Signup: Signup,
    Update: Update,
    ChangePassword: ChangePassword,
-   AuthUpdate: AuthUpdate,
+   newAdmission: newAdmission,
    addDate: addDate,
    addPost: addPost,
    addResponse: addResponse

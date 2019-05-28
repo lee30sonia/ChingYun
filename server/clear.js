@@ -3,7 +3,8 @@
  ************************************/
 
 const People = require("./model/people");
-const AuthNum = require("./model/authNum");
+const Admission = require("./model/admission");
+const Role = require("./model/role")
 const Dates = require("./model/dates");
 const Post = require("./model/post");
 
@@ -17,6 +18,20 @@ db.once('open', function() {
     console.log('connected');
 
    // clean previous data
+   Role.deleteMany({}, function (err) {
+       if (err) return handleError(err);
+      console.log('Role: previous data cleared');
+   })
+   .then( () => {
+      var newRole = new Role({
+        _id: 0
+      });
+      newRole.save(function (err) {
+         if (err) return handleError(err);
+         // saved!
+      });
+   });
+
    People.deleteMany({}, function (err) {
        if (err) return handleError(err);
       console.log('People: previous data cleared');
@@ -28,43 +43,35 @@ db.once('open', function() {
       var admin = new People({ 
          name: 'Admin', 
          username: 'admin', 
-         password: 'password',
-         auth: 'Root',
+         password: 'sha256$9df324b1$1$fbb10a73aab7ca6c9a57a52991e62c947b9eef7b4632431e68f1ea5c7b5a3c97', // "password"
          part: 'Teacher'
       });
       admin.save(function (err) {
-          if (err) return handleError(err);
-          // saved!
-          console.log('People: admin saved')
-          //console.log(admin);
+         if (err) return handleError(err);
+         // saved!
+         console.log('People: admin saved')
+         //console.log(admin);
       });
    });
 
-   AuthNum.deleteMany({}, function (err) {
-       if (err) return handleError(err);
-      console.log('AuthNum: previous data cleared');
+   Admission.deleteMany({}, function (err) {
+      if (err) return handleError(err);
+      console.log('Admission: previous data cleared');
    })
-      .then( () => {
-
-         var numbers = [
-            {
-               number: "abc", auth: "Root", part: "Sope2"
-            },
-            {
-               number: "def", auth: "Teacher", part: "Teacher"
-            },
-            {
-               number: "ghi", auth: "Leader", part: "Tenor1"
-            }
-         ];
-         for(let num of numbers) {
-            let auth = new AuthNum(num);
-            auth.save(function (err) {
-                if (err) return handleError(err);
-            });
+   .then( () => {
+      var numbers = [
+         {
+            number: "abc", name: "王小美", part: "Sop2"
          }
-         console.log("AuthNum: numbers saved");
-      });
+      ];
+      for(let num of numbers) {
+         let admit = new Admission(num);
+         admit.save(function (err) {
+             if (err) return handleError(err);
+         });
+      }
+      console.log("Admission: numbers saved");
+   });
 
    Dates.deleteMany({}, function (err) {
        if (err) return handleError(err);

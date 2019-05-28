@@ -11,7 +11,7 @@ const server = require('http').createServer(app);
 const axios = require('axios');
 
 const People = require('./model/people');
-const AuthNum = require('./model/authNum');
+const Admission = require('./model/admission');
 const Dates = require('./model/dates');
 const Post = require('./model/post');
 const query = require('./query');
@@ -31,9 +31,9 @@ db.once('open', function() {
 // graphql schema
 var schema = buildSchema(`
 
-   type AuthNum {
+   type Admission {
       number: String,
-      auth: String,
+      name: String,
       part: String
    }
 
@@ -45,13 +45,17 @@ var schema = buildSchema(`
 
    type Person {
       name: String,
+      nickname: String,
       username: String,
       password: String,
-      auth: String,
-      part: String,
-      job: String,
       email: String,
-      phone: String
+      phone: String,
+      cellphone: String,
+      address: String,
+      birthday: String,
+      inYear: String,
+      roles: [Int],
+      part: String 
    }
 
    type Dates {
@@ -79,9 +83,8 @@ var schema = buildSchema(`
    }
 
    type Query {
-      checkPass(username: String!, password: String!): Match,
       login(username: String!, password: String!): Match,
-      getAuth(number: String!): AuthNum,
+      getAdmit(number: String!): Admission,
       getPerson(username: String!): Person,
       getIDbyName(name: String!): [Person],
       allPeople: [Person],
@@ -92,10 +95,10 @@ var schema = buildSchema(`
    }
 
    type Mutation {
-      signup(name: String, username: String!, password: String!, auth: String, part: String): Boolean,
+      signup(username: String!, password: String!, auth: String!): Boolean,
       update(username: String!, name: String, email: String, phone: String): Boolean,
       changePassword(username: String!, oldpass: String, newpass: String!): Result,
-      authUpdate(username: String!, auth: String, part: String, job: String): Boolean,
+      newAdmission(name: String!, number: String!, part: String!): Result,
       addDate(name: String!, date: String!): Int,
       addPost(title: String, author: String, date: String, content: String): String,
       addResponse(id: String, author: String, date: String, text: String): Boolean
@@ -103,9 +106,8 @@ var schema = buildSchema(`
 `);
 
 const resolver = {
-   checkPass: query.checkPass,
    login: query.Login,
-   getAuth: query.getAuth,
+   getAdmit: query.getAdmit,
    getPerson: query.getPerson,
    getIDbyName: query.getIDbyName,
    allPeople: query.allPeople,
@@ -114,7 +116,7 @@ const resolver = {
    signup: mutation.Signup,
    update: mutation.Update,
    changePassword: mutation.ChangePassword,
-   authUpdate: mutation.authUpdate,
+   newAdmission: mutation.newAdmission,
    addDate: mutation.addDate,
    addPost: mutation.addPost,
    addResponse: mutation.addResponse,

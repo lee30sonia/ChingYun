@@ -1,29 +1,15 @@
 const People = require('./model/people');
-const AuthNum = require('./model/authNum');
+const Admission = require('./model/admission');
+const Role = require('./model/role')
 const Dates = require("./model/dates");
 const Post = require('./model/post');
+
 const passport = require('passport');
 const axios = require('axios');
 const PasswordHash = require('password-hash');
 const URL = "https://chingyun-server.now.sh";
 //const URL = "http://localhost:4001";
 //const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-
-// not used
-async function checkPass(args) {
-   People.findOne({username: args.username}, (err, user) => {
-      if (err) { return( { match: false } ); }
-      if (!user) { return( { match: false } ); }
-      if (PasswordHash.verify(args.password, user.password))
-      {
-         return ( {
-            match: true,
-            person: user,
-         });
-      }
-      else { return( { match: false } ); }
-   });
-}
 
 async function Login(args) {
    //console.log('login request in query ', args);
@@ -47,75 +33,20 @@ async function Login(args) {
       //console.log(error);
       result = { match: false };
    });
-
-/*   await People.findOne(args)
-      .exec()
-      .then( async function(match) {
-         if(match) {
-            result = {
-               match: true,
-               person: match
-            };
-
-            // create an AJAX request
-            params = "username="+result.person.username+"&password="+result.person.password;
-            const xhr = new XMLHttpRequest();
-            xhr.open('post', 'http://localhost:4001/auth/login?'+params);
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            //xhr.setRequestHeader("Content-length", params.length);
-            xhr.responseType = 'json';
-            xhr.addEventListener('load', () => {
-               //console.log("xhr: ",xhr)
-               if (xhr.status === 200) {
-                  // success
-                  
-                  // save the token
-                  //authenticateUser(JSON.parse(xhr.responseText).token);
-                  result = {
-                     match: true,
-                     person: match,
-                     token: JSON.parse(xhr.responseText).token
-                  };
-                  return result;
-                  // update authenticated state
-                  //this.props.toggleAuthenticateStatus()
-               
-                  // redirect signed in user to dashboard
-                  //this.props.history.push('/dashboard');
-               } 
-               else {
-                  // failure
-                  //console.log("fail, xhr: ", xhr)
-               }
-            });
-            xhr.send(null)
-            //xhr.send(`username=${result.person.username}&password=${result.person.password}`);
-         }
-         else {
-            result = {
-               match: false
-            };
-            return result;
-         }
-      })
-      .catch( err => {
-         console.error(err);
-      });
-*/
    //console.log("result: ", result)
    return result;
 }
 
-async function getAuth(args) {
+async function getAdmit(args) { // permission: no-login
    console.log('getAuth request', args.number);
    var result;
-   await AuthNum.findOne(args)
+   await Admission.findOne(args)
       .exec()
       .then( match => {
          if(match) {
             result = {
                number: args.number,
-               auth: match.auth,
+               name: match.name,
                part: match.part
             };
             // console.log(result);
@@ -128,7 +59,7 @@ async function getAuth(args) {
    return result;
 }
 
-async function getPerson(args) {
+async function getPerson(args) { // permission: loggedin, self
    console.log('getPerson request', args.username);
    var result;
    await People.findOne({username: args.username})
@@ -145,7 +76,7 @@ async function getPerson(args) {
    return result;
 }
 
-async function getIDbyName(args) {
+async function getIDbyName(args) { // permission: no-login
    console.log('getIDbyName request', args.name);
    var result;
    await People.find({name: args.name})
@@ -160,7 +91,7 @@ async function getIDbyName(args) {
    return result;
 }
 
-async function allPeople() {
+async function allPeople() { // permission: loggedin
    console.log('allPeople request');
    var result;
    await People.find()
@@ -232,9 +163,8 @@ async function allPost() {
 }
 
 var query = {
-   checkPass: checkPass,
    Login: Login,
-   getAuth: getAuth,
+   getAdmit: getAdmit,
    getPerson: getPerson,
    getIDbyName: getIDbyName,
    allPeople: allPeople,

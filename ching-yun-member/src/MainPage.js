@@ -14,6 +14,7 @@ import Schedule from './Schedule';
 import ChatBoard from './ChatBoard';
 import People from './People';
 import Attendance from './attendance/attendance';
+import Staff from './Staff';
 //import LoginDialog from './LoginDialog';
 
 //import PropTypes from 'prop-types';
@@ -107,6 +108,7 @@ const MainPage = withStyles(styles)(
                 <PrivateRoute path="/chatboard" component={ChatBoard}/>
                 <PrivateRoute path="/people" component={People}/>
                 <PrivateRoute path="/attendance" component={Attendance}/>
+                <PrivateRoute path="/staff" component={Staff}/>
                 
                 <Route component={NotFound}/>
               </Switch>        
@@ -179,7 +181,8 @@ const NavList = withStyles(styles)(
           <NavItem to="/schedule" text="練唱進度"/>
           <NavItem to="/chatBoard" text="討論區"/>
           <NavItem to="/people" text="通訊錄"/>
-          <NavItem to="/attendance" text="出席表"/>
+          <NavItem to="/attendance" text="出席請假"/>
+          <NavItem to="/staff" text="幹部專區"/>
         </List>
       );
     }
