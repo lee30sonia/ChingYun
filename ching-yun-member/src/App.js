@@ -9,7 +9,7 @@ import { MuiThemeProvider, withTheme, withStyles } from '@material-ui/core/style
 import { styles, theme } from './styles';
 
 //import injectTapEventPlugin from 'react-tap-event-plugin';
-import Auth from './modules/Auth';
+import Auth from './Auth';
 import {
   //BrowserRouter as Router,
   //Route,
@@ -31,12 +31,12 @@ import Hidden from '@material-ui/core/Hidden';
 import { ApolloProvider } from 'react-apollo';
 import client from './client';
 
-const App = withTheme()(withStyles(styles)(
+const App = withTheme(withStyles(styles)(
   class extends Component {
     constructor(props) {
       super(props);
       this.state={
-          me: null, //{name: "dd", username: "admin", auth: "Root", part: "Teacher"}, /* {name, username, auth, part} */
+          me: null, // name, username, roles, token
           loggedIn: false,
           NavOpen: false,
       };

@@ -151,6 +151,10 @@ export const styles = theme => ({
     margin: 3
   },
 
+  fullW: {
+    width: '100%'
+  },
+
   /*
   list: {
     width: '75%',

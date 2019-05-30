@@ -1,0 +1,6 @@
+{
+    "name": "chingyun-server",
+    "version": 1,
+    "alias": ["chingyun-server"],
+    "public": true
+}

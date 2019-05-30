@@ -5,6 +5,19 @@ const Dates = require("./model/dates");
 const Post = require('./model/post');
 
 const PasswordHash = require('password-hash');
+const jwt = require('jsonwebtoken');
+
+async function checkSelf(token) // helper function
+{
+   var result;
+   await jwt.verify(token, "secret!!", async function(err, decoded) {
+      if (err) result = null;
+      else await People.findById(decoded.sub, async function(userErr, user) {
+         if (!userErr) result = user;
+      });
+   });
+   return result;
+}
 
 // helper function, not accessible outside
 async function addNewAgent(name, username, password, roles, part) {
@@ -30,7 +43,8 @@ async function Signup(args) { // permission: no-login
       .then( match => {
          if(match) {
             var roleID = 0; // to be modified
-            addNewAgent(match.name, args.username, args.password, [roleID], match.part)
+            addNewAgent(match.name, args.username, args.password, [roleID], match.part);
+            Admission.deleteOne({number: args.auth}).exec().catch( err => { console.error(err); });
             result = true;
          }
       })
@@ -42,11 +56,19 @@ async function Signup(args) { // permission: no-login
 }
 
 async function Update(args) { // permission: loggedin, self
+   var p = await checkSelf(args.token);
+   if (!p) return null;
+
    var result = true;
-   await People.update( { username: args.username }, {
+   await People.update( { username: p.username }, {
       name: args.name,
+      nickname: args.nickname,
       email: args.email,
-      phone: args.phone
+      phone: args.phone,
+      cellphone: args.cellphone,
+      address: args.address,
+      birthday: args.birthday,
+      inYear: args.inYear
    }, err => {
       console.log(err);
       result = false;
@@ -54,30 +76,25 @@ async function Update(args) { // permission: loggedin, self
    return result;
 }
 
-async function ChangePassword(args) { // permission: loggedin, self
-   var result = true;
+async function ChangePassword(args) { // permission: depends
+   var result = false;
    var name = '';
-   if (args.oldpass)
+   if (args.token)
    {
-      await People.findOne({username: args.username})
-         .exec()
-         .then( async function(match) {
-            if(match) 
-            {
-               if (PasswordHash.verify(args.oldpass, match.password))
-               {
-                  //console.log("match!")
-                  result = true;
-                  await People.updateOne( { username: args.username }, { password: args.newpass });  
-               }
-               else
-                  result = false;
-            }
-            else
-               result = false;
-         });
+      var p = await checkSelf(args.token);
+      if (p)
+      {
+         if (PasswordHash.verify(args.oldpass, p.password))
+         {
+            //console.log("match!")
+            result = true;
+            await People.updateOne( { username: p.username }, { password: args.newpass });  
+         }
+         else result = false;
+      }
    }
-   else
+   
+   else if (args.username)
    {
       await People.findOneAndUpdate( { username: args.username }, { password: args.newpass })
          .exec()
@@ -95,7 +112,7 @@ async function ChangePassword(args) { // permission: loggedin, self
    return { res: result, name: name };
 }
 
-async function newAdmission(args) { // permission: 招生
+async function newAdmission(args) { // permission: 招生 ???
    var result = false;
    var admit = new Admission( { number: args.number, name: args.name, part: args.part } );
    await Admission.findOne({number: args.number})
@@ -116,7 +133,7 @@ async function newAdmission(args) { // permission: 招生
    return { res: result, name: '' };
 }
 
-async function addDate(args) {
+async function addDate(args) { // permission ???
    var result;
    await Dates.findOne( {name: args.name} )
       .exec()
@@ -138,7 +155,10 @@ async function addDate(args) {
    return result;
 }
 
-async function addPost(args) {
+async function addPost(args) { // permission: loggedin
+   var p = await checkSelf(args.token);
+   if (!p) return null;
+
    var result = 1;
    var newPost = new Post({
       title: args.title,
@@ -163,7 +183,10 @@ function Response(a, d, t) {
    };
 };
 
-async function addResponse(args) {
+async function addResponse(args) { // permission: loggedin
+   var p = await checkSelf(args.token);
+   if (!p) return null;
+   
    var result;
    await Post.findById(args.id)
       .exec()

@@ -1,5 +1,5 @@
 const axios = require('axios');
-const URL = require('../URL');
+const URL = require('./URL');
 
 class Auth {
 

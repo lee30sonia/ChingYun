@@ -85,23 +85,23 @@ var schema = buildSchema(`
    type Query {
       login(username: String!, password: String!): Match,
       getAdmit(number: String!): Admission,
-      getPerson(username: String!): Person,
+      getPerson(token: String!): Person,
       getIDbyName(name: String!): [Person],
-      allPeople: [Person],
+      allPeople(token: String!): [Person],
       getDates(name: String!): [String],
-      allPost: [Post],
+      allPost(token: String!): [Post],
       sendMail(email: String!, str: String!): String,
       sendMailForgetPass(name: String!, username: String!, newpass: String!): String
    }
 
    type Mutation {
       signup(username: String!, password: String!, auth: String!): Boolean,
-      update(username: String!, name: String, email: String, phone: String): Boolean,
-      changePassword(username: String!, oldpass: String, newpass: String!): Result,
+      update(token: String!, name: String, nickname: String, email: String, phone: String, cellphone: String, address: String): Boolean,
+      changePassword(token: String, username: String, oldpass: String, newpass: String!): Result,
       newAdmission(name: String!, number: String!, part: String!): Result,
       addDate(name: String!, date: String!): Int,
-      addPost(title: String, author: String, date: String, content: String): String,
-      addResponse(id: String, author: String, date: String, text: String): Boolean
+      addPost(token: String!, title: String, author: String, date: String, content: String): String,
+      addResponse(token: String!, id: String, author: String, date: String, text: String): Boolean
    }
 `);
 

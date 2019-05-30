@@ -20,7 +20,7 @@ const Contact = withStyles(styles)(
                 <Typography variant="h5" gutterBottom color="primary" align="center">
                   聯絡我們
                 </Typography>             
-                <p style={{textAlign:'center', textIndent:'0'}}> 團址：新北市新店區順安街4號B1 <br/>
+                <p style={{textAlign:'center', textIndent:'0'}}> 團址：新北市新店區順安街4號B1（平日無人簽收，請勿寄掛號信至此地址） <br/>
                   E-mail: <a href="mailto:chingyunchoir@gmail.com">chingyunchoir@gmail.com</a> <br/>
                   聯絡電話：團長 李小姐 0961 336 170 <br/>
                 </p>

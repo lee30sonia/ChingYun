@@ -107,33 +107,33 @@ const Staff = withStyles(styles)(
           <Typography variant="h6" align="center" color="primary">招生部：新增錄取通知</Typography>
 
           <div className={classes.margin}>
-            <Grid container spacing={8} alignItems="flex-end">
+            <Grid container spacing={2} alignItems="flex-end">
               <Grid item>
                 <FontAwesomeIcon icon="smile" />
               </Grid>
               <Grid item>
-                <TextField label="新生姓名" required
+                <TextField label="新生姓名" required autoComplete="one-time-code"
                 onChange={(evt) => this.setState({name: evt.target.value})}
                 />
               </Grid>
             </Grid>
-            <Grid container spacing={8} alignItems="flex-end">
+            <Grid container spacing={2} alignItems="flex-end">
               <Grid item>
                 <FontAwesomeIcon icon="music" />
               </Grid>
               <Grid item>
-                <TextField label="聲部" required
+                <TextField label="聲部" required autoComplete="one-time-code"
                 onChange={(evt) => this.setState({part: evt.target.value})}
                 />
               </Grid>
             </Grid>
             ＊聲部請以大寫SATB開頭，否則將分類為老師（ex: Sop1, Alto2, 老師）
-            <Grid container spacing={8} alignItems="flex-end">
+            <Grid container spacing={2} alignItems="flex-end">
               <Grid item>
                 <FontAwesomeIcon icon="key" />
               </Grid>
               <Grid item>
-                <TextField label="錄取授權碼" required
+                <TextField label="錄取授權碼" required autoComplete="one-time-code"
                 onChange={(evt) => this.setState({number: evt.target.value})}
                 onKeyPress={ (event) => { if(event.key === 'Enter') this.addAdmit(client); }} />
               </Grid>

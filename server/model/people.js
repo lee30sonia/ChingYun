@@ -14,9 +14,7 @@ var People = mongoose.model('People', mongoose.Schema({
    // 學歷 工作 血型 ...?
    // connect with FB (FB user id)
    roles: [Number], // _id in Role schema
-   //auth: String, // 入團授權碼 // 應可不用存？
    part: String // SATB, teacher
-   //job: String,  // 幹部部門
 }));
 
 module.exports = People;

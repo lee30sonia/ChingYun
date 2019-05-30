@@ -22,18 +22,19 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserCircle, faKey, faLock, faEnvelope, faPhone, faSmile } from '@fortawesome/free-solid-svg-icons'
+import { faUserCircle, faKey, faLock, faEnvelope, faPhone, faSmile, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
 
 import { Query, Mutation } from 'react-apollo';
 import { ApolloConsumer } from 'react-apollo';
 import gql from 'graphql-tag';
-import Auth from './modules/Auth';
+import Auth from './Auth';
 import PasswordHash from 'password-hash';
 
-library.add(faUserCircle, faKey, faLock, faEnvelope, faPhone, faSmile)
+library.add(faUserCircle, faKey, faLock, faEnvelope, faPhone, faSmile, faMapMarkerAlt)
 
 function TransitionLeft(props) {
   return <Slide direction="left" {...props} />;
@@ -44,24 +45,29 @@ function TransitionUp(props) {
 }
 
 var mutation = gql`
-   mutation update($uid: String!, $n: String, $e: String, $p: String) {
-      update(username: $uid, name: $n, email: $e, phone: $p)
-   }`; // should add more
+   mutation update($t: String!, $n: String, $nic: String, $e: String, $p: String, $cell: String, $ad: String) {
+      update(token: $t, name: $n, nickname: $nic, email: $e, phone: $p, cellphone: $cell, address: $ad)
+   }`;
 
 var mutationChangePass = gql`
-  mutation changePassword($uid: String!, $opw: String, $npw: String!) {
-      changePassword(username: $uid, oldpass: $opw, newpass: $npw) {res}
+  mutation changePassword($t: String, $opw: String, $npw: String!) {
+      changePassword(token: $t, oldpass: $opw, newpass: $npw) {res}
    }`;
 
 var query = gql`
-  query getPerson($uid: String!){
-    getPerson(username: $uid) {
+  query getPerson($t: String!){
+    getPerson(token: $t) {
       name
+      nickname
       username
       password
       part
       email
       phone
+      cellphone
+      address
+      inYear
+      birthday
     } 
   }`;
 
@@ -111,7 +117,7 @@ const LoginDialog = withStyles(styles)(
                person {
                   name
                   username
-                  part
+                  roles
                }
                token
             }
@@ -130,7 +136,7 @@ const LoginDialog = withStyles(styles)(
       {
         //console.log(data.login);
         Auth.authenticateUser(data.login.token);
-        this.props.login(data.login.person);
+        this.props.login({ name: data.login.person.name, username: data.login.person.username, roles: data.login.person.roles, token: data.login.token});
         this.setState({snackBarOpen: true});
         this.handleClose();
       }
@@ -173,7 +179,7 @@ const LoginDialog = withStyles(styles)(
               </DialogContentText>
   
               <div className={classes.margin}>
-                <Grid container spacing={8} alignItems="flex-end">
+                <Grid container spacing={2} alignItems="flex-end">
                   <Grid item>
                     <FontAwesomeIcon icon="user-circle" />
                   </Grid>
@@ -184,7 +190,7 @@ const LoginDialog = withStyles(styles)(
                   </Grid>
                 </Grid>
 
-                <Grid container spacing={8} alignItems="flex-end">
+                <Grid container spacing={2} alignItems="flex-end">
                   <Grid item>
                     <FontAwesomeIcon icon="key" />
                   </Grid>
@@ -265,8 +271,13 @@ const PersonalPage = withStyles(styles)(
       this.state={
         open: false,
         name: '',
+        nickname: ' ',
         email: ' ',
         phone: ' ',
+        cellphone: ' ',
+        address: ' ',
+        birthday: ' ',
+        inYear: ' ',
         changingPass: false
       };
       this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -288,7 +299,7 @@ const PersonalPage = withStyles(styles)(
     {
       await ChangePass({
          variables: {
-            "uid": this.props.me.username,
+            "t": this.props.me.token,
             "opw": oldpass,
             "npw": newpass
          }
@@ -303,25 +314,29 @@ const PersonalPage = withStyles(styles)(
       // check for requirements
       await Update({
          variables: {
-            "uid": this.props.me.username,
+            "t": this.props.me.token,
             "n": this.state.name? this.state.name: data.getPerson.name, 
+            "nic": this.state.nickname===' '? data.getPerson.nickname: this.state.nickname,
             "e": this.state.email===' '? data.getPerson.email: this.state.email,
-            "p": this.state.phone===' '? data.getPerson.phone: this.state.phone
+            "p": this.state.phone===' '? data.getPerson.phone: this.state.phone,
+            "cell": this.state.cellphone===' '? data.getPerson.cellphone: this.state.cellphone,
+            "ad": this.state.address===' '? data.getPerson.address: this.state.address
          }
-         ,refetchQueries: [{ query: query, variables: {"uid": this.props.me.username} }]
+         ,refetchQueries: [{ query: query, variables: {"t": this.props.me.token} }]
        })
           .catch( err => {
              console.log(err);
           });
 
       this.handleClose();
+      window.location.reload();
     }
 
     render() {
       const { classes } = this.props;
 
       return (
-        <Query query={query} variables={{ "uid": this.props.me.username }}>
+        <Query query={query} variables={{ "t": this.props.me.token }}>
           { ({ loading, err, data, refetch}) => {
             if(loading)
               return <CircularProgress className={classes.progress} />;
@@ -330,7 +345,7 @@ const PersonalPage = withStyles(styles)(
 
             return(
               <div className="personal">
-                <Button color="inherit" onClick={this.handleClickOpen}>{data.getPerson.name}</Button>
+                <Button color="inherit" onClick={this.handleClickOpen}>{this.props.me.name}</Button>
                 <Dialog
                   fullScreen
                   open={this.state.open}
@@ -356,50 +371,47 @@ const PersonalPage = withStyles(styles)(
                   </AppBar>
                  
                   <DialogContent>
-                    <Grid container spacing={8} alignItems="flex-end">
-                      <Grid item>
-                        <FontAwesomeIcon icon="smile" />
-                      </Grid>
-                      <Grid item>
-                        <TextField
-                          autoFocus margin="normal" label="姓名" required defaultValue={data.getPerson.name}
-                          onChange={(evt) => this.setState({name: evt.target.value})}
-                        />
-                      </Grid>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} sm={10} md={6} lg={4} xl={3}> <TextField
+                      InputProps={{ startAdornment: ( <InputAdornment position="start"> <FontAwesomeIcon icon="smile" /> </InputAdornment> )}}
+                      margin="dense" autoFocus label="姓名" required defaultValue={data.getPerson.name} autoComplete="name"
+                      onChange={(evt) => this.setState({name: evt.target.value})} fullWidth />
                     </Grid>
-                    <Grid container spacing={8} alignItems="flex-end">
-                      <Grid item>
-                        <FontAwesomeIcon icon="envelope" />
-                      </Grid>
-                      <Grid item>
-                        <TextField
-                          margin="normal" label="email" defaultValue={data.getPerson.email}
-                          onChange={(evt) => this.setState({email: evt.target.value})}
-                        />
-                      </Grid>
+                    <Grid item xs={12} sm={10} md={6} lg={4} xl={3}> <TextField
+                      InputProps={{ startAdornment: ( <InputAdornment position="start"> <FontAwesomeIcon icon="smile" /> </InputAdornment> )}}
+                      margin="dense" label="暱稱" defaultValue={data.getPerson.nickname} autoComplete="nickname"
+                      onChange={(evt) => this.setState({nickname: evt.target.value})} fullWidth />
                     </Grid>
-                    <Grid container spacing={8} alignItems="flex-end">
-                      <Grid item>
-                        <FontAwesomeIcon icon="phone" />
-                      </Grid>
-                      <Grid item>
-                        <TextField
-                          margin="normal" label="電話" defaultValue={data.getPerson.phone}
-                          onChange={(evt) => this.setState({phone: evt.target.value})}
-                        />
-                      </Grid>
+                    <Grid item xs={12} sm={10} md={6} lg={4} xl={3}> <TextField
+                      InputProps={{ startAdornment: ( <InputAdornment position="start"> <FontAwesomeIcon icon="envelope" /> </InputAdornment> )}}
+                      margin="dense" label="email" defaultValue={data.getPerson.email} autoComplete="email"
+                      onChange={(evt) => this.setState({email: evt.target.value})} fullWidth />
                     </Grid>
+                    <Grid item xs={12} sm={10} md={6} lg={4} xl={3}> <TextField
+                      InputProps={{ startAdornment: ( <InputAdornment position="start"> <FontAwesomeIcon icon="phone" /> </InputAdornment> )}}
+                      margin="dense" label="電話" defaultValue={data.getPerson.phone} autoComplete="tel"
+                      onChange={(evt) => this.setState({phone: evt.target.value})} fullWidth />
+                    </Grid>
+                    <Grid item xs={12} sm={10} md={6} lg={4} xl={3}> <TextField
+                      InputProps={{ startAdornment: ( <InputAdornment position="start"> <FontAwesomeIcon icon="phone" /> </InputAdornment> )}}
+                      margin="dense" label="手機" defaultValue={data.getPerson.cellphone} autoComplete="tel"
+                      onChange={(evt) => this.setState({cellphone: evt.target.value})} fullWidth />
+                    </Grid>
+                    <Grid item xs={12} sm={10} md={6} lg={4} xl={3}> <TextField
+                      InputProps={{ startAdornment: ( <InputAdornment position="start"> <FontAwesomeIcon icon="map-marker-alt" /> </InputAdornment> )}}
+                      margin="dense" label="地址" defaultValue={data.getPerson.address} autoComplete="street-address"
+                      onChange={(evt) => this.setState({address: evt.target.value})} fullWidth/>
+                    </Grid>
+                  </Grid>
 
                     <br/> <br/>
                     <Mutation mutation={mutationChangePass} onCompleted={ function(d) { 
                       if (d.changePassword.res) alert("密碼已變更！"); else alert("密碼變更失敗！（舊密碼錯誤）") }} >
                       { (cp, data) => (
-                        <ChangePass changePass={(o,n)=>{this.changePass(o,n,cp)}} state={(b)=>{this.setState({changingPass: b})}}/>
+                        <ChangePass changePass={(o,n)=>{this.changePass(o,n,cp)}} state={(b)=>{this.setState({changingPass: b})}} me={this.props.me}/>
                       )}
                     </Mutation>
-                    
-                    
-                    
+     
                   </DialogContent>
                 </Dialog>
               </div>
@@ -426,8 +438,9 @@ const ChangePass = withStyles(styles)(
     }
   
     handleClickOpen = () => {
-      this.setState({ open: true });
-      this.props.state(true);
+      var ori = this.state.open;
+      this.props.state(!ori);
+      this.setState({ open: !ori });
     };
 
     changePass = () => {
@@ -462,35 +475,40 @@ const ChangePass = withStyles(styles)(
       var cont = this.state.open? (
         <div>
         <Button variant="outlined" className={classes.btn_floatLeft} onClick={this.changePass}>確認</Button>
-        <Grid container spacing={8} alignItems="flex-end">
+        <Grid container spacing={2} alignItems="flex-end">
+          <Grid item> <FontAwesomeIcon icon="user-circle" /> </Grid>
+          <Grid item> <TextField
+              label="帳號" disabled defaultValue={this.props.me.username} autoComplete="username"/> </Grid>
+        </Grid>
+        <Grid container spacing={2} alignItems="flex-end">
           <Grid item>
             <FontAwesomeIcon icon="key" />
           </Grid>
           <Grid item>
             <TextField
-              margin="normal" label="舊密碼" type="password" required
+              autoFocus label="舊密碼" type="password" required autoComplete="current-password"
               onChange={(evt) => this.setState({pass: evt.target.value})}
             />
           </Grid>
         </Grid>
-        <Grid container spacing={8} alignItems="flex-end">
+        <Grid container spacing={2} alignItems="flex-end">
           <Grid item>
             <FontAwesomeIcon icon="key" />
           </Grid>
           <Grid item>
             <TextField
-              margin="normal" label="新密碼" type="password" required
+              label="新密碼" type="password" required autoComplete="new-password"
               onChange={(evt) => this.setState({newpass: evt.target.value})}
             />
           </Grid>
         </Grid>
-        <Grid container spacing={8} alignItems="flex-end">
+        <Grid container spacing={2} alignItems="flex-end">
           <Grid item>
             <FontAwesomeIcon icon="key" />
           </Grid>
           <Grid item>
             <TextField
-              margin="normal" label="重新輸入新密碼" type="password" required
+              label="重新輸入新密碼" type="password" required autoComplete="new-password"
               onChange={(evt) => this.setState({newpass2: evt.target.value})}
             />
           </Grid>
@@ -537,7 +555,7 @@ const ForgetPass = withStyles(styles)(
 
       const { data } = await client.mutate({
         mutation: gql`
-          mutation changePassword($uid: String!, $npw: String!) {
+          mutation changePassword($uid: String, $npw: String!) {
             changePassword(username: $uid, newpass: $npw) { res, name }
           }`,
         variables: {
@@ -593,7 +611,7 @@ const ForgetPass = withStyles(styles)(
               </DialogContentText>
   
               <div className={classes.margin}>
-                <Grid container spacing={8} alignItems="flex-end">
+                <Grid container spacing={2} alignItems="flex-end">
                   <Grid item>
                     <FontAwesomeIcon icon="user-circle" />
                   </Grid>
@@ -692,7 +710,7 @@ const ForgetID = withStyles(styles)(
               </DialogContentText>
   
               <div className={classes.margin}>
-                <Grid container spacing={8} alignItems="flex-end">
+                <Grid container spacing={2} alignItems="flex-end">
                   <Grid item>
                     <FontAwesomeIcon icon="smile" />
                   </Grid>
@@ -821,6 +839,7 @@ const NewMember = withStyles(styles)(
       if(data.signup) {
          alert("You've registered successfully!");
          this.handleClose();
+         window.location.reload(); 
       }
       else {
          alert("Something wrong.");
@@ -857,7 +876,7 @@ const NewMember = withStyles(styles)(
               </DialogContentText>
   
               <div className={classes.margin}>
-                <Grid container spacing={8} alignItems="flex-end">
+                <Grid container spacing={2} alignItems="flex-end">
                   <Grid item>
                     <FontAwesomeIcon icon="lock" />
                   </Grid>
@@ -897,7 +916,7 @@ const NewMember = withStyles(styles)(
               </DialogContentText>
   
               <div className={classes.margin}>
-                <Grid container spacing={8} alignItems="flex-end">
+                <Grid container spacing={2} alignItems="flex-end">
                   <Grid item>
                     <FontAwesomeIcon icon="user-circle" />
                   </Grid>
@@ -908,7 +927,7 @@ const NewMember = withStyles(styles)(
                   </Grid>
                 </Grid>
 
-                <Grid container spacing={8} alignItems="flex-end">
+                <Grid container spacing={2} alignItems="flex-end">
                   <Grid item>
                     <FontAwesomeIcon icon="key" />
                   </Grid>
@@ -919,7 +938,7 @@ const NewMember = withStyles(styles)(
                   </Grid>
                 </Grid>
 
-                <Grid container spacing={8} alignItems="flex-end">
+                <Grid container spacing={2} alignItems="flex-end">
                   <Grid item>
                     <FontAwesomeIcon icon="key" />
                   </Grid>

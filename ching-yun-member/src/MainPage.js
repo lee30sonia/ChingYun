@@ -21,7 +21,7 @@ import Staff from './Staff';
 import { withStyles } from '@material-ui/core/styles';
 import styles from './styles'
 //import injectTapEventPlugin from 'react-tap-event-plugin';
-import Auth from './modules/Auth';
+import Auth from './Auth';
 
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -103,12 +103,12 @@ const MainPage = withStyles(styles)(
               </Drawer>
               
               <Switch>
-                <PrivateRoute exact path="/" component={Announcement}/>
-                <PrivateRoute path="/schedule" component={Schedule}/>
-                <PrivateRoute path="/chatboard" component={ChatBoard}/>
-                <PrivateRoute path="/people" component={People}/>
-                <PrivateRoute path="/attendance" component={Attendance}/>
-                <PrivateRoute path="/staff" component={Staff}/>
+                <PrivateRoute exact path="/" component={Announcement} me={this.props.me}/>
+                <PrivateRoute path="/schedule" component={Schedule} me={this.props.me}/>
+                <PrivateRoute path="/chatboard" component={ChatBoard} me={this.props.me}/>
+                <PrivateRoute path="/people" component={People} me={this.props.me}/>
+                <PrivateRoute path="/attendance" component={Attendance} me={this.props.me}/>
+                <PrivateRoute path="/staff" component={Staff} me={this.props.me}/>
                 
                 <Route component={NotFound}/>
               </Switch>        

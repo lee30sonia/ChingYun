@@ -7,9 +7,22 @@ const Post = require('./model/post');
 const passport = require('passport');
 const axios = require('axios');
 const PasswordHash = require('password-hash');
+const jwt = require('jsonwebtoken');
 const URL = "https://chingyun-server.now.sh";
 //const URL = "http://localhost:4001";
 //const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
+async function checkSelf(token) // helper function
+{
+   var result;
+   await jwt.verify(token, "secret!!", async function(err, decoded) {
+      if (err) result = null;
+      else await People.findById(decoded.sub, async function(userErr, user) {
+         if (!userErr) result = user;
+      });
+   });
+   return result;
+}
 
 async function Login(args) {
    //console.log('login request in query ', args);
@@ -60,20 +73,8 @@ async function getAdmit(args) { // permission: no-login
 }
 
 async function getPerson(args) { // permission: loggedin, self
-   console.log('getPerson request', args.username);
-   var result;
-   await People.findOne({username: args.username})
-      .exec()
-      .then( match => {
-         if(match) {
-            result = match;
-         }
-      })
-      .catch( err => {
-         console.error(err);
-      });
-   //console.log(result);
-   return result;
+   var p = await checkSelf(args.token);
+   return p;
 }
 
 async function getIDbyName(args) { // permission: no-login
@@ -91,8 +92,11 @@ async function getIDbyName(args) { // permission: no-login
    return result;
 }
 
-async function allPeople() { // permission: loggedin
+async function allPeople(args) { // permission: loggedin
    console.log('allPeople request');
+   var p = await checkSelf(args.token);
+   if (!p) return null;
+
    var result;
    await People.find()
       .exec()
@@ -116,7 +120,7 @@ var date_sort = function (date1, date2) {
       return 0;
 };
 
-async function getDates(args) {
+async function getDates(args) { // permission???
    console.log('getDates request');
    var result;
    await Dates.findOne(args)
@@ -135,8 +139,11 @@ async function getDates(args) {
    return result;
 }
 
-async function allPost() {
+async function allPost(args) { // permission: logged-in
    console.log('allPost request');
+   var p = await checkSelf(args.token);
+   if (!p) return null;
+
    var result;
    await Post.find()
       .exec()

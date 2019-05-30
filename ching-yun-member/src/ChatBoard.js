@@ -30,8 +30,8 @@ import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 
 var query = gql`
-   query {
-      allPost {
+   query allPost($t: String!){
+      allPost(token: $t) {
          title
          author{
             name
@@ -53,7 +53,7 @@ const ChatBoard = withStyles(styles)(
       const { classes } = this.props;
 
       return (
-         <Query query={query}>
+         <Query query={query} variables={{ "t": this.props.me.token }}>
             { ({ loading, err, data, refetch}) => {
                if(loading)
                   return <CircularProgress className={classes.progress} />;
@@ -97,8 +97,8 @@ function Transition(props) {
 }
 
 var mutation = gql`
-   mutation addPost($t: String, $a: String, $d: String, $c: String) {
-      addPost(title: $t, author: $a, date: $d, content: $c)
+   mutation addPost($tok: String!, $t: String, $a: String, $d: String, $c: String) {
+      addPost(token: $tok, title: $t, author: $a, date: $d, content: $c)
 }`;
 
 const NewPost = withStyles(styles)(
@@ -139,6 +139,7 @@ const NewPost = withStyles(styles)(
 
        addPost({
          variables: {
+            "tok": this.props.me.token,
             "t": this.state.title,
             "a": this.props.me.username, 
                //應該存username，顯示時顯示name(nickname)，以處理更換暱稱的狀況

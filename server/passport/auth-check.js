@@ -32,8 +32,8 @@ module.exports = (req, res, next) => {
       return res.status(200).send({user: {
         name: user.name, 
         username: user.username, 
-        auth: user.auth, 
-        part: user.part
+        roles: user.roles,
+        token: token
       }});
     });
   });
