@@ -52,7 +52,7 @@ import client from './client';
 
 //var classNames = require('classnames');
 
-const App = withTheme()(withStyles(styles)(
+const App = withTheme(withStyles(styles)(
   class extends Component {    
     render() {
       const { classes } = this.props;

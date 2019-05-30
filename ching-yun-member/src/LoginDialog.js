@@ -329,7 +329,8 @@ const PersonalPage = withStyles(styles)(
           });
 
       this.handleClose();
-      window.location.reload();
+      this.render();
+      //window.location.reload();
     }
 
     render() {
@@ -342,7 +343,7 @@ const PersonalPage = withStyles(styles)(
               return <CircularProgress className={classes.progress} />;
             if(err)
               return `Error! ${err.message}`;
-
+            
             return(
               <div className="personal">
                 <Button color="inherit" onClick={this.handleClickOpen}>{this.props.me.name}</Button>

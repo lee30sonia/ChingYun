@@ -59,6 +59,8 @@ const ChatBoard = withStyles(styles)(
                   return <CircularProgress className={classes.progress} />;
                if(err)
                   return `Error! ${err.message}`;
+               if(!data)
+                  return "Error: can not load data.";
 
                return (
                  <div className={classes.content}>

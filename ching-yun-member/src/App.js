@@ -44,9 +44,9 @@ const App = withTheme(withStyles(styles)(
       this.logout = this.logout.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
       // check if user is logged in on refresh
-      this.toggleAuthenticateStatus();
+      await this.toggleAuthenticateStatus();
     }
     
     async toggleAuthenticateStatus() {

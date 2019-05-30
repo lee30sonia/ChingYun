@@ -58,12 +58,13 @@ function Member(number, name, part, dates) {
    this.rate = Math.round(100*(1 - (this.absent / this.attend.length))) + "%";
 }
    
-var query = gql`{
-   allPeople {
-      name
-      part
-   }
-   getDates(name: "attend")
+var query = gql`
+   query allPeople($t: String!) {
+      allPeople(token: $t){
+         name
+         part
+      }
+      getDates(name: "attend")
 }`;
 var queryDate = gql`{
    getDates(name: "attend")
@@ -124,12 +125,14 @@ const Attendance = withStyles(styles)(
       const { classes } = this.props;
 
       return(
-         <Query query={ query } >
+         <Query query={ query } variables={{"t": this.props.me.token}} >
             { ({ loading, err, data, refetch}) => {
                if(loading)
                   return <CircularProgress className={classes.progress} />;
                if(err)
                   return `Error! ${err.message}`;
+               if(!data)
+                  return "Error: can not load data.";
 
                return (
                   <div className={classes.content + " Attendance"}>

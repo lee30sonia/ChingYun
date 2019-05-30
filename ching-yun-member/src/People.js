@@ -13,15 +13,19 @@ import styles from './styles'
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 
-var query = gql`{
-   allPeople {
-      name
-      part
-      job
-      email
-      phone
-   }
-}`;
+var query = gql`
+   query allPeople($t: String!) {
+      allPeople(token: $t){
+         name
+         nickname
+         part
+         email
+         phone
+         cellphone
+         address
+      }
+   }`;
+
 
 const People = withStyles(styles)(
   class extends Component {
@@ -36,7 +40,7 @@ const People = withStyles(styles)(
       const { classes } = this.props;
 
       return (
-         <Query query={ query } >
+         <Query query={ query } variables={{"t": this.props.me.token}}>
             { ({ loading, err, data}) => {
                if(loading)
                   return <CircularProgress className={classes.progress} />;
@@ -52,12 +56,13 @@ const People = withStyles(styles)(
 
                        <TableHead>
                           <TableRow>
-                             <TableCell></TableCell>
                              <TableCell >姓名</TableCell>
+                             <TableCell >暱稱</TableCell>
                              <TableCell >聲部</TableCell>
-                             <TableCell >職位</TableCell>
                              <TableCell >email</TableCell>
+                             <TableCell >手機</TableCell>
                              <TableCell >電話</TableCell>
+                             <TableCell >地址</TableCell>
                            </TableRow>
                      </TableHead>
 
@@ -65,12 +70,13 @@ const People = withStyles(styles)(
                         { data.allPeople.map( (person, index) => {
                            return (
                               <TableRow key={index}>
-                                 <TableCell component="th" scope="row">{index+1}</TableCell>
                                  <TableCell>{person.name}</TableCell>
+                                 <TableCell>{person.nickname}</TableCell>
                                  <TableCell>{person.part}</TableCell>
-                                 <TableCell>{person.job}</TableCell>
                                  <TableCell>{person.email}</TableCell>
+                                 <TableCell>{person.cellphone}</TableCell>
                                  <TableCell>{person.phone}</TableCell>
+                                 <TableCell>{person.address}</TableCell>
                               </TableRow>
                            );
                         })}
