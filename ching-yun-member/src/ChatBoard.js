@@ -51,16 +51,16 @@ const ChatBoard = withStyles(styles)(
     
     render() {
       const { classes } = this.props;
+      if(!this.props.me)
+        return <CircularProgress className={classes.progress} />;
 
       return (
          <Query query={query} variables={{ "t": this.props.me.token }}>
             { ({ loading, err, data, refetch}) => {
-               if(loading)
+               if(loading || !data.allPost)
                   return <CircularProgress className={classes.progress} />;
                if(err)
                   return `Error! ${err.message}`;
-               if(!data)
-                  return "Error: can not load data.";
 
                return (
                  <div className={classes.content}>

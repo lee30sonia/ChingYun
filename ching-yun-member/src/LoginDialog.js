@@ -155,12 +155,15 @@ const LoginDialog = withStyles(styles)(
     render() {
       const { classes } = this.props;
 
+      if(this.props.loggedIn && !this.props.me)
+        return <CircularProgress className={classes.progress} />;
+
       var login = (<Button color="inherit" onClick={this.handleClickOpen}>登入</Button>);
       var logout = (<Button color="inherit" onClick={this.logout}>登出</Button>);
       var button = this.props.loggedIn? logout: login;
       var greet = this.props.loggedIn? (<PersonalPage me={this.props.me}/>): (<div></div>);
       //var greet = this.props.loggedIn? (<Button color="inherit">{this.props.me.name}</Button>): (<div></div>);
-         
+
       return (
          <ApolloConsumer>
          { client => (
@@ -171,6 +174,7 @@ const LoginDialog = withStyles(styles)(
             open={this.state.open}
             onClose={this.handleClose}
             aria-labelledby="form-dialog-title"
+            PaperProps={{className: classes.smallScreen}}
           >
             <DialogTitle id="form-dialog-title">登入</DialogTitle>
             <DialogContent>
@@ -335,11 +339,13 @@ const PersonalPage = withStyles(styles)(
 
     render() {
       const { classes } = this.props;
-
+      if(!this.props.me)
+        return <CircularProgress className={classes.progress} />;
+      
       return (
         <Query query={query} variables={{ "t": this.props.me.token }}>
           { ({ loading, err, data, refetch}) => {
-            if(loading)
+            if(loading || !data.getPerson)
               return <CircularProgress className={classes.progress} />;
             if(err)
               return `Error! ${err.message}`;
@@ -352,6 +358,7 @@ const PersonalPage = withStyles(styles)(
                   open={this.state.open}
                   onClose={this.handleClose}
                   TransitionComponent={TransitionUp}
+                  PaperProps={{className: classes.smallScreen}}
                 >
                   
                   <AppBar className={classes.appBar}>
@@ -372,6 +379,8 @@ const PersonalPage = withStyles(styles)(
                   </AppBar>
                  
                   <DialogContent>
+                  <div className={classes.contentNoShift}>
+
                   <Grid container spacing={3}>
                     <Grid item xs={12} sm={10} md={6} lg={4} xl={3}> <TextField
                       InputProps={{ startAdornment: ( <InputAdornment position="start"> <FontAwesomeIcon icon="smile" /> </InputAdornment> )}}
@@ -404,15 +413,15 @@ const PersonalPage = withStyles(styles)(
                       onChange={(evt) => this.setState({address: evt.target.value})} fullWidth/>
                     </Grid>
                   </Grid>
-
-                    <br/> <br/>
+                  </div>
+                    <br/> <br/> <br/> <br/>
                     <Mutation mutation={mutationChangePass} onCompleted={ function(d) { 
                       if (d.changePassword.res) alert("密碼已變更！"); else alert("密碼變更失敗！（舊密碼錯誤）") }} >
                       { (cp, data) => (
                         <ChangePass changePass={(o,n)=>{this.changePass(o,n,cp)}} state={(b)=>{this.setState({changingPass: b})}} me={this.props.me}/>
                       )}
                     </Mutation>
-     
+                  
                   </DialogContent>
                 </Dialog>
               </div>
@@ -604,6 +613,7 @@ const ForgetPass = withStyles(styles)(
           <Dialog
             open={this.state.open}
             onClose={this.handleClose}
+            PaperProps={{className: classes.smallScreen}}
           >
             <DialogTitle id="form-dialog-title">忘記密碼</DialogTitle>
             <DialogContent>
@@ -703,6 +713,7 @@ const ForgetID = withStyles(styles)(
           <Dialog
             open={this.state.open}
             onClose={this.handleClose}
+            PaperProps={{className: classes.smallScreen}}
           >
             <DialogTitle id="form-dialog-title">忘記帳號</DialogTitle>
             <DialogContent>
@@ -869,6 +880,7 @@ const NewMember = withStyles(styles)(
           <Dialog
             open={this.state.step===1}
             onClose={this.handleClose}
+            PaperProps={{className: classes.smallScreen}}
           >
             <DialogTitle>新團員註冊：Step {this.state.step}</DialogTitle>
             <DialogContent>
@@ -907,6 +919,7 @@ const NewMember = withStyles(styles)(
             onClose={this.handleClose}
             TransitionComponent={TransitionLeft}
             keepMounted
+            PaperProps={{className: classes.smallScreen}}
           >
             <DialogTitle>新團員註冊：Step {this.state.step}</DialogTitle>
             <DialogContent>

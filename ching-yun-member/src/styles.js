@@ -34,7 +34,7 @@ export const theme = createMuiTheme({
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
     ].join(','),
-    fontSize: 16,
+    fontSize: 15
   },
 });
 
@@ -44,7 +44,7 @@ export const styles = theme => ({
   },
 
   appBar: {
-    position: 'relative',
+    position: 'fixed',
     textAlign: 'center',
     zIndex: theme.zIndex.drawer + 1,
     height: '65px',
@@ -105,12 +105,20 @@ export const styles = theme => ({
     padding: theme.spacing.unit * 3,
     display: 'flex',
     position: 'relative',
-    //top: '65px',
-    [theme.breakpoints.up('md')]:{ left: '18%', width: '75%'},
-    [theme.breakpoints.between('xs','md')]:{ left: '22%', width: '75%'},
-    [theme.breakpoints.between('xs','sm')]:{ left: '28%', width: '70%'},
-    [theme.breakpoints.down('xs')]:{ left: '0%', width: '100%'},
+    top: '65px',
+    [theme.breakpoints.up('md')]:{ left: '15%', width: '81%'},
+    [theme.breakpoints.between('xs','md')]:{ left: '19%', width: '75%'},
+    [theme.breakpoints.between('xs','sm')]:{ left: '23%', width: '73%'},
+    [theme.breakpoints.down('xs')]:{ left: '0%', width: '90%'},
     //minWidth: 0, // So the Typography noWrap works
+  },
+
+  contentNoShift: {
+    flexGrow: 1,
+    padding: theme.spacing.unit * 3,
+    display: 'flex',
+    position: 'relative',
+    top: '65px'
   },
 
   DialogContent: {
@@ -133,11 +141,6 @@ export const styles = theme => ({
   },
 
 
-  tableroot: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-  },
   flex: {
     flex: 1,
   },
@@ -162,8 +165,23 @@ export const styles = theme => ({
     backgroundColor: theme.palette.primary.main,
   },*/
 
-
+  smallScreen: {
+    [theme.breakpoints.down('xs')]: {margin: '0'}
+  },
   
+  hint: {
+    padding: '20px',
+    textAlign: 'left',
+    width: '100%',
+    display: 'block'
+  },
+
+  details: {
+    padding: '20px',
+    paddingLeft: '50px',
+    textAlign: 'left',
+    width: '100%',
+  },
 
   
 
@@ -188,6 +206,11 @@ export const styles = theme => ({
   progress: {
     margin: theme.spacing.unit * 2,
    },
+
+  tableroot: {
+    width: '100%',
+    overflowX: 'auto',
+  },
   table: {
     minWidth: 700,
    },
